@@ -39,7 +39,7 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              href="#"
+              th:href="@{/characters/page/1}"
               title="Закупить товар у поставщика"
               style="text-decoration: none"
               >Purchase</a
@@ -48,7 +48,7 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              href="#"
+              th:href="@{/storage/page/{next} (next=${current_page})}"
               title="Товар на складе"
               style="text-decoration: none"
               >Storage</a
@@ -57,10 +57,10 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              href="#"
-              title="На продаже"
+              th:href="@{/sale/page/{next} (next=${current_page})}"
+              title="В продаже"
               style="text-decoration: none"
-              >Trading floor</a
+              >Sale</a
             >
           </li>
           <li class="header_nav_ul_li">
@@ -106,7 +106,7 @@
     <!-- MAIN SECTION -->
     <main class="main_1">
       <section class="main_section_1">
-        <h1 class="main_section1_h1">Cards in the store's warehouse</h1>
+        <h1 class="main_section1_h1">Товар на складе</h1>
         <div class="main_hero-image">
           <svg
             class="main_hero-image_svg"
@@ -135,9 +135,9 @@
         >
           <a
             class="main_section_2_div_1_card"
-            title="Add to the basket"
+            title="Add to the sale"
             style="text-decoration: none"
-            th:href="@{/characters/add_to_basket/{id}/{page} (id=${characters.id}, page=${current_page})}"
+            th:href="@{/storage/add_to_sale/{id}/{page} (id=${characters.id}, page=${current_page})}"
             th:object="${characters}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -196,9 +196,9 @@
           </a>
         </div>
       </section>
-      <!-- BASKET -->
+      <!-- SALE -->
       <section class="main_section_3">
-        <h1 class="main_section3_h1">Your choice</h1>
+        <h1 class="main_section3_h1">Выставлено на продажу</h1>
         <div class="main_hero-image">
           <svg
             class="main_hero-image_svg"
@@ -219,13 +219,13 @@
           </svg>
         </div>
       </section>
-      <section class="main_section_2" id="basket">
-        <div class="main_section_2_div_1" th:each="card : ${basket_cards}">
+      <section class="main_section_2" id="sale">
+        <div class="main_section_2_div_1" th:each="card : ${sale_cards}">
           <a
             class="main_section_2_div_1_card"
             style="text-decoration: none"
-            title="Delete from basket"
-            th:href="@{/characters/delete_from_basket/{id}/{page} (id=${card.id}, page=${current_page})}"
+            title="Delete from sale"
+            th:href="@{/storage/delete_from_sale/{id}/{page} (id=${card.id}, page=${current_page})}"
             th:object="${card}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -293,13 +293,13 @@
           <span class="footer_ul_1_li_1_a">Amount of cards:</span>
           <span
             class="footer_ul_1_li_1_a_span"
-            th:text="${character_info.count}"
+            th:text="${sale_size}"
           ></span>
         </li>
         <li class="footer_ul_1_li_1">
           <a
             title="Prev page"
-            th:href="@{/characters/page/{prev} (prev=${character_info.prev})}"
+            th:href="@{/storage/page/{prev} (prev=${current_page})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
           >
@@ -307,7 +307,7 @@
         <li class="footer_ul_1_li_1">
           <a
             title="Next page"
-            th:href="@{/characters/page/{next} (next=${character_info.next})}"
+            th:href="@{/storage/page/{next} (next=${current_page})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
           >

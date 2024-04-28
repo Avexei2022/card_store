@@ -5,8 +5,9 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>ru.gb.group5984</groupId>
-    <artifactId>store_warehouse</artifactId>
+    <artifactId>storefront</artifactId>
     <version>1.0-SNAPSHOT</version>
+
 
     <properties>
         <maven.compiler.source>21</maven.compiler.source>

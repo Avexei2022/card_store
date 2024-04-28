@@ -1,14 +1,15 @@
-package ru.gb.group5984.service.api;
+package group5984.service.api;
 
+import group5984.model.characters.Characters;
+import group5984.model.storage.CardsStorage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import ru.gb.group5984.model.characters.CharacterResult;
-import ru.gb.group5984.model.characters.Characters;
-import ru.gb.group5984.service.db.CharacterDbService;
+
 
 import java.util.List;
 
@@ -19,8 +20,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Log
-public class CharacterApiServiceImpl  implements CharacterApiService{
-    private final CharacterDbService characterDbService;
+public class ContentApiServiceImpl implements ContentApiService {
 
     @Autowired
     private RestTemplate restTemplate;
@@ -28,19 +28,20 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     @Autowired
     private HttpHeaders headers;
 
+
     /**
      * Получить с сайта Rick and Morty страницу со списком героев
      * @param url ссылка на сайт Rick and Morty в соответствии с документацией
      * @return Страница со списком героев
      */
     @Override
-    public Characters getAllCharacters(String url) {
+    public Page<CardsStorage> getAllCardsStorage(String url) {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        Class<Characters> responseType = Characters.class;
+        Class<Page<CardsStorage>> responseType = Page<CardsStorage>.class;
         log.info("URI - " + url);
-        ResponseEntity<Characters> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        ResponseEntity<Page<CardsStorage>> response = restTemplate.exchange(url, method, requestEntity, responseType);
         return response.getBody();
     }
 
@@ -52,14 +53,12 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
      *  - если карточка найдена, то она передается в сервис работы с базой данных для её сохранения
      */
     @Override
-    public void saveOneCharacterById(String url) {
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
-        Class<CharacterResult> responseType = CharacterResult.class;
-        log.info("URI - " + url);
-        CharacterResult characterResult = restTemplate.exchange(url, method, requestEntity, responseType).getBody();
-        if (characterResult != null) characterDbService.saveOneCharacter(characterResult);
+    public void saveOneCardsStorageById(String url) {
+
     }
 
+    @Override
+    public void deleteOneCardsStorageById(String url) {
+
+    }
 }

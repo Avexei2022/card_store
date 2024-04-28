@@ -1,26 +1,28 @@
-package ru.gb.group5984.service.api;
+package group5984.service.api;
 
-import ru.gb.group5984.model.characters.CharacterResult;
-import ru.gb.group5984.model.characters.Characters;
+import group5984.model.storage.CardsStorage;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
 /**
  * Интерфейс сервиса взаимодействия с сайтом Rick and Morty
  */
-public interface CharacterApiService {
+public interface ContentApiService {
     /**
      * Получить с сайта Rick and Morty страницу со списком героев
      * @param url ссылка на сайт Rick and Morty в соответствии с документацией
      * @return Страница со списком героев
      */
-    Characters getAllCharacters(String url);
+    Page<CardsStorage> getAllCardsStorage(String url);
 
     /**
      * Метод сохранения выбранной прльзователем карточки в базе данных
      * @param url ссылка
      */
-    void saveOneCharacterById(String url);
+    void saveOneCardsStorageById(String url);
+
+    void deleteOneCardsStorageById(String url);
 
 
 }

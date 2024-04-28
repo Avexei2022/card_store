@@ -106,7 +106,7 @@
     <!-- MAIN SECTION -->
     <main class="main_1">
       <section class="main_section_1">
-        <h1 class="main_section1_h1">Товар на складе</h1>
+        <h1 class="main_section1_h1">Закупить товар у поставщика</h1>
         <div class="main_hero-image">
           <svg
             class="main_hero-image_svg"
@@ -135,9 +135,9 @@
         >
           <a
             class="main_section_2_div_1_card"
-            title="Add to the sale"
+            title="Приобрести на склад"
             style="text-decoration: none"
-            th:href="@{/storage/add_to_sale/{id}/{page} (id=${characters.id}, page=${current_page})}"
+            th:href="@{/characters/add_to_storage/{id}/{page} (id=${characters.id}, page=${current_page})}"
             th:object="${characters}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -196,9 +196,9 @@
           </a>
         </div>
       </section>
-      <!-- SALE -->
+      <!-- STORAGE -->
       <section class="main_section_3">
-        <h1 class="main_section3_h1">Выставлено на продажу</h1>
+        <h1 class="main_section3_h1">Закуплено на склад</h1>
         <div class="main_hero-image">
           <svg
             class="main_hero-image_svg"
@@ -219,13 +219,13 @@
           </svg>
         </div>
       </section>
-      <section class="main_section_2" id="sale">
-        <div class="main_section_2_div_1" th:each="card : ${sale_cards}">
+      <section class="main_section_2" id="storage">
+        <div class="main_section_2_div_1" th:each="card : ${storage_cards}">
           <a
             class="main_section_2_div_1_card"
             style="text-decoration: none"
-            title="Delete from sale"
-            th:href="@{/storage/delete_from_sale/{id}/{page} (id=${card.id}, page=${current_page})}"
+            title="Delete from storage"
+            th:href="@{/characters/delete_from_storage/{id}/{page} (id=${card.id}, page=${current_page})}"
             th:object="${card}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -293,13 +293,13 @@
           <span class="footer_ul_1_li_1_a">Amount of cards:</span>
           <span
             class="footer_ul_1_li_1_a_span"
-            th:text="${sale_size}"
+            th:text="${character_info.count}"
           ></span>
         </li>
         <li class="footer_ul_1_li_1">
           <a
             title="Prev page"
-            th:href="@{/storage/page/{prev} (prev=${current_page})}"
+            th:href="@{/characters/page/{prev} (prev=${character_info.prev})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
           >
@@ -307,7 +307,7 @@
         <li class="footer_ul_1_li_1">
           <a
             title="Next page"
-            th:href="@{/storage/page/{next} (next=${current_page})}"
+            th:href="@{/characters/page/{next} (next=${character_info.next})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
           >

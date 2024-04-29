@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
   <head>
-    <title>The Rick and Morty Card Storage</title>
+    <title>The Rick and Morty Card Store</title>
     <!-- Required meta tags -->
     <meta charset="utf-8" />
     <meta
@@ -39,8 +39,8 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/characters/page/1}"
-              title="Закупить товар у поставщика"
+              th:href="@{/storefront/cards/page/1}"
+              title="Витрина магазина"
               style="text-decoration: none"
               >Purchase</a
             >
@@ -48,48 +48,22 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/storage/page/{next} (next=${current_page})}"
-              title="Товар на складе"
+              th:href="@{/storefront/basket/page/1}"
+              title="Корзина"
               style="text-decoration: none"
-              >Storage</a
-            >
-          </li>
-          <li class="header_nav_ul_li">
-            <a
-              class="header_nav_ul_li_a"
-              th:href="@{/sale/page/{next} (next=${current_page})}"
-              title="В продаже"
-              style="text-decoration: none"
-              >Sale</a
+              >Basket</a
             >
           </li>
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
               href="#"
-              title="Зарезервированный товар"
+              title="Приобретенный товар"
               style="text-decoration: none"
-              >Reserved</a
+              >Purchased</a
             >
           </li>
-          <li class="header_nav_ul_li">
-            <a
-              class="header_nav_ul_li_a"
-              href="#"
-              title="Проданный товар"
-              style="text-decoration: none"
-              >Sold</a
-            >
-          </li>
-          <li class="header_nav_ul_li">
-            <a
-              class="header_nav_ul_li_a"
-              href="#"
-              title="Покупатели"
-              style="text-decoration: none"
-              >Customers</a
-            >
-          </li>
+
           <li class="header_nav_ul_li_buy">
             <a
               class="header_nav_ul_li_a_buy"
@@ -106,7 +80,7 @@
     <!-- MAIN SECTION -->
     <main class="main_1">
       <section class="main_section_1">
-        <h1 class="main_section1_h1">Товар в продаже</h1>
+        <h1 class="main_section1_h1">Basket</h1>
         <div class="main_hero-image">
           <svg
             class="main_hero-image_svg"
@@ -127,16 +101,18 @@
           </svg>
         </div>
       </section>
-      <!-- SALE -->
+      <!-- STORE -->
+
       <section class="main_section_2">
         <div
           class="main_section_2_div_1"
           th:each="cards_storage : ${sale_list}"
         >
-          <div
+          <a
             class="main_section_2_div_1_card"
-            title="For sale"
+            title="Удалить из корзины"
             style="text-decoration: none"
+            th:href="@{/storefront/basket/delete_from_basket/{id}/{page} (id=${cards_storage.id}, page=${current_page})}"
             th:object="${cards_storage}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -173,44 +149,6 @@
                   th:text="${cards_storage.card.species}"
                 ></span>
               </div>
-              <!-- <div class="main_section_2_div_1_card_context_section_2">
-                <form th:action="@{/sale/update}" method="post">
-                  <input type="hidden" readonly th:field="${cards_storage.id}">
-                  <input type="hidden" readonly th:field="${cards_storage.card}">
-                  <div>
-                    <span
-                      class="main_section_2_div_1_card_context_section_2_span"
-                      >Price:</span
-                    >
-                    <input
-                      type="number"
-                      th:field="${cards_storage.price}"
-                      id="price"
-                      maxlength="10"
-                      placeholder="стоимость"
-                    />
-                  </div>
-                  <div>
-                    <span
-                      class="main_section_2_div_1_card_context_section_2_span"
-                      >Amount:</span
-                    >
-                    <input
-                      type="number"
-                      th:field="${cards_storage.amount}"
-                      id="amount"
-                      maxlength="10"
-                      placeholder="стоимость"
-                    />
-                  </div>
-                  <input
-                    class="btn btn-primary"
-                    type="submit"
-                    value="Сохранить изменения"
-                  />
-                </form>
-              </div> -->
-
               <div class="main_section_2_div_1_card_context_section_2">
                 <span class="main_section_2_div_1_card_context_section_2_span"
                   >Price:</span
@@ -230,10 +168,9 @@
                 ></span>
               </div>
             </div>
-          </div>
+          </a>
         </div>
       </section>
-      <!-- SALE -->
     </main>
 
     <!-- FOOTER SECTION -->
@@ -244,17 +181,31 @@
           <span class="footer_ul_1_li_1_a_span" th:text="${sale_size}"></span>
         </li>
         <li class="footer_ul_1_li_1">
+          <span class="footer_ul_1_li_1_a">Amount of pages:</span>
+          <span
+            class="footer_ul_1_li_1_a_span"
+            th:text="${amount_pages}"
+          ></span>
+        </li>
+        <li class="footer_ul_1_li_1">
           <a
             title="Prev page"
-            th:href="@{/sale/page/{prev} (prev=${current_page})}"
+            th:href="@{/storefront/basket/page/{prev} (prev=${prev_page})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
           >
         </li>
         <li class="footer_ul_1_li_1">
+          <span class="footer_ul_1_li_1_a">Page:</span>
+          <span
+            class="footer_ul_1_li_1_a_span"
+            th:text="${current_page}"
+          ></span>
+        </li>
+        <li class="footer_ul_1_li_1">
           <a
             title="Next page"
-            th:href="@{/sale/page/{next} (next=${current_page})}"
+            th:href="@{/storefront/basket/page/{next} (next=${next_page})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
           >

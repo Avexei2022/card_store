@@ -13,6 +13,6 @@ import org.springframework.web.client.RestTemplate;
 @Getter
 @Setter
 public class BasicConfig {
-    private String CHARACTER_API;
+    private String STORAGE_API;
     private RestTemplate restTemplate;
 }

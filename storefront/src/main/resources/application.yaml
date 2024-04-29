@@ -2,13 +2,13 @@ spring:
   application:
     name: storefront
   config:
-    import: ConfigServer:http://localhost:8888
+    import: configserver:http://localhost:8888
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
 url:
-  CHARACTER_API: "http://localhost:8082/rest"
+  STORAGE_API: "http://localhost:8082/storage/rest"
 server:
   port: 8083
 management:

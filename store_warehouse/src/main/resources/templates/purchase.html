@@ -39,7 +39,7 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/characters/page/1}"
+              th:href="@{/storage/characters/page/1}"
               title="Закупить товар у поставщика"
               style="text-decoration: none"
               >Purchase</a
@@ -48,7 +48,7 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/storage/page/{next} (next=${current_page})}"
+              th:href="@{/storage/storage/page/{next} (next=${current_page})}"
               title="Товар на складе"
               style="text-decoration: none"
               >Storage</a
@@ -57,7 +57,7 @@
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/sale/page/{next} (next=${current_page})}"
+              th:href="@{/storage/sale/page/{next} (next=${current_page})}"
               title="В продаже"
               style="text-decoration: none"
               >Sale</a
@@ -137,7 +137,7 @@
             class="main_section_2_div_1_card"
             title="Приобрести на склад"
             style="text-decoration: none"
-            th:href="@{/characters/add_to_storage/{id}/{page} (id=${characters.id}, page=${current_page})}"
+            th:href="@{/storage/characters/add_to_storage/{id}/{page} (id=${characters.id}, page=${current_page})}"
             th:object="${characters}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -225,7 +225,7 @@
             class="main_section_2_div_1_card"
             style="text-decoration: none"
             title="Delete from storage"
-            th:href="@{/characters/delete_from_storage/{id}/{page} (id=${card.id}, page=${current_page})}"
+            th:href="@{/storage/characters/delete_from_storage/{id}/{page} (id=${card.id}, page=${current_page})}"
             th:object="${card}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -299,7 +299,7 @@
         <li class="footer_ul_1_li_1">
           <a
             title="Prev page"
-            th:href="@{/characters/page/{prev} (prev=${character_info.prev})}"
+            th:href="@{/storage/characters/page/{prev} (prev=${character_info.prev})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
           >
@@ -307,7 +307,7 @@
         <li class="footer_ul_1_li_1">
           <a
             title="Next page"
-            th:href="@{/characters/page/{next} (next=${character_info.next})}"
+            th:href="@{/storage/characters/page/{next} (next=${character_info.next})}"
             class="footer_ul_1_li_1_a"
             ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
           >

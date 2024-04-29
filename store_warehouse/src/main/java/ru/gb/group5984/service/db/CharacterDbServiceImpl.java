@@ -5,21 +5,29 @@ import lombok.extern.java.Log;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import ru.gb.group5984.model.basket.Basket;
+import ru.gb.group5984.model.basket.BasketInfo;
+import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
+import ru.gb.group5984.repository.BasketRepository;
 import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.repository.CharacterRepository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
 
 /**
- * Сервис героев
- * Работает с базой данных
+ * Сервис склада магазина
+ * Работает с базой данных:
+ * - товары на складе;
+ * - товары в продаже;
+ * - товары в корзине покупателя (зарезервированные)
  */
 @Service
 @RequiredArgsConstructor
@@ -27,9 +35,12 @@ import java.util.Objects;
 public class CharacterDbServiceImpl implements CharacterDbService{
     private final CharacterRepository characterRepository;
     private final CardsRepository cardsRepository;
+    private final BasketRepository basketRepository;
+
     /**
-     * Метод сохранения выбранной карточки в базе данных
-     * @param characterResult карточка героя
+     * Сохранение единицы товара, закупленного у поставщика,
+     * в базе данных товаров на складе.
+     * @param characterResult Единица товара
      */
     @Override
     public void saveOneCharacter(CharacterResult characterResult) {
@@ -37,8 +48,8 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     }
 
     /**
-     * Получить все карточки героев из базы данных
-     * @return список карточек героев
+     * Получить полный список товаров из базы данных товаров на складе
+     * @return список товара
      */
     @Override
     public List<CharacterResult> getAllFromStorage() {
@@ -46,21 +57,19 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     }
 
     /**
-     * Удалить карточку героя из базы данных склада
-     * @param id Id героя
+     * Удалить единицу товара из базы данных товаров на складе
+     * @param id Id Товара
      */
     @Override
     public void deleteById(Integer id) {
         characterRepository.deleteById(id);
     }
 
+    //TODO Реализовать ввод данных от пользователя
     /**
-     * Метод занесения картоки на складе в список продаж
-     * @param id - id карточки героя
-     * Вначале проверяется наличие карточки на складе
-     * Создается новая запись в списке продаж в которую заносится карточка
-     * Далее запись сохраняется в базе данных.
-     * Остальные поля записи заполняются в сервисе продаж.
+     * Выствить товар на продажу
+     * @param id - id товара
+     * Устанавливается количество товара и стоимость единицы товара
      */
     @Override
     public void saveOneCardById(Integer id) {
@@ -74,10 +83,9 @@ public class CharacterDbServiceImpl implements CharacterDbService{
         }
     }
 
-
     /**
-     * Получить все карточки героев из списка продаж
-     * @return список карточек героев
+     * Получить список товара, выставленного на продажу
+     * @return список товара.
      */
     @Override
     public List<CharacterResult> getAllCardFromSale() {
@@ -85,6 +93,18 @@ public class CharacterDbServiceImpl implements CharacterDbService{
         return cardsStorageList.stream().map(CardsStorage::getCard).toList();
     }
 
+    /**
+     * Получить все товары постранично, выставленные на продажу.
+     * @param page - запрашиваемая пользователем страница
+     * @return список товаров в продаже
+     * По умолчанию страница содержит 20 товаров
+     * Список товаров дополнен следующей информацией о нем:
+     * - общее количество товаров в корзине;
+     * - количество страниц;
+     * - номера текущей, предыдущей и следующей страниц.
+     * Если предыдущей страницы нет, то проставляется номер последней страницы.
+     * Если следующей страницы нет, то проставляется номер первой страницы
+     */
     @Override
     public Cards getAllCardsStorageFromSale(Integer page) {
         page = page - 1;
@@ -107,9 +127,13 @@ public class CharacterDbServiceImpl implements CharacterDbService{
         return cards;
     }
 
+    //TODO добавить проверку на резервирование покупателем
+    /**
+     * Удалить товар из списка продаж / убрать с полки.
+     * @param id - id товара
+     */
     @Override
     public void deleteCardFromSaleById(Integer id) {
-        //TODO добавить проверку на резервирование покупателем
         List<CardsStorage> cardsStorageList = cardsRepository.findAll();
         Long cardsStoreId = cardsStorageList.stream()
                 .filter(cardsStorage -> Objects.equals(cardsStorage.getCard().getId(), id))
@@ -121,4 +145,96 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     public void saveCardStorage(CardsStorage cardsStorage) {
         cardsRepository.save(cardsStorage);
     }
+
+    /**
+     * Переместить единицу товара с полки в корзину покупателя
+     * @param id - id товара
+     *  При наличии товара на полке его количество уменьшается на единицу.
+     *  Если товара на полке больше нет, то данная партия товара удаляется из списка.
+     *  В корзине сохраняется информация о номере партии товара,
+     *  а также дата и время перемещения товара в корзину.
+     */
+    //TODO доработать ввод количества товара и проверку на валидность
+    @Override
+    @Transactional
+    public void moveCardToBasket(Long id) {
+        CardsStorage cardInSale = cardsRepository.findById(id).orElseThrow();
+        if (cardInSale.getAmount() > 0) {
+            CardInBasket cardInBasket = new CardInBasket();
+            cardInBasket.setCard(cardInSale.getCard());
+            cardInBasket.setAmount(1);
+            cardInSale.setAmount(cardInSale.getAmount() - 1);
+            cardInBasket.setPrice(cardInSale.getPrice());
+            cardInBasket.setCardsStorageId(cardInSale.getId());
+            cardInBasket.setCreated(LocalDateTime.now());
+            if (cardInSale.getAmount() < 1) cardsRepository.deleteById(id);
+            else cardsRepository.save(cardInSale);
+            basketRepository.save(cardInBasket);
+        }
+    }
+
+
+    /**
+     * Возврат единицы товара из корзины покупателя на полку магазина
+     * @param id id - товара в корзине
+     * Проверяется наличие партии данного товара на полке.
+     * Если товар из данной партии в наличии на полке, то его количество увеличивается на количество товара в корзине.
+     * Если товар из данной партии на полке отсутствует,
+     * то восстанавливается партия товара на полке в количестве товара из корзины.
+     */
+    @Override
+    @Transactional
+    public void returnCardFromBasketToSale(Long id) {
+        CardInBasket cardInBasket = basketRepository.findById(id).orElseThrow();
+        log.info("TEST" + cardInBasket.toString());
+        Long cardsStorageId = cardInBasket.getCardsStorageId();
+        if (cardsRepository.existsById(cardsStorageId)) {
+            CardsStorage cardsStorage = cardsRepository.findById(cardsStorageId).orElseThrow();
+            cardsStorage.setAmount(cardsStorage.getAmount() + cardInBasket.getAmount());
+            cardsRepository.save(cardsStorage);
+        } else {
+            CardsStorage cardsStorage = new CardsStorage();
+            cardsStorage.setId(cardsStorageId);
+            cardsStorage.setCard(cardInBasket.getCard());
+            cardsStorage.setPrice(cardInBasket.getPrice());
+            cardsStorage.setAmount(cardInBasket.getAmount());
+            cardsRepository.save(cardsStorage);
+        }
+        basketRepository.deleteById(id);
+    }
+
+    /**
+     * Получить все товары постранично, зарезервированные в корзине.
+     * @param page - запрашиваемая пользователем страница
+     * @return список товаров в корзине
+     * По умолчанию страница содержит 20 товаров
+     * Список товаров дополнен следующей информацией о нем:
+     * - общее количество товаров в корзине;
+     * - количество страниц;
+     * - номера текущей, предыдущей и следующей страниц.
+     * Если предыдущей страницы нет, то проставляется номер последней страницы.
+     * Если следующей страницы нет, то проставляется номер первой страницы
+     */
+    @Override
+    public Basket getAllFromBasket(Integer page) {
+        page = page - 1;
+        if (page < 0) page = 0;
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<CardInBasket> cardInBasketPage = basketRepository.findAll(pageable);
+        Basket basket = new Basket();
+        BasketInfo basketInfo = new BasketInfo();
+        basketInfo.setCount(cardInBasketPage.getTotalElements());
+        basketInfo.setPages(cardInBasketPage.getTotalPages());
+        if (cardInBasketPage.hasPrevious())
+            basketInfo.setPrev(cardInBasketPage.getNumber());
+        else basketInfo.setPrev(cardInBasketPage.getTotalPages());
+        if (cardInBasketPage.hasNext())
+            basketInfo.setNext(cardInBasketPage.getNumber() + 2);
+        else basketInfo.setNext(1);
+        basketInfo.setCurrent(cardInBasketPage.getNumber() + 1);
+        basket.setCardInBasketList(cardInBasketPage.toList());
+        basket.setInfo(basketInfo);
+        return basket;
+    }
+
 }

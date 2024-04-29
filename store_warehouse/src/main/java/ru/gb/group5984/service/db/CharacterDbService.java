@@ -1,6 +1,7 @@
 package ru.gb.group5984.service.db;
 
 import org.springframework.data.domain.Page;
+import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsStorage;
@@ -38,4 +39,8 @@ public interface CharacterDbService {
     void deleteCardFromSaleById(Integer id);
 
     void saveCardStorage(CardsStorage cardsStorage);
+    void moveCardToBasket(Long ig);
+    void returnCardFromBasketToSale(Long id);
+
+    Basket getAllFromBasket(Integer page);
 }

@@ -2,7 +2,6 @@ package ru.gb.group5984.controller.web;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -23,7 +22,7 @@ import java.util.List;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/")
+@RequestMapping("/storage")
 @Log
 public class StorageWebController {
     private final CharacterApiService serviceApi;
@@ -34,9 +33,9 @@ public class StorageWebController {
      * Метод принудительного перенаправления к методу подготовки страниц
      * @return ссылка на первую страницу героев
      */
-    @GetMapping("/")
+    @GetMapping("")
     public String redirectToFirstPage() {
-        return "redirect:/characters/page/1";
+        return "redirect:/storage/characters/page/1";
     }
 
     /**
@@ -64,11 +63,11 @@ public class StorageWebController {
         CharacterInfo characterInfo = getCharacterInfo(allCharacters);
         List<CharacterResult> characterResultList = allCharacters.getResults();
         List<CharacterResult> characterResultListFromStorage = serviceDb.getAllFromStorage();
-        model.addAttribute("character_info", characterInfo);
-        model.addAttribute("characters_list", characterResultList);
-        model.addAttribute("current_page", page);
-        model.addAttribute("storage_size", characterResultListFromStorage.size());
-        model.addAttribute("storage_cards", characterResultListFromStorage);
+        model.addAttribute("character_info", characterInfo)
+                .addAttribute("characters_list", characterResultList)
+                .addAttribute("current_page", page)
+                .addAttribute("storage_size", characterResultListFromStorage.size())
+                .addAttribute("storage_cards", characterResultListFromStorage);
         return "purchase";
     }
 
@@ -141,11 +140,11 @@ public class StorageWebController {
         List<CharacterResult> characterResultList = serviceDb.getAllFromStorage();
         List<CharacterResult> characterResultListInSale = serviceDb.getAllCardFromSale();
         page = "1";
-        model.addAttribute("storage_size", characterResultList.size());
-        model.addAttribute("characters_list", characterResultList);
-        model.addAttribute("current_page", page);
-        model.addAttribute("sale_size", characterResultListInSale.size());
-        model.addAttribute("sale_cards", characterResultListInSale);
+        model.addAttribute("storage_size", characterResultList.size())
+                .addAttribute("characters_list", characterResultList)
+                .addAttribute("current_page", page)
+                .addAttribute("sale_size", characterResultListInSale.size())
+                .addAttribute("sale_cards", characterResultListInSale);
         return "storage";
 
     }
@@ -183,7 +182,6 @@ public class StorageWebController {
 
     @GetMapping("/sale/page/{page}")
     public String getAllCardsInSale(@PathVariable("page") Integer page, Model model) {
-        //TODO оптимизировать - пока тестовый вариант
         Cards cards = serviceDb.getAllCardsStorageFromSale(page);
         model.addAttribute("sale_size", cards.getInfo().getCount())
                 .addAttribute("amount_pages", cards.getInfo().getPages())

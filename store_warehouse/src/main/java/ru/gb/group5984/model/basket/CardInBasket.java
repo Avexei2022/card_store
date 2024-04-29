@@ -1,16 +1,16 @@
-package ru.gb.group5984.model.storage;
+package ru.gb.group5984.model.basket;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
 import ru.gb.group5984.model.characters.CharacterResult;
 
-
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Data
-@Table(name = "cards_storage")
-public class CardsStorage {
+@Table(name = "card_in_basket")
+public class CardInBasket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -21,4 +21,8 @@ public class CardsStorage {
     private Integer amount;
     @Column(name = "price")
     private Double price;
+    @Column(name="cards_storage_id")
+    private Long cardsStorageId;
+    @Column(name = "created")
+    private LocalDateTime created;
 }

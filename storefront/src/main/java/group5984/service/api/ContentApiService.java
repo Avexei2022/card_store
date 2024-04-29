@@ -1,9 +1,7 @@
 package group5984.service.api;
 
-import group5984.model.storage.CardsStorage;
-import org.springframework.data.domain.Page;
-
-import java.util.List;
+import group5984.model.basket.Basket;
+import group5984.model.storage.Cards;
 
 /**
  * Интерфейс сервиса взаимодействия с сайтом Rick and Morty
@@ -11,18 +9,12 @@ import java.util.List;
 public interface ContentApiService {
     /**
      * Получить с сайта Rick and Morty страницу со списком героев
-     * @param url ссылка на сайт Rick and Morty в соответствии с документацией
+     * @param way ссылка на сайт Rick and Morty в соответствии с документацией
      * @return Страница со списком героев
      */
-    Page<CardsStorage> getAllCardsStorage(String url);
+    Cards getAllFromSale(String way);
+    Basket getAllFromBasket(String way);
+    void addToBasketById(Integer id);
 
-    /**
-     * Метод сохранения выбранной прльзователем карточки в базе данных
-     * @param url ссылка
-     */
-    void saveOneCardsStorageById(String url);
-
-    void deleteOneCardsStorageById(String url);
-
-
+    void deleteFromBasketById(Integer id);
 }

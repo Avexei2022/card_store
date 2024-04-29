@@ -10,3 +10,5 @@ spring:
       server:
         git:
           uri: https://github.com/Avexei2022/CardStoreConfig.git
+          basedir: file://c:/tmp/card_store
+          default-label: main

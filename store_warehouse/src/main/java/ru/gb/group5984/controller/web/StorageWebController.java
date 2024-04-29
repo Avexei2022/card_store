@@ -85,7 +85,7 @@ public class StorageWebController {
     public String addToStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         String url = basicConfig.getCHARACTER_API() + "/" + id;
         serviceApi.saveOneCharacterById(url);
-        return "redirect:/characters/page/" + page;
+        return "redirect:/storage/characters/page/" + page;
     }
 
     /**
@@ -100,7 +100,7 @@ public class StorageWebController {
     @GetMapping("/characters/delete_from_storage/{id}/{page}")
     public String deleteFromStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         serviceDb.deleteById(id);
-        return "redirect:/characters/page/" + page;
+        return "redirect:/storage/characters/page/" + page;
     }
 
     /**
@@ -162,7 +162,7 @@ public class StorageWebController {
     @GetMapping("/storage/add_to_sale/{id}/{page}")
     public String addToSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         serviceDb.saveOneCardById(id);
-        return "redirect:/storage/page/" + page;
+        return "redirect:/storage/storage/page/" + page;
     }
 
     /**
@@ -177,7 +177,7 @@ public class StorageWebController {
     @GetMapping("/storage/delete_from_sale/{id}/{page}")
     public String deleteFromSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         serviceDb.deleteCardFromSaleById(id);
-        return "redirect:/storage/page/" + page;
+        return "redirect:/storage/storage/page/" + page;
     }
 
     @GetMapping("/sale/page/{page}")
@@ -196,7 +196,7 @@ public class StorageWebController {
     @PostMapping("/sale/update")
     public String updateSaleCard(CardsStorage cardsStorage) {
         serviceDb.saveCardStorage(cardsStorage);
-        return "redirect:/sale/page/1";
+        return "redirect:/storage/sale/page/1";
     }
 
 }

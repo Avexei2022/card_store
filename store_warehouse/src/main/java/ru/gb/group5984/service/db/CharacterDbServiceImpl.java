@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.basket.BasketInfo;
 import ru.gb.group5984.model.basket.CardInBasket;
@@ -41,7 +42,9 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * Сохранение единицы товара, закупленного у поставщика,
      * в базе данных товаров на складе.
      * @param characterResult Единица товара
+     * Данные действия пользователя выводятся в консоль
      */
+    @TrackUserAction
     @Override
     public void saveOneCharacter(CharacterResult characterResult) {
         if (characterResult != null) characterRepository.save(characterResult);
@@ -50,7 +53,9 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     /**
      * Получить полный список товаров из базы данных товаров на складе
      * @return список товара
+     * Данные действия пользователя выводятся в консоль
      */
+    @TrackUserAction
     @Override
     public List<CharacterResult> getAllFromStorage() {
         return characterRepository.findAll();
@@ -59,8 +64,10 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     /**
      * Удалить единицу товара из базы данных товаров на складе
      * @param id Id Товара
+     * Данные действия пользователя выводятся в консоль
      */
     @Override
+    @TrackUserAction
     public void deleteById(Integer id) {
         characterRepository.deleteById(id);
     }
@@ -70,8 +77,10 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * Выствить товар на продажу
      * @param id - id товара
      * Устанавливается количество товара и стоимость единицы товара
+     * Данные действия пользователя выводятся в консоль
      */
     @Override
+    @TrackUserAction
     public void saveOneCardById(Integer id) {
         CharacterResult characterResult = characterRepository.findById(id).orElse(null);
         if (characterResult != null) {
@@ -86,7 +95,9 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     /**
      * Получить список товара, выставленного на продажу
      * @return список товара.
+     * Данные действия пользователя выводятся в консоль
      */
+    @TrackUserAction
     @Override
     public List<CharacterResult> getAllCardFromSale() {
         List<CardsStorage> cardsStorageList = cardsRepository.findAll();
@@ -104,7 +115,9 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * - номера текущей, предыдущей и следующей страниц.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы
+     * Данные действия пользователя выводятся в консоль
      */
+    @TrackUserAction
     @Override
     public Cards getAllCardsStorageFromSale(Integer page) {
         page = page - 1;
@@ -131,8 +144,10 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     /**
      * Удалить товар из списка продаж / убрать с полки.
      * @param id - id товара
+     * Данные действия пользователя выводятся в консоль
      */
     @Override
+    @TrackUserAction
     public void deleteCardFromSaleById(Integer id) {
         List<CardsStorage> cardsStorageList = cardsRepository.findAll();
         Long cardsStoreId = cardsStorageList.stream()
@@ -141,6 +156,12 @@ public class CharacterDbServiceImpl implements CharacterDbService{
         cardsRepository.deleteById(cardsStoreId);
     }
 
+    /**
+     * Закупка единицы товара у поставщика и сохранение на складе магазина
+     * @param cardsStorage единица товара
+     * Данные действия пользователя выводятся в консоль
+     */
+    @TrackUserAction
     @Override
     public void saveCardStorage(CardsStorage cardsStorage) {
         cardsRepository.save(cardsStorage);
@@ -181,8 +202,10 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * Если товар из данной партии в наличии на полке, то его количество увеличивается на количество товара в корзине.
      * Если товар из данной партии на полке отсутствует,
      * то восстанавливается партия товара на полке в количестве товара из корзины.
+     * Данные действия пользователя выводятся в консоль
      */
     @Override
+    @TrackUserAction
     @Transactional
     public void returnCardFromBasketToSale(Long id) {
         CardInBasket cardInBasket = basketRepository.findById(id).orElseThrow();
@@ -214,7 +237,9 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * - номера текущей, предыдущей и следующей страниц.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы
+     * Данные действия пользователя выводятся в консоль
      */
+    @TrackUserAction
     @Override
     public Basket getAllFromBasket(Integer page) {
         page = page - 1;

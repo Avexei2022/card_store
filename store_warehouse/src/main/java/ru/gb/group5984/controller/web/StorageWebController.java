@@ -33,7 +33,7 @@ public class StorageWebController {
      * Метод принудительного перенаправления к методу подготовки страниц
      * @return ссылка на первую страницу героев
      */
-    @GetMapping("")
+    @GetMapping("/")
     public String redirectToFirstPage() {
         return "redirect:/storage/characters/page/1";
     }

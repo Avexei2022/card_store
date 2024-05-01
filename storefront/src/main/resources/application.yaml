@@ -1,3 +1,5 @@
+server:
+  port: 8083
 spring:
   application:
     name: storefront
@@ -9,10 +11,9 @@ eureka:
       defaultZone: http://localhost:8761/eureka
 url:
   STORAGE_API: "http://localhost:8082/storage/rest"
-server:
-  port: 8083
-management:
-  endpoints:
-    web:
-      exposure:
-        include: metrics,prometheus
+
+#management:
+#  endpoints:
+#    web:
+#      exposure:
+#        include: metrics,prometheus

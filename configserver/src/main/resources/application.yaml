@@ -3,12 +3,13 @@ server:
 
 spring:
   application:
-    name: ConfigServer
-
+    name: configserver
   cloud:
     config:
       server:
         git:
           uri: https://github.com/Avexei2022/CardStoreConfig.git
-          basedir: file://c:/tmp/card_store
+          search-path: /tree/main/config
           default-label: main
+          search-paths: "{application}"
+

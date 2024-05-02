@@ -2,7 +2,7 @@ package group5984.service.api;
 
 import group5984.configuration.BasicConfig;
 import group5984.model.basket.Basket;
-import group5984.model.storage.Cards;
+import group5984.model.clients.Cards;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +87,21 @@ public class ContentApiServiceImpl implements ContentApiService {
     @Override
     public void deleteFromBasketById(Integer id) {
         String url = basicConfig.getSTORAGE_API() + "/basket/delete_from_basket/" + id;
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        HttpMethod method = HttpMethod.GET;
+        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        Class<HttpStatusCode> responseType = HttpStatusCode.class;
+        log.info("URI - " + url);
+        ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        response.getStatusCode();
+    }
+
+    /**
+     * Оплатить товар в корзине
+     */
+    @Override
+    public void basketPay() {
+        String url = basicConfig.getSTORAGE_API() + "/basket/pay";
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = new HttpEntity<>(headers);

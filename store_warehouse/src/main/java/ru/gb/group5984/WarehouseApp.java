@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
-
+//TODO Разделить на два микросервиса
 /**
  * Основной класс микоросервиса Склад магазина
  * Зарегистрирован на сервере Eureka

@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Основной класс микоросервиса Склад магазина
+ * Основной класс микоросервиса Витрина / торговый зал магазина
  * Зарегистрирован на сервере Eureka
  */
 @SpringBootApplication

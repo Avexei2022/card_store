@@ -42,7 +42,7 @@
               th:href="@{/storefront/cards/page/1}"
               title="Витрина магазина"
               style="text-decoration: none"
-              >Purchase</a
+              >Товар</a
             >
           </li>
           <li class="header_nav_ul_li">
@@ -51,7 +51,16 @@
               th:href="@{/storefront/basket/page/1}"
               title="Корзина"
               style="text-decoration: none"
-              >Basket</a
+              >Корзина</a
+            >
+          </li>
+          <li class="header_nav_ul_li">
+            <a
+              class="header_nav_ul_li_a"
+              th:href="@{/storefront/basket/pay}"
+              title="Оплатить товар в корзине"
+              style="text-decoration: none"
+              >Оплатить</a
             >
           </li>
           <li class="header_nav_ul_li">
@@ -60,7 +69,7 @@
               href="#"
               title="Приобретенный товар"
               style="text-decoration: none"
-              >Purchased</a
+              >Покупки</a
             >
           </li>
 
@@ -70,7 +79,7 @@
               href="#"
               style="text-decoration: none"
             >
-              <span class="header_nav_ul_li_a_buy_span">Login/Logout TODO</span>
+              <span class="header_nav_ul_li_a_buy_span">Login/Logout_TODO</span>
             </a>
           </li>
         </ul>
@@ -179,6 +188,10 @@
         <li class="footer_ul_1_li_1">
           <span class="footer_ul_1_li_1_a">Amount of cards:</span>
           <span class="footer_ul_1_li_1_a_span" th:text="${sale_size}"></span>
+        </li>
+        <li class="footer_ul_1_li_1">
+          <span class="footer_ul_1_li_1_a">TotalPrice:</span>
+          <span class="footer_ul_1_li_1_a_span" th:text="${total_price}"></span>
         </li>
         <li class="footer_ul_1_li_1">
           <span class="footer_ul_1_li_1_a">Amount of pages:</span>

@@ -18,7 +18,7 @@ import java.util.List;
 
 
 /**
- * Веб контроллер закупки товаров на склад
+ * Веб контроллер склада магазина
  */
 @Controller
 @RequiredArgsConstructor
@@ -30,8 +30,8 @@ public class StorageWebController {
     private final BasicConfig basicConfig;
 
     /**
-     * Метод принудительного перенаправления к методу подготовки страниц
-     * @return ссылка на первую страницу героев
+     * Переадресация к странице 1 списка товаров поставщика
+     * @return адрес
      */
     @GetMapping("/")
     public String redirectToFirstPage() {
@@ -39,22 +39,16 @@ public class StorageWebController {
     }
 
     /**
-     * Основной метод подготовки вебстраницы
-     * @param page номер страницы в списке героев с рессурса Rick and Morty
+     * Подготовка веб-страницы для закупки товаров на склад магазина
+     * @param page номер страницы в списке товаров с рессурса поставщика - Rick and Morty
      * @param model Модель веб страницы
-     * @return готовая страница index.html
-     * Шаги:
-     * - подготовка ссылки на соответствующую страницу героев в соответствии с документацией Rick and Morty
-     * - Получение с рессурса Rick and Morty объединенной информации о странице со списком героев
-     * - Изъятие информационной части
-     * - Изъятие списка героев
-     * - получение списка героев из базы данных (корзины)
-     * - подгрузка в модель:
+     * @return готовая страница purchase.html
+     * В модель страницы загружается следющая информация:
      *      - информация о странице;
-     *      - список героев;
-     *      - номер текущей страниы;
-     *      - количество карточек героев в корзине;
-     *      - список карточек героев из корзины
+     *      - список товаров поставщика;
+     *      - номер текущей страницы из списка товаров;
+     *      - количество товара, закупленного на склад;
+     *      - список товаров на складе.
      */
     @GetMapping("/characters/page/{page}")
     public String getCharacters(@PathVariable("page") String page, Model model) {
@@ -72,15 +66,11 @@ public class StorageWebController {
     }
 
     /**
-     * Метод добавления карточки героя в корзину
-     * @param id номер героя
+     * Добавить единицу товара на склад - закупить у поставщика.
+     * @param id номер товара
      * @param page номер текущей страницы для возврата к ней
      * @return возврат ссылки на соответствующую страницу
-     * Шаги:
-     *      - подготовка ссылки на страницу героя по его id в соответствии с документацией Rick and Morty
-     *      - передача сервису подготовленной ссылки для загрузки карточки героя и сохранения её в базе данных
-     *      - возврат к странице, с которой карточка героя была добавлена в корзину
-     */
+      */
     @GetMapping("/characters/add_to_storage/{id}/{page}")
     public String addToStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         String url = basicConfig.getCHARACTER_API() + "/" + id;
@@ -89,13 +79,10 @@ public class StorageWebController {
     }
 
     /**
-     * Метод удаления карточки героя из базы данных
-     * @param id id героя
+     * Удалить единицу товара со склада.
+     * @param id id товара
      * @param page номер страницы на которой пользователь производил действия удаления
      * @return возврат к этой же странице
-     * Шаги:
-     *      - передача сервису id героя для удаления его карточки из базы данных
-     *      - возврат к страние
      */
     @GetMapping("/characters/delete_from_storage/{id}/{page}")
     public String deleteFromStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
@@ -134,6 +121,12 @@ public class StorageWebController {
         return characterInfo;
     }
 
+    /**
+     * Получить страницу из списка товаров, хранящихся на складе.
+     * @param page номер страницы
+     * @param model модель веб-страницы
+     * @return веб-страница storage.html
+     */
     @GetMapping("/storage/page/{page}")
     public String getAllCardsInStorage(@PathVariable("page") String page, Model model) {
         //TODO оптимизировать - пока тестовый вариант
@@ -150,14 +143,10 @@ public class StorageWebController {
     }
 
     /**
-     * Метод добавления карточки героя в корзину
-     * @param id номер героя
+     * Переместить единицу товара со склада на полку продаж
+     * @param id номер товара
      * @param page номер текущей страницы для возврата к ней
      * @return возврат ссылки на соответствующую страницу
-     * Шаги:
-     *      - подготовка ссылки на страницу героя по его id в соответствии с документацией Rick and Morty
-     *      - передача сервису подготовленной ссылки для загрузки карточки героя и сохранения её в базе данных
-     *      - возврат к странице, с которой карточка героя была добавлена в корзину
      */
     @GetMapping("/storage/add_to_sale/{id}/{page}")
     public String addToSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
@@ -166,13 +155,10 @@ public class StorageWebController {
     }
 
     /**
-     * Метод удаления карточки героя из списка продаж
-     * @param id id героя
+     * Удалить товар из списка продаж - убрать с витрины.
+     * @param id номер товара
      * @param page номер страницы на которой пользователь производил действия удаления
      * @return возврат к этой же странице
-     * Шаги:
-     *      - передача сервису id героя для удаления его карточки из базы данных
-     *      - возврат к страние
      */
     @GetMapping("/storage/delete_from_sale/{id}/{page}")
     public String deleteFromSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
@@ -180,6 +166,12 @@ public class StorageWebController {
         return "redirect:/storage/storage/page/" + page;
     }
 
+    /**
+     * Получить страницу из списка товаров, выставленных на продажу.
+     * @param page номер страницы
+     * @param model заготовка веб-страницы
+     * @return веб-страница sale.html
+     */
     @GetMapping("/sale/page/{page}")
     public String getAllCardsInSale(@PathVariable("page") Integer page, Model model) {
         Cards cards = serviceDb.getAllCardsStorageFromSale(page);
@@ -193,6 +185,11 @@ public class StorageWebController {
 
     }
 
+    /**
+     * Обновление информации о товаре, выставленного на продажу.
+     * @param cardsStorage карточка товара
+     * @return возврат к первой странице списка продаж.
+     */
     @PostMapping("/sale/update")
     public String updateSaleCard(CardsStorage cardsStorage) {
         serviceDb.saveCardStorage(cardsStorage);

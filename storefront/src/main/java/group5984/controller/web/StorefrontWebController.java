@@ -1,7 +1,7 @@
 package group5984.controller.web;
 
 import group5984.model.basket.Basket;
-import group5984.model.storage.Cards;
+import group5984.model.clients.Cards;
 import group5984.service.api.ContentApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -80,8 +80,9 @@ public class StorefrontWebController {
      *      - количество страниц для загрузки товара;
      *      - номер текущей страницы;
      *      - номер предыдущей страницы;
-     *      - номер следующей страницы
+     *      - номер следующей страницы;
      *      - список товара;
+     *      - общая сумма товаров в корзине.
      */
     @GetMapping("/basket/page/{page}")
     public String getAllFromBasket(@PathVariable("page") String page, Model model) {
@@ -91,7 +92,8 @@ public class StorefrontWebController {
                 .addAttribute("current_page", basket.getInfo().getCurrent())
                 .addAttribute("prev_page", basket.getInfo().getPrev())
                 .addAttribute("next_page", basket.getInfo().getNext())
-                .addAttribute("sale_list", basket.getCardInBasketList());
+                .addAttribute("sale_list", basket.getCardInBasketList())
+                .addAttribute("total_price", basket.getInfo().getTotalPrice());
         return "basket";
     }
 
@@ -105,6 +107,21 @@ public class StorefrontWebController {
     public String deleteFromBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         serviceApi.deleteFromBasketById(id);
         return "redirect:/storefront/basket/page/" + page;
+    }
+
+    //TODO Поработать над исключениями
+    /**
+     * Оплатить товар из корзины
+     * @return переход к веб-странице покупок
+     */
+    @GetMapping("/basket/pay")
+    public String basketPay() {
+        log.info("TEST 1");
+        try {
+            serviceApi.basketPay();
+        } catch (Exception ignore) {
+        }
+        return "redirect:/storefront/cards/page/1";
     }
 
 }

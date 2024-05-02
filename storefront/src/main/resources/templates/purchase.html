@@ -42,7 +42,7 @@
               th:href="@{/storefront/cards/page/1}"
               title="Витрина магазина"
               style="text-decoration: none"
-              >Purchase</a
+              >Товар</a
             >
           </li>
           <li class="header_nav_ul_li">
@@ -51,7 +51,16 @@
               th:href="@{/storefront/basket/page/1}"
               title="Корзина"
               style="text-decoration: none"
-              >Basket</a
+              >Корзина</a
+            >
+          </li>
+          <li class="header_nav_ul_li">
+            <a
+              class="header_nav_ul_li_a"
+              th:href="@{/storefront/basket/pay}"
+              title="Оплатить товар в корзине"
+              style="text-decoration: none"
+              >Оплатить</a
             >
           </li>
           <li class="header_nav_ul_li">
@@ -60,10 +69,9 @@
               href="#"
               title="Приобретенный товар"
               style="text-decoration: none"
-              >Purchased</a
+              >Покупки</a
             >
           </li>
-
 
           <li class="header_nav_ul_li_buy">
             <a
@@ -71,7 +79,7 @@
               href="#"
               style="text-decoration: none"
             >
-              <span class="header_nav_ul_li_a_buy_span">Login/Logout TODO</span>
+              <span class="header_nav_ul_li_a_buy_span">Login/Logout_TODO</span>
             </a>
           </li>
         </ul>
@@ -151,27 +159,26 @@
               </div>
               <div class="main_section_2_div_1_card_context_section_2">
                 <span class="main_section_2_div_1_card_context_section_2_span"
-                >Price:</span
+                  >Price:</span
                 >
                 <span
-                        class="main_section_2_div_1_card_context_section_2_a"
-                        th:text="${cards_storage.price}"
+                  class="main_section_2_div_1_card_context_section_2_a"
+                  th:text="${cards_storage.price}"
                 ></span>
               </div>
               <div class="main_section_2_div_1_card_context_section_2">
                 <span class="main_section_2_div_1_card_context_section_2_span"
-                >Rest:</span
+                  >Rest:</span
                 >
                 <span
-                        class="main_section_2_div_1_card_context_section_2_a"
-                        th:text="${cards_storage.amount}"
+                  class="main_section_2_div_1_card_context_section_2_a"
+                  th:text="${cards_storage.amount}"
                 ></span>
               </div>
             </div>
           </a>
         </div>
       </section>
-
     </main>
 
     <!-- FOOTER SECTION -->
@@ -183,26 +190,32 @@
         </li>
         <li class="footer_ul_1_li_1">
           <span class="footer_ul_1_li_1_a">Amount of pages:</span>
-          <span class="footer_ul_1_li_1_a_span" th:text="${amount_pages}"></span>
+          <span
+            class="footer_ul_1_li_1_a_span"
+            th:text="${amount_pages}"
+          ></span>
         </li>
         <li class="footer_ul_1_li_1">
           <a
-                  title="Prev page"
-                  th:href="@{/storefront/cards/page/{prev} (prev=${prev_page})}"
-                  class="footer_ul_1_li_1_a"
-          ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
+            title="Prev page"
+            th:href="@{/storefront/cards/page/{prev} (prev=${prev_page})}"
+            class="footer_ul_1_li_1_a"
+            ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
           >
         </li>
         <li class="footer_ul_1_li_1">
           <span class="footer_ul_1_li_1_a">Page-</span>
-          <span class="footer_ul_1_li_1_a_span" th:text="${current_page}"></span>
+          <span
+            class="footer_ul_1_li_1_a_span"
+            th:text="${current_page}"
+          ></span>
         </li>
         <li class="footer_ul_1_li_1">
           <a
-                  title="Next page"
-                  th:href="@{/storefront/cards/page/{next} (next=${next_page})}"
-                  class="footer_ul_1_li_1_a"
-          ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
+            title="Next page"
+            th:href="@{/storefront/cards/page/{next} (next=${next_page})}"
+            class="footer_ul_1_li_1_a"
+            ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
           >
         </li>
       </ul>

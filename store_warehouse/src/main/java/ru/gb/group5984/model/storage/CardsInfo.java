@@ -1,9 +1,11 @@
 package ru.gb.group5984.model.storage;
 
-import jakarta.persistence.Entity;
 import lombok.Data;
 
-
+/**
+ * Информационная часть страницы о списке товаров, выставленных на продажу,
+ * загруженная постранично из базы данных.
+ */
 @Data
 public class CardsInfo {
     private Long count;

@@ -1,4 +1,4 @@
-package group5984.model.characters;
+package group5984.model.visitors;
 
 import lombok.Data;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import java.util.Date;
 
 /**
  * Карточка героя в соответствии с документацией Rick and Morty
- * Добавлены аннотации для базы данных
+
  */
 @Data
 @Setter

@@ -5,7 +5,10 @@ import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
 
 import java.time.LocalDateTime;
-import java.util.Date;
+
+/**
+ * Товар в корзине покупателей, информация о котоором хранится в базе данных
+ */
 
 @Entity
 @Data

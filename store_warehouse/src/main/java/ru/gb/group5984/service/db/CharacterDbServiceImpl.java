@@ -234,7 +234,8 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * Список товаров дополнен следующей информацией о нем:
      * - общее количество товаров в корзине;
      * - количество страниц;
-     * - номера текущей, предыдущей и следующей страниц.
+     * - номера текущей, предыдущей и следующей страниц;
+     * -общая сумма товара в корзине.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы
      * Данные действия пользователя выводятся в консоль
@@ -257,9 +258,35 @@ public class CharacterDbServiceImpl implements CharacterDbService{
             basketInfo.setNext(cardInBasketPage.getNumber() + 2);
         else basketInfo.setNext(1);
         basketInfo.setCurrent(cardInBasketPage.getNumber() + 1);
+        basketInfo.setTotalPrice(basketRepository.findAll()
+                .stream()
+                .map(CardInBasket::getPrice)
+                .reduce(Double::sum)
+                .orElse(0.0));
         basket.setCardInBasketList(cardInBasketPage.toList());
         basket.setInfo(basketInfo);
         return basket;
     }
+
+    /**
+     * Получить общую сумму товаров в корзине
+     * @return сумма товаров в корзине
+     */
+    @Override
+    public Double getTotalPriceFromBasket() {
+        return basketRepository.findAll().stream()
+                .map(CardInBasket::getPrice)
+                .reduce(Double::sum)
+                .orElse(0.0);
+    }
+
+    /**
+     * Удалить все товары из корзины
+     */
+    @Override
+    public void deleteAllFromBasket() {
+        basketRepository.deleteAll();
+    }
+
 
 }

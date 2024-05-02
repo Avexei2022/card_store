@@ -1,26 +1,30 @@
 package ru.gb.group5984.service.api;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.transactions.Transaction;
 import ru.gb.group5984.service.db.CharacterDbService;
 
 import java.util.List;
 
+
 /**
- * Сервис героев
- * Работает с рессурсом Rick and Morty и с базой данных
+ * Сервис получения данных с сайта Rick and Morty
  */
 @Service
 @RequiredArgsConstructor
 @Log
 public class CharacterApiServiceImpl  implements CharacterApiService{
     private final CharacterDbService characterDbService;
+    private final BasicConfig basicConfig;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -45,11 +49,8 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     }
 
     /**
-     * Метод сохранения выбранной пользователем карточки в базе данных
-     * @param url ссылка
-     * Этапы:
-     *  - осуществляется поиск карточки по её id нв сайте Rick and Morty;
-     *  - если карточка найдена, то она передается в сервис работы с базой данных для её сохранения
+     * "Закупка" единицы товара на сервисе Rick and Morty и сохранение в базе данных склада
+     * @param url ссылка на сервис Rick and Morty
      */
     @Override
     public void saveOneCharacterById(String url) {
@@ -62,4 +63,20 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
         if (characterResult != null) characterDbService.saveOneCharacter(characterResult);
     }
 
+    //TODO Доработать
+    /**
+     * Оплата товара из корзины покупателя через банк.
+     */
+    @Override
+    @Transactional
+    public void basketPay() {
+        Double totalAmount = characterDbService.getTotalPriceFromBasket();
+        String url = basicConfig.getBANK_API();
+        Transaction transaction = new Transaction();
+        transaction.setCreditAccount(2L); // Пока тест
+        transaction.setDebitAccount(1L); // Пока тест
+        transaction.setTransferAmount(totalAmount);
+        restTemplate.postForEntity(url, transaction, Transaction.class);
+        characterDbService.deleteAllFromBasket();
+    }
 }

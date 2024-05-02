@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.storage.Cards;
+import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.db.CharacterDbService;
 
 
@@ -24,11 +25,12 @@ import ru.gb.group5984.service.db.CharacterDbService;
 @RequestMapping("/storage/rest")
 @Log
 public class StorageRestController {
-    private final CharacterDbService service;
+    private final CharacterDbService serviceDb;
+    private final CharacterApiService serviceApi;
 
     /**
-     * Принудительная пересылка на загрузку первой страницы списка товаров
-     * @return ссылка на метод получения первой страницы  из списка товаров
+     * Переадресация на первую страницу списка товаров
+     * @return адрес первой страницы списка товаров
      */
     @GetMapping("")
     public String redirectToFirstPage() {
@@ -41,7 +43,7 @@ public class StorageRestController {
      */
     @GetMapping("/cards/page/{page}")
     public ResponseEntity<Cards> getAllCards(@PathVariable("page") Integer page) {
-        return new ResponseEntity<>(service.getAllCardsStorageFromSale(page), HttpStatus.OK);
+        return new ResponseEntity<>(serviceDb.getAllCardsStorageFromSale(page), HttpStatus.OK);
     }
 
     /**
@@ -51,7 +53,7 @@ public class StorageRestController {
      */
     @GetMapping("/basket/add_to_basket/{id}")
     public ResponseEntity<Void> addToBasket(@PathVariable("id") Long id) {
-        service.moveCardToBasket(id);
+        serviceDb.moveCardToBasket(id);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +64,7 @@ public class StorageRestController {
      */
     @GetMapping("/basket/page/{page}")
     public ResponseEntity<Basket> getAllFromBasket(@PathVariable("page") Integer page) {
-        return new ResponseEntity<>(service.getAllFromBasket(page), HttpStatus.OK);
+        return new ResponseEntity<>(serviceDb.getAllFromBasket(page), HttpStatus.OK);
     }
 
     /**
@@ -72,7 +74,17 @@ public class StorageRestController {
      */
     @GetMapping("/basket/delete_from_basket/{id}")
     public ResponseEntity<Void> deleteFromBasket(@PathVariable("id") Long id) {
-        service.returnCardFromBasketToSale(id);
+        serviceDb.returnCardFromBasketToSale(id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Оплата товара из корзины покупателя.
+     * @return
+     */
+    @GetMapping("/basket/pay")
+    public ResponseEntity<Void> basketPay() {
+        serviceApi.basketPay();
         return ResponseEntity.ok().build();
     }
 }

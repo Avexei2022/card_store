@@ -3,7 +3,8 @@ package ru.gb.group5984.model.characters;
 import lombok.Data;
 
 /**
- * Информационная часть страницы в соотвествии с документацией Rick and Morty
+ * Информационная часть страницы о списке товаров, находящихся на складе
+ * , но не выставленных на продажу.
  */
 @Data
 public class CharacterInfo {

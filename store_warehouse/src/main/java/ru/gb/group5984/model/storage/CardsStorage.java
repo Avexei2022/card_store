@@ -6,7 +6,9 @@ import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
 
 
-
+/**
+ * Товар, выставленный на продажу, информация о котоором хранится в базе данных
+ */
 @Entity
 @Data
 @Table(name = "cards_storage")

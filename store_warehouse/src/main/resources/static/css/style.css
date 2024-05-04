@@ -293,7 +293,7 @@ main {
   margin: 0.75rem;
   box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
     rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
-  cursor:pointer;
+  cursor: pointer;
   text-decoration: none;
 }
 
@@ -509,6 +509,7 @@ main {
   text-transform: uppercase;
   text-align: center;
   font-weight: bold;
+  color: rgb(224, 224, 224);
 }
 
 .footer_about {

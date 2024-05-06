@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Основной класс микоросервиса Банка
+ * Основной класс микросервиса Банка.
  * Зарегистрирован на сервере Eureka
  */
 @SpringBootApplication

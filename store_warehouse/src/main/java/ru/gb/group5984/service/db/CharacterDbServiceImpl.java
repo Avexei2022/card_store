@@ -61,6 +61,7 @@ public class CharacterDbServiceImpl implements CharacterDbService{
         return characterRepository.findAll();
     }
 
+    //TODO Добавить проверку на наличие товара в продаже и в корзине
     /**
      * Удалить единицу товара из базы данных товаров на складе
      * @param id Id Товара

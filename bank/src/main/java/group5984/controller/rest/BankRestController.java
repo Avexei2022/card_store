@@ -4,7 +4,6 @@ import group5984.model.transactions.Transaction;
 import group5984.service.db.BankDbService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

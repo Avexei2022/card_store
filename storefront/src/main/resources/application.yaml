@@ -1,16 +1,24 @@
+#SERVER
 server:
   port: 8083
+
+#SPRING
 spring:
   application:
     name: storefront
   config:
     import: configserver:http://localhost:8888
+
+#EUREKA
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+#RESOURCE_URL
 url:
   STORAGE_API: "http://localhost:8082/storage/rest"
+
 
 #management:
 #  endpoints:

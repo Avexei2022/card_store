@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.security.Principal;
 
 
 /**
@@ -22,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Log
 public class StorefrontWebController {
     private final ContentApiService serviceApi;
-
 
     /**
      * Перенаправление к методу вызова основной веб-страницы списка товаров

@@ -3,8 +3,9 @@ package group5984.service.api;
 import group5984.model.basket.Basket;
 import group5984.model.clients.Cards;
 
+
 /**
- * Интерфейс сервиса витрины / торгового зала магазина
+ * Интерфейс сервиса витрины / торгового зала магазина.
  * Готовит запросы на склад и получает от него соответствующие ответы
  */
 public interface ContentApiService {
@@ -30,7 +31,7 @@ public interface ContentApiService {
     void addToBasketById(Integer id);
 
     /**
-     * вернуть товар из корзины покупателя на полку
+     * Вернуть товар из корзины покупателя на полку
      * @param id - id товара
      */
     void deleteFromBasketById(Integer id);

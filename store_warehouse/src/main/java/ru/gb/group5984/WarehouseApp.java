@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 //TODO Разделить на два микросервиса
 /**
- * Основной класс микоросервиса Склад магазина
+ * Основной класс микросервиса Склад магазина.
  * Зарегистрирован на сервере Eureka
  */
 @SpringBootApplication

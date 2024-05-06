@@ -8,8 +8,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class ApiGatewayApp {
     public static void main(String[] args) {
         SpringApplication.run(ApiGatewayApp.class, args);
-
-
     }
 
 }

@@ -1,5 +1,8 @@
+#SERVER
 server:
   port: 8082
+
+#SPRING
 spring:
   application:
     name: store_warehouse
@@ -17,10 +20,15 @@ spring:
     show-sql: true
   config:
     import: configserver:http://localhost:8888
+
+
+#EUREKA
 eureka:
   client:
     service-url:
       defaultZone: http://localhost:8761/eureka
+
+#RESORECE_URL
 url:
   CHARACTER_API: "https://rickandmortyapi.com/api/character"
   BANK_API: "http://localhost:8081/bank/rest"

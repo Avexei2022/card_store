@@ -36,7 +36,7 @@
           </svg>
         </a>
         <ul class="header_nav_ul">
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" >
             <a
               class="header_nav_ul_li_a"
               th:href="@{/storage/characters/page/1}"
@@ -72,7 +72,7 @@
               >Reserved</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="hasRole('admin')">
             <a
               class="header_nav_ul_li_a"
               href="#"
@@ -81,7 +81,7 @@
               >Sold</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="hasRole('ADMIN')">
             <a
               class="header_nav_ul_li_a"
               href="#"
@@ -90,13 +90,27 @@
               >Customers</a
             >
           </li>
-          <li class="header_nav_ul_li_buy">
+          <li class="header_nav_ul_li_buy" sec:authorize="!isAuthenticated()">
             <a
               class="header_nav_ul_li_a_buy"
-              href="#"
+              href="/login"
               style="text-decoration: none"
             >
-              <span class="header_nav_ul_li_a_buy_span">Login/Logout_TODO</span>
+              <span class="header_nav_ul_li_a_buy_span" title="LogIn">Login</span>
+            </a>
+          </li>
+          <li class="header_nav_ul_li_buy" sec:authorize="isAuthenticated()">
+            <a
+              class="header_nav_ul_li_a_buy"
+              href="/logout"
+              style="text-decoration: none"
+            >
+              <span
+                class="header_nav_ul_li_a_buy_span"
+                sec:authentication="principal.username"
+                title="LogOut"
+                >Logout</span
+              >
             </a>
           </li>
         </ul>

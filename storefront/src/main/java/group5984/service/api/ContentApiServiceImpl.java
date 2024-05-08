@@ -81,7 +81,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     }
 
     /**
-     * вернуть товар из корзины покупателя на полку
+     * Вернуть товар из корзины покупателя на полку
      * @param id        - id товара
      */
     @Override

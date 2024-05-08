@@ -1,0 +1,16 @@
+#SERVER
+server:
+  port: 9000
+
+#SPRING
+spring:
+  application:
+    name: auth_server
+  config:
+    import: configserver:http://localhost:8888
+
+#EUREKA
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka

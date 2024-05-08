@@ -20,6 +20,11 @@ spring:
     show-sql: true
   config:
     import: configserver:http://localhost:8888
+#  security:
+#    oauth2:
+#      resourceserver:
+#        jwt:
+#          issuer-uri: http://localhost:9000
 
 #EUREKA
 eureka:

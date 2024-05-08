@@ -16,7 +16,6 @@ import org.springframework.web.client.RestTemplate;
 @SpringBootApplication
 @EnableDiscoveryClient
 @ConfigurationPropertiesScan
-
 public class StorefrontApp {
     public static void main(String[] args) {
         SpringApplication.run(StorefrontApp.class, args);

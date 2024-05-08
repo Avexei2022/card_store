@@ -7,7 +7,7 @@ import ru.gb.group5984.model.characters.CharacterResult;
 import java.time.LocalDateTime;
 
 /**
- * Товар в корзине покупателей, информация о котоором хранится в базе данных
+ * Товар в корзине покупателей, информация о котором хранится в базе данных
  */
 
 @Entity

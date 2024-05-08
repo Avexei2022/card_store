@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
   <head>
     <title>The Rick and Morty Card Store</title>
     <!-- Required meta tags -->
@@ -73,13 +73,27 @@
             >
           </li>
 
-          <li class="header_nav_ul_li_buy">
+          <li class="header_nav_ul_li_buy" sec:authorize="!isAuthenticated()">
             <a
-              class="header_nav_ul_li_a_buy"
-              href="#"
-              style="text-decoration: none"
+                    class="header_nav_ul_li_a_buy"
+                    href="/login"
+                    style="text-decoration: none"
             >
-              <span class="header_nav_ul_li_a_buy_span">Login/Logout_TODO</span>
+              <span class="header_nav_ul_li_a_buy_span" title="LogIn">Login</span>
+            </a>
+          </li>
+          <li class="header_nav_ul_li_buy" sec:authorize="isAuthenticated()">
+            <a
+                    class="header_nav_ul_li_a_buy"
+                    href="/logout"
+                    style="text-decoration: none"
+            >
+              <span
+                      class="header_nav_ul_li_a_buy_span"
+                      sec:authentication="principal.username"
+                      title="LogOut"
+              >Logout</span
+              >
             </a>
           </li>
         </ul>

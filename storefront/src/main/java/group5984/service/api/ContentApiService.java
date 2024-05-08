@@ -11,18 +11,18 @@ import group5984.model.clients.Cards;
 public interface ContentApiService {
 
     /**
-     * Получить со склада список товаров, выставленных на продажу
-     * @param way путь соответствующего запроса на склад
-     * @return Список товаров на полке
+     * Получить со склада список товаров, выставленных на продажу.
+     * @param page запрашиваемая страница товаров.
+     * @return Список товаров на полке.
      */
-    Cards getAllFromSale(String way);
+    Cards getAllFromSale(String page);
 
     /**
      * Получить список товаров в корзине покупателя
-     * @param way путь соответствующего запроса на склад
+     * @param page запрашиваемая страница товаров
      * @return список товаров в корзине
      */
-    Basket getAllFromBasket(String way);
+    Basket getAllFromBasket(String page);
 
     /**
      * Добавить товар в корзину покупателя

@@ -1,11 +1,11 @@
 #SERVER
 server:
-  port: 8083
+  port: 8084
 
 #SPRING
 spring:
   application:
-    name: storefront
+    name: store_resource_server
   datasource:
     url: jdbc:postgresql://localhost:5432/db_trading_floor
     username: admin
@@ -27,13 +27,7 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
-#RESOURCE_URL
+#RESORECE_URL
 url:
-  SERVER_API: "http://localhost:8084/server"
-
-
-#management:
-#  endpoints:
-#    web:
-#      exposure:
-#        include: metrics,prometheus
+  CHARACTER_API: "https://rickandmortyapi.com/api/character"
+  BANK_API: "http://localhost:8081/bank/rest"

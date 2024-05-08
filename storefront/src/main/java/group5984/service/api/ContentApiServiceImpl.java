@@ -14,7 +14,7 @@ import java.util.List;
 
 /**
  * Сервис витрины / торгового зала магазина.
- * Готовит запросы на склад и получает от него соответствующие ответы
+ * Готовит запросы на склад и получает от него соответствующие ответы.
  */
 @Service
 @RequiredArgsConstructor
@@ -31,14 +31,13 @@ public class ContentApiServiceImpl implements ContentApiService {
 
 
     /**
-     * Получить со склада список товаров, выставленных на продажу
-     *
-     * @param way       путь соответствующего запроса на склад
-     * @return Список товаров на полке
+     * Получить со склада список товаров, выставленных на продажу.
+     * @param page запрашиваемая страница товаров.
+     * @return Список товаров на полке.
      */
     @Override
-    public Cards getAllFromSale(String way) {
-        String url = basicConfig.getSTORAGE_API() + way;
+    public Cards getAllFromSale(String page) {
+        String url = basicConfig.getSERVER_API() + "/sale/page/" + page;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<Cards> responseType = Cards.class;
@@ -48,14 +47,13 @@ public class ContentApiServiceImpl implements ContentApiService {
     }
 
     /**
-     * Получить список товаров в корзине покупателя
-     *
-     * @param way       путь соответствующего запроса на склад
-     * @return список товаров в корзине
+     * Получить список товаров в корзине покупателя.
+     * @param page запрашиваемая страница товаров.
+     * @return список товаров в корзине.
      */
     @Override
-    public Basket getAllFromBasket(String way) {
-        String url = basicConfig.getSTORAGE_API() + way;
+    public Basket getAllFromBasket(String page) {
+        String url = basicConfig.getSERVER_API() + "/basket/page/" + page;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<Basket> responseType = Basket.class;
@@ -65,13 +63,12 @@ public class ContentApiServiceImpl implements ContentApiService {
     }
 
     /**
-     * Добавить товар в корзину покупателя
-     *
-     * @param id        - id товара
+     * Добавить товар в корзину покупателя.
+     * @param id - id товара.
      */
     @Override
     public void addToBasketById(Integer id) {
-        String url = basicConfig.getSTORAGE_API() + "/basket/add_to_basket/" + id;
+        String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
@@ -81,12 +78,12 @@ public class ContentApiServiceImpl implements ContentApiService {
     }
 
     /**
-     * Вернуть товар из корзины покупателя на полку
-     * @param id        - id товара
+     * Вернуть товар из корзины покупателя на полку.
+     * @param id - id товара.
      */
     @Override
     public void deleteFromBasketById(Integer id) {
-        String url = basicConfig.getSTORAGE_API() + "/basket/delete_from_basket/" + id;
+        String url = basicConfig.getSERVER_API() + "/basket/delete_from_basket/" + id;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
@@ -96,11 +93,11 @@ public class ContentApiServiceImpl implements ContentApiService {
     }
 
     /**
-     * Оплатить товар в корзине
+     * Оплатить товар в корзине.
      */
     @Override
     public void basketPay() {
-        String url = basicConfig.getSTORAGE_API() + "/basket/pay";
+        String url = basicConfig.getSERVER_API() + "/basket/pay";
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;

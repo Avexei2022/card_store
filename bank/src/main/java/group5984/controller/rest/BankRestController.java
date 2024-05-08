@@ -1,5 +1,6 @@
 package group5984.controller.rest;
 
+import group5984.aspect.TrackUserAction;
 import group5984.model.transactions.Transaction;
 import group5984.service.db.BankDbService;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +26,7 @@ public class BankRestController {
      * @param transaction транзакция с данными.
      * @return ответ с подтверждением.
      */
+    @TrackUserAction
     @PostMapping()
     public ResponseEntity<Void> transaction(@RequestBody Transaction transaction){
         service.transaction(transaction);

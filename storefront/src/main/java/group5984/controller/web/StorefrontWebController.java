@@ -48,7 +48,7 @@ public class StorefrontWebController {
      */
     @GetMapping("/cards/page/{page}")
     public String getAllCardsStorage(@PathVariable("page") String page, Model model) {
-        Cards cards = serviceApi.getAllFromSale("/cards/page/" + page);
+        Cards cards = serviceApi.getAllFromSale(page);
         model.addAttribute("sale_size", cards.getInfo().getCount())
                 .addAttribute("amount_pages", cards.getInfo().getPages())
                 .addAttribute("current_page", cards.getInfo().getCurrent())
@@ -86,7 +86,7 @@ public class StorefrontWebController {
      */
     @GetMapping("/basket/page/{page}")
     public String getAllFromBasket(@PathVariable("page") String page, Model model) {
-        Basket basket = serviceApi.getAllFromBasket("/basket/page/" + page);
+        Basket basket = serviceApi.getAllFromBasket(page);
         model.addAttribute("sale_size", basket.getInfo().getCount())
                 .addAttribute("amount_pages", basket.getInfo().getPages())
                 .addAttribute("current_page", basket.getInfo().getCurrent())

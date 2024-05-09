@@ -7,14 +7,14 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.gb.group5984.model.users.User;
-import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.model.users.ThisUserDetails;
+import ru.gb.group5984.service.api.ServerApiService;
 
 @Service
 @Log
 public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
-    private UserRepository userRepository;
+    private ServerApiService serverApiService;
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 //        userRepository.deleteAll();
@@ -27,10 +27,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 //        User admin = userRepository.findUserByUsername("admin");
 //        admin.setPassword("{noop}admin");
 //        userRepository.save(admin);
-        User user = userRepository.findUserByUsername(username);
-        if (user == null) {
+        try {
+            User user = serverApiService.getUserByUserName(username);
+            return new ThisUserDetails(user);
+        } catch (NullPointerException e) {
             throw  new UsernameNotFoundException("Could not find user");
         }
-        return new ThisUserDetails(user);
     }
 }

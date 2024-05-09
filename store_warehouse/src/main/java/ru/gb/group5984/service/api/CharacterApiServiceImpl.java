@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.configuration.BasicConfig;
-import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 
 
@@ -22,7 +21,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log
 public class CharacterApiServiceImpl  implements CharacterApiService{
-    private final ServerApiService serverApiService;
     private final BasicConfig basicConfig;
 
     @Autowired

@@ -3,6 +3,7 @@ package ru.gb.group5984.service.api;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.storage.Cards;
+import ru.gb.group5984.model.users.User;
 
 
 /**
@@ -62,4 +63,5 @@ public interface ServerApiService {
      */
     Basket getAllFromBasket(Integer page);
 
+    User getUserByUserName(String name);
 }

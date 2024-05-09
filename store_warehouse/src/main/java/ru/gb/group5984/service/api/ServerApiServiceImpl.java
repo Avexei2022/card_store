@@ -12,9 +12,8 @@ import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.storage.Cards;
-import ru.gb.group5984.repository.BasketRepository;
-import ru.gb.group5984.repository.CardsRepository;
-import ru.gb.group5984.repository.CharacterRepository;
+import ru.gb.group5984.model.users.User;
+
 import java.util.List;
 
 
@@ -29,9 +28,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log
 public class ServerApiServiceImpl implements ServerApiService {
-    private final CharacterRepository characterRepository;
-    private final CardsRepository cardsRepository;
-    private final BasketRepository basketRepository;
     private final BasicConfig basicConfig;
 
     @Autowired
@@ -213,6 +209,22 @@ public class ServerApiServiceImpl implements ServerApiService {
         Class<Basket> responseType = Basket.class;
         log.info("URI - " + url);
         ResponseEntity<Basket> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        return response.getBody();
+    }
+
+    /**
+     * Получить пользователя по имени.
+     * @param name имя пользователя.
+     * @return пользователь.
+     */
+    @Override
+    public User getUserByUserName(String name) {
+        String url = basicConfig.getSERVER_API() + "/user/" + name;
+        HttpMethod method = HttpMethod.GET;
+        HttpEntity<String> requestEntity = getRequestEntity();
+        Class<User> responseType = User.class;
+        log.info("URI - " + url);
+        ResponseEntity<User> response = restTemplate.exchange(url, method, requestEntity, responseType);
         return response.getBody();
     }
 

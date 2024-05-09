@@ -6,18 +6,6 @@ server:
 spring:
   application:
     name: store_warehouse
-  datasource:
-    url: jdbc:postgresql://localhost:5432/db_trading_floor
-    username: admin
-    password: admin
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      jdbc:
-        lob:
-          non_contextual_creation: true
-      ddl-auto: update
-    show-sql: true
   config:
     import: configserver:http://localhost:8888
 

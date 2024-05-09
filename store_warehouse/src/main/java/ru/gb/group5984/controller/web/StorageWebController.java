@@ -10,7 +10,6 @@ import ru.gb.group5984.model.characters.CharacterInfo;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.storage.Cards;
-import ru.gb.group5984.model.storage.CardsStorage;
 import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.api.ServerApiService;
 
@@ -27,7 +26,6 @@ import java.util.List;
 public class StorageWebController {
     private final CharacterApiService characterApiService;
     private final ServerApiService serverApiService;
-    private final BasicConfig basicConfig;
 
     /**
      * Переадресация к странице 1 списка товаров поставщика

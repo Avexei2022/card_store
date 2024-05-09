@@ -53,7 +53,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/css/**", "/", "/index")
+                                .requestMatchers("/css/**", "/", "/index", "bank/rest/**", "swagger/**")
                                     .permitAll()
                                 .anyRequest()
                                 .authenticated())

@@ -11,7 +11,7 @@ import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.transactions.Transaction;
-import ru.gb.group5984.service.db.CharacterDbService;
+import ru.gb.group5984.service.db.ServerDbService;
 
 import java.util.List;
 
@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log
 public class CharacterApiServiceImpl  implements CharacterApiService{
-    private final CharacterDbService characterDbService;
+    private final ServerDbService serverDbService;
     private final BasicConfig basicConfig;
 
     @Autowired
@@ -33,15 +33,24 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     private HttpHeaders headers;
 
     /**
-     * Получить с сайта Rick and Morty страницу со списком героев
-     * @param url ссылка на сайт Rick and Morty в соответствии с документацией
-     * @return Страница со списком героев
+     * Подготовка объекта HTTP-запроса.
+     * @return
+     */
+    private HttpEntity<String> getRequestEntity() {
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+        return new HttpEntity<>(headers);
+    }
+
+    /**
+     * Получить с сайта Rick and Morty страницу со списком героев.
+     * @param page номер страницы.
+     * @return Страница со списком героев.
      */
     @Override
-    public Characters getAllCharacters(String url) {
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+    public Characters getPageCharacters(String page) {
+        String url = basicConfig.getCHARACTER_API() + "/?page=" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<String> requestEntity = getRequestEntity();
         Class<Characters> responseType = Characters.class;
         log.info("URI - " + url);
         ResponseEntity<Characters> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -50,17 +59,17 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
 
     /**
      * "Закупка" единицы товара на сервисе Rick and Morty и сохранение в базе данных склада
-     * @param url ссылка на сервис Rick and Morty
+     * @param id номер карточки.
      */
     @Override
-    public void saveOneCharacterById(String url) {
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+    public void saveOneCharacterById(Integer id) {
+        String url = basicConfig.getCHARACTER_API() + "/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+        HttpEntity<String> requestEntity = getRequestEntity();
         Class<CharacterResult> responseType = CharacterResult.class;
         log.info("URI - " + url);
         CharacterResult characterResult = restTemplate.exchange(url, method, requestEntity, responseType).getBody();
-        if (characterResult != null) characterDbService.saveOneCharacter(characterResult);
+        if (characterResult != null) serverDbService.saveOneCharacter(characterResult);
     }
 
     //TODO Доработать
@@ -70,13 +79,13 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     @Override
     @Transactional
     public void basketPay() {
-        Double totalAmount = characterDbService.getTotalPriceFromBasket();
+        Double totalAmount = serverDbService.getTotalPriceFromBasket();
         String url = basicConfig.getBANK_API();
         Transaction transaction = new Transaction();
         transaction.setCreditAccount(2L); // Пока тест
         transaction.setDebitAccount(1L); // Пока тест
         transaction.setTransferAmount(totalAmount);
         restTemplate.postForEntity(url, transaction, Transaction.class);
-        characterDbService.deleteAllFromBasket();
+        serverDbService.deleteAllFromBasket();
     }
 }

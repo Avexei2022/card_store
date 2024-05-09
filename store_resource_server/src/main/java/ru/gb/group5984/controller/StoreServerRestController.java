@@ -11,14 +11,15 @@ import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsStorage;
+import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.service.api.CharacterApiService;
-import ru.gb.group5984.service.db.CharacterDbService;
-
+import ru.gb.group5984.service.db.ServerDbService;
+import ru.gb.group5984.service.db.UserDbService;
 import java.util.List;
 
 
 /**
- * REST Контроллер склада магазина
+ * REST Контроллер сервера ресурсов магазина.
  * Проверка свагером http://localhost:8084/swagger-ui/index.html
  */
 
@@ -27,8 +28,9 @@ import java.util.List;
 @RequestMapping("/server")
 @Log
 public class StoreServerRestController {
-    private final CharacterDbService serviceDb;
-    private final CharacterApiService serviceApi;
+    private final ServerDbService serverDbService;
+    private final UserDbService userDbService;
+    private final CharacterApiService characterApiService;
     private final BasicConfig basicConfig;
 
 
@@ -39,20 +41,10 @@ public class StoreServerRestController {
      */
     @GetMapping("/characters/page/{page}")
     public ResponseEntity<Characters> getCharactersPage (@PathVariable("page") String page) {
-        String url = basicConfig.getCHARACTER_API() + "/?page=" + page;
-        Characters allCharacters = serviceApi.getAllCharacters(url);
+        Characters allCharacters = characterApiService.getPageCharacters(page);
         return new ResponseEntity<>(allCharacters, HttpStatus.OK);
     }
 
-    //TODO Удалить
-    /**
-     * Запрос всех товаров на складе, но невыставленных на продажу.
-     * @return список товаров на складе и статус ответа.
-     */
-    @GetMapping("/storage/all")
-    public ResponseEntity<List<CharacterResult>> getAllFromStorage() {
-        return new ResponseEntity<>(serviceDb.getAllFromStorage(), HttpStatus.OK);
-    }
 
     /**
      * Добавить единицу товара на склад - закупить у поставщика.
@@ -61,8 +53,7 @@ public class StoreServerRestController {
      */
     @GetMapping("/characters/add_to_storage/{id}")
     public ResponseEntity<Void> addToStorage(@PathVariable("id") Integer id) {
-        String url = basicConfig.getCHARACTER_API() + "/" + id;
-        serviceApi.saveOneCharacterById(url);
+        characterApiService.saveOneCharacterById(id);
         return ResponseEntity.ok().build();
     }
 
@@ -72,8 +63,8 @@ public class StoreServerRestController {
      * @return статус ответа.
      */
     @GetMapping("/characters/delete_from_storage/{id}")
-    public ResponseEntity<Void> deleteFromStorage(@PathVariable("id") Integer id) {
-        serviceDb.deleteById(id);
+    public ResponseEntity<Void> deleteFromStorageById(@PathVariable("id") Integer id) {
+        serverDbService.deleteFromStorageById(id);
         return ResponseEntity.ok().build();
     }
 
@@ -83,21 +74,10 @@ public class StoreServerRestController {
      * @return страница списка товаров на складе и статус ответа.
      */
     @GetMapping("/storage/page/{page}")
-    public ResponseEntity<List<CharacterResult>> getPageCardsInStorage(@PathVariable("page") String page) {
-        //TODO оптимизировать - пока тестовый вариант
-        return new ResponseEntity<>(serviceDb.getAllFromStorage(), HttpStatus.OK);
+    public ResponseEntity<Characters> getPageCharactersFromStorage(@PathVariable("page") String page) {
+        Characters characters = serverDbService.getPageCharactersFromStorage(Integer.valueOf(page));
+        return new ResponseEntity<>(characters, HttpStatus.OK);
     }
-
-    //TODO Удалить
-    /**
-     * Получить все товары выставленные на продажу.
-     * @return список товаров и статус ответа.
-     */
-    @GetMapping("/sale/all")
-    public ResponseEntity<List<CharacterResult>> gelAllFromSale() {
-        return new ResponseEntity<>(serviceDb.getAllCardFromSale(), HttpStatus.OK);
-    }
-
 
     /**
      * Переместить единицу товара со склада на полку продаж.
@@ -106,7 +86,7 @@ public class StoreServerRestController {
      */
     @GetMapping("/storage/add_to_sale/{id}")
     public ResponseEntity<Void> addToSale(@PathVariable("id") Integer id) {
-        serviceDb.saveOneCardById(id);
+        serverDbService.saveOneCardById(id);
         return ResponseEntity.ok().build();
     }
 
@@ -117,72 +97,71 @@ public class StoreServerRestController {
      */
     @GetMapping("/storage/delete_from_sale/{id}")
     public ResponseEntity<Void> deleteFromSale(@PathVariable("id") Integer id) {
-        serviceDb.deleteCardFromSaleById(id);
+        serverDbService.deleteCardFromSaleById(id);
         return ResponseEntity.ok().build();
     }
 
     /**
      * Получить страницу из списка товаров, выставленных на продажу.
-     * @param page номер страницы
+     * @param page номер страницы.
      * @return страница списка товаров.
      */
     @GetMapping("/sale/page/{page}")
     public ResponseEntity<Cards> getPageCardsInSale(@PathVariable("page") Integer page) {
-        Cards cards = serviceDb.getAllCardsStorageFromSale(page);
+        Cards cards = serverDbService.getPageCardsStorageFromSale(page);
         return new ResponseEntity<>(cards, HttpStatus.OK);
 
     }
 
     /**
-     * Обновление информации о товаре, выставленного на продажу.
-     * @param cardsStorage карточка товара
+     * Добавить товар в корзину.
+     * @param id -id товара.
      * @return статус ответа.
-     */
-    @PostMapping("/sale/update")
-    public ResponseEntity<Void> updateSaleCard(CardsStorage cardsStorage) {
-        serviceDb.saveCardStorage(cardsStorage);
-        return ResponseEntity.ok().build();
-    }
-
-    /**
-     * Добавить товар в корзину
-     * @param id -id товара
-     * @return статус ответа
      */
     @GetMapping("/basket/add_to_basket/{id}")
     public ResponseEntity<Void> addToBasket(@PathVariable("id") Long id) {
-        serviceDb.moveCardToBasket(id);
+        serverDbService.moveCardToBasket(id);
         return ResponseEntity.ok().build();
     }
 
     /**
-     * Получить список товаров в корзине
-     * @param page номер запрашиваемой пользователем страницы из списка товаров
-     * @return список товаров в корзине и статус ответа
+     * Получить список товаров в корзине.
+     * @param page номер запрашиваемой пользователем страницы из списка товаров.
+     * @return список товаров в корзине и статус ответа.
      */
     @GetMapping("/basket/page/{page}")
     public ResponseEntity<Basket> getAllFromBasket(@PathVariable("page") Integer page) {
-        return new ResponseEntity<>(serviceDb.getAllFromBasket(page), HttpStatus.OK);
+        return new ResponseEntity<>(serverDbService.getAllFromBasket(page), HttpStatus.OK);
     }
 
     /**
-     * Возврат товара из корзины на полку
-     * @param id - id товара
-     * @return статус ответа
+     * Возврат товара из корзины на полку.
+     * @param id - id товара.
+     * @return статус ответа.
      */
-    @GetMapping("/basket/delete_from_basket/{id}")
+    @GetMapping("/basket/return_to_sale/{id}")
     public ResponseEntity<Void> deleteFromBasket(@PathVariable("id") Long id) {
-        serviceDb.returnCardFromBasketToSale(id);
+        serverDbService.returnCardFromBasketToSale(id);
         return ResponseEntity.ok().build();
     }
 
     /**
      * Оплата товара из корзины покупателя.
-     * @return
+     * @return статус ответа.
      */
     @GetMapping("/basket/pay")
     public ResponseEntity<Void> basketPay() {
-        serviceApi.basketPay();
+        characterApiService.basketPay();
         return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Поиск пользователя по имени.
+     * @param name имя пользователя.
+     * @return пользователь.
+     */
+    @GetMapping("/user/{name}")
+    public ResponseEntity<User> findUserByName(@PathVariable("name") String name) {
+        return new ResponseEntity<>(userDbService.findUserByUsername(name), HttpStatus.OK);
     }
 }

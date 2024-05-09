@@ -22,6 +22,7 @@ import ru.gb.group5984.aspect.UserActionAspect;
 @Setter
 public class BasicConfig {
     private String CHARACTER_API;
+    private String SERVER_API;
     private String BANK_API;
     private RestTemplate restTemplate;
 

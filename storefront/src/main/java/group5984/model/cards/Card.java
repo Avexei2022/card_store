@@ -1,4 +1,4 @@
-package group5984.model.visitors;
+package group5984.model.cards;
 
 import lombok.Data;
 import lombok.Getter;

@@ -11,7 +11,9 @@ import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.basket.BasketInfo;
 import ru.gb.group5984.model.basket.CardInBasket;
+import ru.gb.group5984.model.characters.CharacterInfo;
 import ru.gb.group5984.model.characters.CharacterResult;
+import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
@@ -24,7 +26,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * Сервис склада магазина
+ * Сервис склада магазина.
  * Работает с базой данных:
  * - товары на складе;
  * - товары в продаже;
@@ -33,7 +35,7 @@ import java.util.Objects;
 @Service
 @RequiredArgsConstructor
 @Log
-public class CharacterDbServiceImpl implements CharacterDbService{
+public class ServerDbServiceImpl implements ServerDbService {
     private final CharacterRepository characterRepository;
     private final CardsRepository cardsRepository;
     private final BasketRepository basketRepository;
@@ -42,7 +44,7 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * Сохранение единицы товара, закупленного у поставщика,
      * в базе данных товаров на складе.
      * @param characterResult Единица товара
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
     @Override
@@ -50,26 +52,51 @@ public class CharacterDbServiceImpl implements CharacterDbService{
         if (characterResult != null) characterRepository.save(characterResult);
     }
 
+
     /**
-     * Получить полный список товаров из базы данных товаров на складе
-     * @return список товара
-     * Данные действия пользователя выводятся в консоль
+     * Получить все товары постранично, хранящиеся на складе.
+     * @param page - номер страницы.
+     * @return список товаров на складе.
+     * По умолчанию страница содержит 20 товаров
+     * Список товаров дополнен следующей информацией о нем:
+     * - общее количество товаров на складе;
+     * - количество страниц;
+     * - номера предыдущей и следующей страниц.
+     * Если предыдущей страницы нет, то проставляется номер последней страницы.
+     * Если следующей страницы нет, то проставляется номер первой страницы.
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
     @Override
-    public List<CharacterResult> getAllFromStorage() {
-        return characterRepository.findAll();
+    public Characters getPageCharactersFromStorage(Integer page) {
+        page = page - 1;
+        if (page < 0) page = 0;
+        Pageable pageable = PageRequest.of(page, 20);
+        Page<CharacterResult> characterResultPage = characterRepository.findAll(pageable);
+        Characters characters = new Characters();
+        CharacterInfo characterInfo = new CharacterInfo();
+        characterInfo.setCount((int) characterResultPage.getTotalElements());
+        characterInfo.setPages(characterResultPage.getTotalPages());
+        if (characterResultPage.hasPrevious())
+            characterInfo.setPrev(String.valueOf(characterResultPage.getNumber()));
+        else characterInfo.setPrev(String.valueOf(characterResultPage.getTotalPages()));
+        if (characterResultPage.hasNext())
+            characterInfo.setNext(String.valueOf(characterResultPage.getNumber() + 2));
+        else characterInfo.setNext("1");
+        characters.setResults(characterResultPage.toList());
+        characters.setInfo(characterInfo);
+        return characters;
     }
 
     //TODO Добавить проверку на наличие товара в продаже и в корзине
     /**
      * Удалить единицу товара из базы данных товаров на складе
      * @param id Id Товара
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @Override
     @TrackUserAction
-    public void deleteById(Integer id) {
+    public void deleteFromStorageById(Integer id) {
         characterRepository.deleteById(id);
     }
 
@@ -78,7 +105,7 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * Выствить товар на продажу
      * @param id - id товара
      * Устанавливается количество товара и стоимость единицы товара
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @Override
     @TrackUserAction
@@ -94,33 +121,21 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     }
 
     /**
-     * Получить список товара, выставленного на продажу
-     * @return список товара.
-     * Данные действия пользователя выводятся в консоль
-     */
-    @TrackUserAction
-    @Override
-    public List<CharacterResult> getAllCardFromSale() {
-        List<CardsStorage> cardsStorageList = cardsRepository.findAll();
-        return cardsStorageList.stream().map(CardsStorage::getCard).toList();
-    }
-
-    /**
      * Получить все товары постранично, выставленные на продажу.
-     * @param page - запрашиваемая пользователем страница
-     * @return список товаров в продаже
+     * @param page - номер страницы.
+     * @return список товаров в продаже.
      * По умолчанию страница содержит 20 товаров
      * Список товаров дополнен следующей информацией о нем:
-     * - общее количество товаров в корзине;
-     * - количество страниц;
+     * - общее количество товаров в продаже;
+     * - количество страниц в списке;
      * - номера текущей, предыдущей и следующей страниц.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
     @Override
-    public Cards getAllCardsStorageFromSale(Integer page) {
+    public Cards getPageCardsStorageFromSale(Integer page) {
         page = page - 1;
         if (page < 0) page = 0;
         Pageable pageable = PageRequest.of(page, 20);
@@ -145,7 +160,7 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     /**
      * Удалить товар из списка продаж / убрать с полки.
      * @param id - id товара
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @Override
     @TrackUserAction
@@ -160,7 +175,7 @@ public class CharacterDbServiceImpl implements CharacterDbService{
     /**
      * Закупка единицы товара у поставщика и сохранение на складе магазина
      * @param cardsStorage единица товара
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
     @Override
@@ -198,12 +213,12 @@ public class CharacterDbServiceImpl implements CharacterDbService{
 
     /**
      * Возврат единицы товара из корзины покупателя на полку магазина
-     * @param id id - товара в корзине
+     * @param id id - товара в корзине.
      * Проверяется наличие партии данного товара на полке.
      * Если товар из данной партии в наличии на полке, то его количество увеличивается на количество товара в корзине.
      * Если товар из данной партии на полке отсутствует,
      * то восстанавливается партия товара на полке в количестве товара из корзины.
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @Override
     @TrackUserAction
@@ -239,7 +254,7 @@ public class CharacterDbServiceImpl implements CharacterDbService{
      * -общая сумма товара в корзине.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы
-     * Данные действия пользователя выводятся в консоль
+     * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
     @Override

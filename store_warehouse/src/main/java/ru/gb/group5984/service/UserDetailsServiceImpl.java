@@ -1,4 +1,4 @@
-package ru.gb.group5984.service.db;
+package ru.gb.group5984.service;
 
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,8 +9,6 @@ import org.springframework.stereotype.Service;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.model.users.ThisUserDetails;
-
-import java.util.Objects;
 
 @Service
 @Log

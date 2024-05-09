@@ -3,6 +3,7 @@ package group5984.service.api;
 import group5984.configuration.BasicConfig;
 import group5984.model.basket.Basket;
 import group5984.model.clients.Cards;
+import group5984.model.users.User;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,7 +84,7 @@ public class ContentApiServiceImpl implements ContentApiService {
      */
     @Override
     public void deleteFromBasketById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/basket/delete_from_basket/" + id;
+        String url = basicConfig.getSERVER_API() + "/basket/return_to_sale/" + id;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
@@ -106,6 +107,26 @@ public class ContentApiServiceImpl implements ContentApiService {
         response.getStatusCode();
     }
 
+    /**
+     * Получить пользователя по имени.
+     * @param name имя пользователя.
+     * @return пользователь.
+     */
+    @Override
+    public User getUserByUserName(String name) {
+        String url = basicConfig.getSERVER_API() + "/user/" + name;
+        HttpMethod method = HttpMethod.GET;
+        HttpEntity<String> requestEntity = getRequestEntity();
+        Class<User> responseType = User.class;
+        log.info("URI - " + url);
+        ResponseEntity<User> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        return response.getBody();
+    }
+
+    /**
+     * Подготовка объекта HTTP-запроса.
+     * @return
+     */
     private HttpEntity<String> getRequestEntity() {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         return new HttpEntity<>(headers);

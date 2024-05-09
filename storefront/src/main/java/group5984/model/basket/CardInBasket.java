@@ -1,6 +1,6 @@
 package group5984.model.basket;
 
-import group5984.model.visitors.Card;
+import group5984.model.cards.Card;
 import lombok.Data;
 
 import java.util.Date;

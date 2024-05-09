@@ -10,19 +10,16 @@ public interface CharacterApiService {
 
     /**
      * Получить с сайта Rick and Morty страницу со списком героев
-     * @param url ссылка на сайт Rick and Morty в соответствии с документацией
+     * @param page запрашиваемый номер страницы
      * @return Страница со списком героев
      */
-    Characters getAllCharacters(String url);
+    Characters getAllCharacters(String page);
 
     /**
      * "Закупка" единицы товара на сервисе Rick and Morty и сохранение в базе данных склада
-     * @param url ссылка на сервис Rick and Morty
+     * @param id номер товара
      */
-    void saveOneCharacterById(String url);
+    void saveOneCharacterById(Integer id);
 
-    /**
-     * Оплата товара из корзины покупателя через банк.
-     */
-    void basketPay();
+
 }

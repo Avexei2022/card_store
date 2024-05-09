@@ -1,6 +1,6 @@
 package group5984.configuration;
 
-import group5984.service.db.UserDetailsServiceImpl;
+import group5984.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;

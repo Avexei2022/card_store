@@ -12,7 +12,7 @@ import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsStorage;
 import ru.gb.group5984.service.api.CharacterApiService;
-import ru.gb.group5984.service.db.CharacterDbService;
+import ru.gb.group5984.service.api.ServerApiService;
 
 import java.util.List;
 
@@ -25,8 +25,8 @@ import java.util.List;
 @RequestMapping("/storage")
 @Log
 public class StorageWebController {
-    private final CharacterApiService serviceApi;
-    private final CharacterDbService serviceDb;
+    private final CharacterApiService characterApiService;
+    private final ServerApiService serverApiService;
     private final BasicConfig basicConfig;
 
     /**
@@ -52,16 +52,15 @@ public class StorageWebController {
      */
     @GetMapping("/characters/page/{page}")
     public String getCharacters(@PathVariable("page") String page, Model model) {
-        String url = basicConfig.getCHARACTER_API() + "/?page=" + page;
-        Characters allCharacters = serviceApi.getAllCharacters(url);
+        Characters allCharacters = characterApiService.getAllCharacters(page);
         CharacterInfo characterInfo = getCharacterInfo(allCharacters);
         List<CharacterResult> characterResultList = allCharacters.getResults();
-        List<CharacterResult> characterResultListFromStorage = serviceDb.getAllFromStorage();
-        model.addAttribute("character_info", characterInfo)
-                .addAttribute("characters_list", characterResultList)
+        model.addAttribute("characters_size", characterInfo.getCount())
+                .addAttribute("characters_pages", characterInfo.getPages())
+                .addAttribute("prev_page", characterInfo.getPrev())
+                .addAttribute("next_page", characterInfo.getNext())
                 .addAttribute("current_page", page)
-                .addAttribute("storage_size", characterResultListFromStorage.size())
-                .addAttribute("storage_cards", characterResultListFromStorage);
+                .addAttribute("characters_list", characterResultList);
         return "purchase";
     }
 
@@ -73,8 +72,7 @@ public class StorageWebController {
       */
     @GetMapping("/characters/add_to_storage/{id}/{page}")
     public String addToStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
-        String url = basicConfig.getCHARACTER_API() + "/" + id;
-        serviceApi.saveOneCharacterById(url);
+        characterApiService.saveOneCharacterById(id);
         return "redirect:/storage/characters/page/" + page;
     }
 
@@ -86,7 +84,7 @@ public class StorageWebController {
      */
     @GetMapping("/characters/delete_from_storage/{id}/{page}")
     public String deleteFromStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
-        serviceDb.deleteById(id);
+        serverApiService.deleteById(id);
         return "redirect:/storage/characters/page/" + page;
     }
 
@@ -130,14 +128,15 @@ public class StorageWebController {
     @GetMapping("/storage/page/{page}")
     public String getAllCardsInStorage(@PathVariable("page") String page, Model model) {
         //TODO оптимизировать - пока тестовый вариант
-        List<CharacterResult> characterResultList = serviceDb.getAllFromStorage();
-        List<CharacterResult> characterResultListInSale = serviceDb.getAllCardFromSale();
-        page = "1";
-        model.addAttribute("storage_size", characterResultList.size())
-                .addAttribute("characters_list", characterResultList)
+        Characters characters = serverApiService.getPageFromStorage(page);
+        CharacterInfo characterInfo = characters.getInfo();
+        List<CharacterResult> characterResultList = characters.getResults();
+        model.addAttribute("storage_size", characterInfo.getCount())
+                .addAttribute("storage_pages", characterInfo.getPages())
+                .addAttribute("prev_page", characterInfo.getPrev())
+                .addAttribute("next_page", characterInfo.getNext())
                 .addAttribute("current_page", page)
-                .addAttribute("sale_size", characterResultListInSale.size())
-                .addAttribute("sale_cards", characterResultListInSale);
+                .addAttribute("characters_list", characterResultList);
         return "storage";
 
     }
@@ -150,7 +149,7 @@ public class StorageWebController {
      */
     @GetMapping("/storage/add_to_sale/{id}/{page}")
     public String addToSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
-        serviceDb.saveOneCardById(id);
+        serverApiService.saveOneCardToSaleById(id);
         return "redirect:/storage/storage/page/" + page;
     }
 
@@ -162,7 +161,7 @@ public class StorageWebController {
      */
     @GetMapping("/storage/delete_from_sale/{id}/{page}")
     public String deleteFromSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
-        serviceDb.deleteCardFromSaleById(id);
+        serverApiService.deleteCardFromSaleById(id);
         return "redirect:/storage/storage/page/" + page;
     }
 
@@ -174,7 +173,7 @@ public class StorageWebController {
      */
     @GetMapping("/sale/page/{page}")
     public String getAllCardsInSale(@PathVariable("page") Integer page, Model model) {
-        Cards cards = serviceDb.getAllCardsStorageFromSale(page);
+        Cards cards = serverApiService.getPageCardsStorageFromSale(page);
         model.addAttribute("sale_size", cards.getInfo().getCount())
                 .addAttribute("amount_pages", cards.getInfo().getPages())
                 .addAttribute("current_page", cards.getInfo().getCurrent())
@@ -185,15 +184,5 @@ public class StorageWebController {
 
     }
 
-    /**
-     * Обновление информации о товаре, выставленного на продажу.
-     * @param cardsStorage карточка товара
-     * @return возврат к первой странице списка продаж.
-     */
-    @PostMapping("/sale/update")
-    public String updateSaleCard(CardsStorage cardsStorage) {
-        serviceDb.saveCardStorage(cardsStorage);
-        return "redirect:/storage/sale/page/1";
-    }
 
 }

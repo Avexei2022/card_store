@@ -5,10 +5,11 @@ import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import ru.gb.group5984.configuration.BasicConfig;
+import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.model.characters.CharacterInfo;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.api.ServerApiService;
@@ -80,10 +81,17 @@ public class StorageWebController {
      * @param page номер страницы на которой пользователь производил действия удаления
      * @return возврат к этой же странице
      */
+    @TrackUserAction
     @GetMapping("/characters/delete_from_storage/{id}/{page}")
-    public String deleteFromStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
-        serverApiService.deleteById(id);
-        return "redirect:/storage/characters/page/" + page;
+    public String deleteFromStorage(@PathVariable("id") Integer id, @PathVariable("page") String page, Model model) {
+        serverApiService.deleteFromStorageById(id);
+        Message message = serverApiService.deleteFromStorageById(id);
+        log.info(message.getMessage());
+        if (message.getMessage().equals("none")) return "redirect:/storage/storage/page/" + page;
+        else {
+            model.addAttribute("message", message.getMessage());
+            return "message";
+        }
     }
 
     /**
@@ -160,7 +168,7 @@ public class StorageWebController {
     @GetMapping("/storage/delete_from_sale/{id}/{page}")
     public String deleteFromSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         serverApiService.deleteCardFromSaleById(id);
-        return "redirect:/storage/storage/page/" + page;
+        return "redirect:/storage/sale/page/" + page;
     }
 
     /**

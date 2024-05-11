@@ -30,4 +30,4 @@ eureka:
 #RESORECE_URL
 url:
   CHARACTER_API: "https://rickandmortyapi.com/api/character"
-  BANK_API: "http://localhost:8081/bank/rest"
+  BANK_API: "http://localhost:8085/bank_server"

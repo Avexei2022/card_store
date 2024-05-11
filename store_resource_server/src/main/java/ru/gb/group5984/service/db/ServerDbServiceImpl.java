@@ -14,6 +14,7 @@ import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterInfo;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
@@ -22,8 +23,7 @@ import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.repository.CharacterRepository;
 
 import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Objects;
+
 
 /**
  * Сервис склада магазина.
@@ -96,8 +96,27 @@ public class ServerDbServiceImpl implements ServerDbService {
      */
     @Override
     @TrackUserAction
-    public void deleteFromStorageById(Integer id) {
-        characterRepository.deleteById(id);
+    public Message deleteFromStorageById(Integer id) {
+        boolean isNotInBasket = basketRepository.findAll()
+                                        .stream()
+                                        .filter(cardInBasket -> cardInBasket.getCard().getId().equals(id))
+                                        .toList().isEmpty();
+        boolean isNotInSale = cardsRepository.findAll()
+                                        .stream()
+                                        .filter(cardsStorage -> cardsStorage.getCard().getId().equals(id))
+                                        .toList().isEmpty();
+        Message message = new Message();
+        if (isNotInBasket && isNotInSale) {
+            try {
+                characterRepository.deleteById(id);
+                message.setMessage("none");
+            } catch (RuntimeException e) {
+                message.setMessage("Удаление товара невозможно: " + e.getMessage());
+            }
+        } else message.setMessage("Удаление товара невозможно: " +
+                "Товар выставлен на продажу и может быть зарезервирован." +
+                " Для удаления товара со склада снимите его с продажи.");
+        return message;
     }
 
     //TODO Реализовать ввод данных от пользователя
@@ -164,12 +183,8 @@ public class ServerDbServiceImpl implements ServerDbService {
      */
     @Override
     @TrackUserAction
-    public void deleteCardFromSaleById(Integer id) {
-        List<CardsStorage> cardsStorageList = cardsRepository.findAll();
-        Long cardsStoreId = cardsStorageList.stream()
-                .filter(cardsStorage -> Objects.equals(cardsStorage.getCard().getId(), id))
-                .toList().getFirst().getId();
-        cardsRepository.deleteById(cardsStoreId);
+    public void deleteCardFromSaleById(Long id) {
+        cardsRepository.deleteById(id);
     }
 
     /**
@@ -299,6 +314,7 @@ public class ServerDbServiceImpl implements ServerDbService {
     /**
      * Удалить все товары из корзины
      */
+    @TrackUserAction
     @Override
     public void deleteAllFromBasket() {
         basketRepository.deleteAll();

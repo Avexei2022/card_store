@@ -5,12 +5,12 @@ import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.users.User;
 
@@ -70,14 +70,14 @@ public class ServerApiServiceImpl implements ServerApiService {
      */
     @Override
     @TrackUserAction
-    public void deleteById(Integer id) {
+    public Message deleteFromStorageById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/characters/delete_from_storage/" + id;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
-        Class<HttpStatusCode> responseType = HttpStatusCode.class;
+        Class<Message> responseType = Message.class;
         log.info("URI - " + url);
-        ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
-        response.getStatusCode();
+        ResponseEntity<Message> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        return response.getBody();
     }
 
     //TODO Реализовать ввод данных от пользователя
@@ -175,7 +175,6 @@ public class ServerApiServiceImpl implements ServerApiService {
      */
     @Override
     @TrackUserAction
-    @Transactional
     public void returnCardFromBasketToSale(Long id) {
         String url = basicConfig.getSERVER_API() + "/basket/return_to_sale/" + id;
         HttpMethod method = HttpMethod.GET;

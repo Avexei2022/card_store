@@ -148,13 +148,30 @@
                   th:text="${cards_storage.amount}"
                 ></span>
               </div>
+              <div class="main_section_2_div_1_card_context_section_2">
+                <span class="main_section_2_div_1_card_context_section_2_span"
+                  >ID:</span
+                >
+                <span
+                  class="main_section_2_div_1_card_context_section_2_a"
+                  th:text="${cards_storage.id}"
+                ></span>
+              </div>
             </div>
           </div>
+          <a
+            class="main_section_2_div_1_card_context"
+            th:href="@{/storage/storage/delete_from_sale/{id}/{page} (id=${cards_storage.id}, page=${current_page})}"
+            >Delete</a
+          >
         </div>
         <ul class="footer_ul_1">
           <li class="footer_ul_1_li_1">
             <span class="footer_ul_1_li_1_a">Amount of cards:</span>
-            <span class="main_section_2_div_1_card_context_section_2_a" th:text="${sale_size}"></span>
+            <span
+              class="main_section_2_div_1_card_context_section_2_a"
+              th:text="${sale_size}"
+            ></span>
           </li>
           <li class="footer_ul_1_li_1">
             <span class="footer_ul_1_li_1_a">Amount of pages:</span>

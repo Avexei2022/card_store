@@ -5,17 +5,16 @@ import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
-import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
-import ru.gb.group5984.model.storage.CardsStorage;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.db.ServerDbService;
 import ru.gb.group5984.service.db.UserDbService;
-import java.util.List;
 
 
 /**
@@ -25,13 +24,12 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/server")
+@RequestMapping("/store_server")
 @Log
 public class StoreServerRestController {
     private final ServerDbService serverDbService;
     private final UserDbService userDbService;
     private final CharacterApiService characterApiService;
-    private final BasicConfig basicConfig;
 
 
     /**
@@ -62,10 +60,11 @@ public class StoreServerRestController {
      * @param id id товара.
      * @return статус ответа.
      */
+    @TrackUserAction
     @GetMapping("/characters/delete_from_storage/{id}")
-    public ResponseEntity<Void> deleteFromStorageById(@PathVariable("id") Integer id) {
-        serverDbService.deleteFromStorageById(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Message> deleteFromStorageById(@PathVariable("id") Integer id) {
+        Message message = serverDbService.deleteFromStorageById(id);
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     /**
@@ -95,8 +94,9 @@ public class StoreServerRestController {
      * @param id номер товара.
      * @return статус ответа.
      */
+    @TrackUserAction
     @GetMapping("/storage/delete_from_sale/{id}")
-    public ResponseEntity<Void> deleteFromSale(@PathVariable("id") Integer id) {
+    public ResponseEntity<Void> deleteFromSale(@PathVariable("id") Long id) {
         serverDbService.deleteCardFromSaleById(id);
         return ResponseEntity.ok().build();
     }
@@ -149,6 +149,7 @@ public class StoreServerRestController {
      * Оплата товара из корзины покупателя.
      * @return статус ответа.
      */
+    @TrackUserAction
     @GetMapping("/basket/pay")
     public ResponseEntity<Void> basketPay() {
         characterApiService.basketPay();

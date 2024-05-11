@@ -2,6 +2,7 @@ package ru.gb.group5984.service.api;
 
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.users.User;
 
@@ -22,7 +23,7 @@ public interface ServerApiService {
      * Удалить карточку героя из базы данных
      * @param id Id героя
      */
-    void deleteById(Integer id);
+    Message deleteFromStorageById(Integer id);
 
     /**
      * Выствить товар на продажу

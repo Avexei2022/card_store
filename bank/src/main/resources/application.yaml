@@ -6,27 +6,8 @@ server:
 spring:
   application:
     name: bank
-  datasource:
-    url: jdbc:postgresql://localhost:5432/db_trading_floor
-    username: admin
-    password: admin
-    driver-class-name: org.postgresql.Driver
-  jpa:
-    hibernate:
-      jdbc:
-        lob:
-          non_contextual_creation: true
-      ddl-auto: update
-    show-sql: true
   config:
     import: configserver:http://localhost:8888
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: http://localhost:9000
-
-#EUREKA
 eureka:
   client:
     service-url:
@@ -35,4 +16,5 @@ eureka:
 #RESOURCE_URL
 url:
   CLIENT_API: "https://rickandmortyapi.com/api/character"
+  BANK_API: "http://localhost:8085/bank_server"
 

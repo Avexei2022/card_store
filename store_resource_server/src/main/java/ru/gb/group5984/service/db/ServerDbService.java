@@ -3,6 +3,7 @@ package ru.gb.group5984.service.db;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsStorage;
 
@@ -30,7 +31,7 @@ public interface ServerDbService {
      * Удалить единицу товара из базы данных товаров на складе
      * @param id Id Товара
      */
-    void deleteFromStorageById(Integer id);
+    Message deleteFromStorageById(Integer id);
 
     /**
      * Выствить товар на продажу.
@@ -50,7 +51,7 @@ public interface ServerDbService {
      * Удалить товар из списка продаж / убрать с полки.
      * @param id - id товара.
      */
-    void deleteCardFromSaleById(Integer id);
+    void deleteCardFromSaleById(Long id);
 
     /**
      * Закупка единицы товара у поставщика и сохранение на складе магазина.

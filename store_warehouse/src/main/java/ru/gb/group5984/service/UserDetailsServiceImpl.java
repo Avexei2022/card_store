@@ -31,7 +31,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             User user = serverApiService.getUserByUserName(username);
             return new ThisUserDetails(user);
         } catch (NullPointerException e) {
-            throw  new UsernameNotFoundException("Could not find user");
+            throw  new UsernameNotFoundException("Пользователь не найден");
         }
     }
 }

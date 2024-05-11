@@ -113,24 +113,46 @@
               </div>
             </div>
           </a>
+          <a
+            class="main_section_2_div_1_card_context"
+            th:href="@{/storage/characters/delete_from_storage/{id}/{page} (id=${characters.id}, page=${current_page})}"
+            >Delete</a
+          >
         </div>
         <ul class="footer_ul_1">
           <li class="footer_ul_1_li_1">
             <span class="footer_ul_1_li_1_a">Amount of cards:</span>
-            <span class="main_section_2_div_1_card_context_section_2_a" th:text="${sale_size}"></span>
+            <span
+              class="main_section_2_div_1_card_context_section_2_a"
+              th:text="${storage_size}"
+            ></span>
+          </li>
+          <li class="footer_ul_1_li_1">
+            <span class="footer_ul_1_li_1_a">Amount of pages:</span>
+            <span
+              class="main_section_2_div_1_card_context_section_2_a"
+              th:text="${storage_pages}"
+            ></span>
           </li>
           <li class="footer_ul_1_li_1">
             <a
               title="Prev page"
-              th:href="@{/storage/storage/page/{prev} (prev=${current_page})}"
+              th:href="@{/storage/storage/page/{prev} (prev=${prev_page})}"
               class="footer_ul_1_li_1_a"
               ><span class="footer_ul_1_li_1_a_span">Prev Page</span></a
             >
           </li>
           <li class="footer_ul_1_li_1">
+            <span class="footer_ul_1_li_1_a">Page:</span>
+            <span
+              class="main_section_2_div_1_card_context_section_2_a"
+              th:text="${current_page}"
+            ></span>
+          </li>
+          <li class="footer_ul_1_li_1">
             <a
               title="Next page"
-              th:href="@{/storage/storage/page/{next} (next=${current_page})}"
+              th:href="@{/storage/storage/page/{next} (next=${next_page})}"
               class="footer_ul_1_li_1_a"
               ><span class="footer_ul_1_li_1_a_span">Next Page</span></a
             >
@@ -138,7 +160,7 @@
         </ul>
       </section>
 
-      <!-- SALE -->
+      <!-- SALE
       <section class="main_section_3">
         <h1 class="main_section3_h1">Выставлено на продажу</h1>
         <div class="main_hero-image">
@@ -225,7 +247,7 @@
             </div>
           </a>
         </div>
-      </section>
+      </section> -->
     </main>
 
     <!-- FOOTER SECTION -->

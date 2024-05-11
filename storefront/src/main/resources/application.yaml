@@ -17,7 +17,7 @@ eureka:
 
 #RESOURCE_URL
 url:
-  SERVER_API: "http://localhost:8084/server"
+  SERVER_API: "http://localhost:8084/store_server"
 
 
 #management:

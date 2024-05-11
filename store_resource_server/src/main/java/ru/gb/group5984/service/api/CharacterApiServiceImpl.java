@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
@@ -78,13 +79,16 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
      */
     @Override
     @Transactional
+    @TrackUserAction
     public void basketPay() {
         Double totalAmount = serverDbService.getTotalPriceFromBasket();
-        String url = basicConfig.getBANK_API();
+        String url = basicConfig.getBANK_API() + "/transaction";
         Transaction transaction = new Transaction();
         transaction.setCreditAccount(2L); // Пока тест
         transaction.setDebitAccount(1L); // Пока тест
         transaction.setTransferAmount(totalAmount);
+        log.info("Тест платежа: " + transaction);
+        log.info("URL: " + url);
         restTemplate.postForEntity(url, transaction, Transaction.class);
         serverDbService.deleteAllFromBasket();
     }

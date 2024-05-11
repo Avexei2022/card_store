@@ -334,6 +334,7 @@ main {
   color: rgb(255, 255, 255);
   display: flex;
   flex-direction: column;
+  text-decoration: none;
 }
 
 .main_section_2_div_1_card_context_section_1 {

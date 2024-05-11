@@ -1,6 +1,6 @@
 package group5984.configuration;
 
-import group5984.service.db.UserDetailsServiceImpl;
+import group5984.service.UserDetailsServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -53,7 +53,7 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/css/**", "/", "/index", "bank/rest/**", "swagger/**")
+                                .requestMatchers("/css/**", "/", "/index")
                                     .permitAll()
                                 .anyRequest()
                                 .authenticated())

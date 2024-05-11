@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 @Setter
 public class BasicConfig {
     private String CLIENT_API;
+    private String BANK_API;
     private RestTemplate restTemplate;
 
     @Bean

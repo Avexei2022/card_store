@@ -6,6 +6,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.group5984.aspect.TrackUserAction;
+import ru.gb.group5984.auth.AuthenticationRequest;
+import ru.gb.group5984.auth.AuthenticationResponse;
+import ru.gb.group5984.auth.AuthenticationService;
+import ru.gb.group5984.auth.RegisterRequest;
 import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
@@ -163,6 +167,9 @@ public class StoreServerRestController {
      */
     @GetMapping("/user/{name}")
     public ResponseEntity<User> findUserByName(@PathVariable("name") String name) {
-        return new ResponseEntity<>(userDbService.findUserByUsername(name), HttpStatus.OK);
+        User user = userDbService.findUserByUsername(name);
+        log.info(user.toString());
+        return new ResponseEntity<>(user, HttpStatus.OK);
     }
+
 }

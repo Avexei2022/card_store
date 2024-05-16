@@ -6,7 +6,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 
 /**
- * Сервер авторизации.
+ * Стартовый класс (точка входа) сервера авторизации.
  */
 @SpringBootApplication
 @EnableDiscoveryClient

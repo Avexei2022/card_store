@@ -6,8 +6,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.gb.group5984.service.UserDetailsServiceImpl;
 
@@ -15,22 +14,22 @@ import ru.gb.group5984.service.UserDetailsServiceImpl;
 @EnableWebSecurity
 public class WebSecurityConfig{
 
+
     @Bean
     public UserDetailsService userDetailsService() {
-
         return new UserDetailsServiceImpl();
     }
 
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//
-//    }
-
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+
     }
+
+//    @Bean
+//    PasswordEncoder passwordEncoder() {
+//        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+//    }
 
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
@@ -52,7 +51,7 @@ public class WebSecurityConfig{
         http
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/css/**", "/", "/index", "storage/rest/**")
+                                .requestMatchers("/css/**", "/", "/index")
                                     .permitAll()
                                 .anyRequest()
                                 .authenticated())

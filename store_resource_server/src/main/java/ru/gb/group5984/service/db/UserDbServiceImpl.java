@@ -34,6 +34,8 @@ public class UserDbServiceImpl implements UserDbService{
 //        User admin = userRepository.findUserByUsername("admin");
 //        admin.setPassword("{noop}admin");
 //        userRepository.save(admin);
+        User user = userRepository.findUserByUsername(username).orElseThrow();
+        log.info(user.toString());
         return userRepository.findUserByUsername(username).orElseThrow();
     }
 }

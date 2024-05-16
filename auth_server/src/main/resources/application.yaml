@@ -2,6 +2,14 @@
 server:
   port: 9000
 
+#LOGGIN
+logging:
+  level:
+    root: DEBUG
+    org.apache.tomcat.util.net.NioEndpoint: ERROR
+    sun.rmi: ERROR
+    java.io: ERROR
+    javax.management: ERROR
 
 #SPRING
 spring:
@@ -9,6 +17,12 @@ spring:
     name: auth_server
   config:
     import: configserver:http://localhost:8888
+  security:
+    oauth2:
+      authorizationserver:
+        issuer-url: http://localhost:9000
+        introspection-endpoint: /oauth2/token-info
+
 
 #EUREKA
 eureka:

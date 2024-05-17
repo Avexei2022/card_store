@@ -8,6 +8,10 @@ import lombok.NoArgsConstructor;
 import java.util.HashMap;
 import java.util.Map;
 
+
+/**
+ * Класс запроса аутентификации.
+ */
 @Data
 @Builder
 @NoArgsConstructor
@@ -16,8 +20,6 @@ public class AuthenticationRequest {
 
     private String username;
     String password;
-
-
 
     public String getRequest() {
         return "{\"username\": \""

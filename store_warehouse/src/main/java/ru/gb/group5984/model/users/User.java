@@ -1,13 +1,12 @@
 package ru.gb.group5984.model.users;
 
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 
-
+/**
+ * Класс пользователя
+ */
 @Setter
 @Getter
 @AllArgsConstructor

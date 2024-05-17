@@ -7,38 +7,48 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-
+/**
+ * Конфигуратор безопасности
+ */
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+    /**
+     * Создание экземпляра сервиса пользователей.
+     * @return сервис пользователей.
+     */
     @Bean
     public UserDetailsService userDetailsService() {
-
         return new UserDetailsServiceImpl();
     }
 
-//    @Bean
-//    public BCryptPasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//
-//    }
-
+    /**
+     * Кодировщик паролей
+     * @return кодировщик
+     */
     @Bean
-    PasswordEncoder passwordEncoder() {
-        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
+    public BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+
     }
 
+    /**
+     *  Реализация AuthenticationProvider,
+     *  которая использует UserDetailsService и PasswordEncoder
+     *  для проверки подлинности имени пользователя и пароля.
+     * @return экземпляр поставщика DAO-аутентификации.
+     */
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
-
         return authProvider;
     }
 

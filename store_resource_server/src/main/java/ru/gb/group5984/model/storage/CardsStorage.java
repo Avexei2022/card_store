@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
 
+import java.math.BigDecimal;
+
 
 /**
  * Товар, выставленный на продажу, информация о котором хранится в базе данных
@@ -21,5 +23,5 @@ public class CardsStorage {
     @Column(name = "amount")
     private Integer amount;
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
 }

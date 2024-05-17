@@ -65,5 +65,4 @@ public interface ServerApiService {
      */
     Basket getAllFromBasket(Integer page);
 
-    User getUserByUserName(String name);
 }

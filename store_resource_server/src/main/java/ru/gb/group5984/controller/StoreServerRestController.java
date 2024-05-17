@@ -155,9 +155,8 @@ public class StoreServerRestController {
      */
     @TrackUserAction
     @GetMapping("/basket/pay")
-    public ResponseEntity<Void> basketPay() {
-        characterApiService.basketPay();
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Message> basketPay() {
+        return new ResponseEntity<>(characterApiService.basketPay(), HttpStatus.OK);
     }
 
     /**

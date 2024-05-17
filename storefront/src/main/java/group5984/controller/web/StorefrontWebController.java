@@ -2,6 +2,7 @@ package group5984.controller.web;
 
 import group5984.model.basket.Basket;
 import group5984.model.clients.Cards;
+import group5984.model.messeges.Message;
 import group5984.service.api.ContentApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -11,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.security.Principal;
 
 
 /**
@@ -115,13 +115,10 @@ public class StorefrontWebController {
      * @return переход к веб-странице покупок
      */
     @GetMapping("/basket/pay")
-    public String basketPay() {
-        log.info("TEST 1");
-        try {
-            serviceApi.basketPay();
-        } catch (Exception ignore) {
-        }
-        return "redirect:/storefront/cards/page/1";
+    public String basketPay(Model model) {
+        Message message = serviceApi.basketPay();
+        model.addAttribute("message", message.getMessage());
+        return "message";
     }
 
 }

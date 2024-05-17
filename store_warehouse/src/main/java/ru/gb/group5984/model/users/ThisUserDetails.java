@@ -8,6 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+
+/**
+ * Реализация UserDetails.
+ * DaoAuthenticationProvider проверяет UserDetails, а затем возвращает аутентификацию.
+ */
 @Data
 @AllArgsConstructor
 public class ThisUserDetails implements UserDetails{

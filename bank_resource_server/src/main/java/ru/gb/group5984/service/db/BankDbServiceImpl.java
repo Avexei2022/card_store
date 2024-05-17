@@ -21,6 +21,7 @@ import ru.gb.group5984.model.visitors.Characters;
 import ru.gb.group5984.repository.ClientsRepository;
 import ru.gb.group5984.repository.VisitorRepository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Objects;
 
@@ -118,7 +119,7 @@ public class BankDbServiceImpl implements BankDbService {
         if (characterResult != null) {
             Client client = new Client();
             client.setClientDetail(characterResult);
-            client.setBalance(50.00);
+            client.setBalance(BigDecimal.valueOf(50.00));
             try {
                 clientsRepository.save(client);
             } catch (RuntimeException e) {
@@ -247,8 +248,8 @@ public class BankDbServiceImpl implements BankDbService {
         } catch (ExcessAmountException e) {
             throw new ExcessAmountException("Клиент для пополнения средств не найден.");
         }
-        creditClient.setBalance(creditClient.getBalance() - transaction.getTransferAmount());
-        debitClient.setBalance(debitClient.getBalance() + transaction.getTransferAmount());
+        creditClient.setBalance(creditClient.getBalance().subtract(transaction.getTransferAmount()));
+        debitClient.setBalance(debitClient.getBalance().add(transaction.getTransferAmount()));
         try {
             clientsRepository.save(creditClient);
             clientsRepository.save(debitClient);

@@ -7,6 +7,8 @@ import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsStorage;
 
+import java.math.BigDecimal;
+
 /**
  * Интерфейс сервиса склада магазина
  */
@@ -82,7 +84,7 @@ public interface ServerDbService {
      * Получить общую сумму товаров в корзине.
      * @return сумма товаров в корзине.
      */
-    Double getTotalPriceFromBasket();
+    BigDecimal getTotalPriceFromBasket();
 
     /**
      * Удалить все товары из корзины.

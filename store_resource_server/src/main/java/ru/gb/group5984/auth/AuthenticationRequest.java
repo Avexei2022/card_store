@@ -13,4 +13,12 @@ public class AuthenticationRequest {
 
     private String username;
     String password;
+
+    public String getRequest() {
+        return "{\"username\": \""
+                + username
+                + "\", \"password\": \""
+                + password
+                + "\"}";
+    }
 }

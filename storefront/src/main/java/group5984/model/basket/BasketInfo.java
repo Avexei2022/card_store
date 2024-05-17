@@ -2,6 +2,8 @@ package group5984.model.basket;
 
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 /**
  * Информация о корзине покупателя:
  * - количество товара;
@@ -16,5 +18,5 @@ public class BasketInfo {
     private Integer next;
     private Integer current;
     private Integer prev;
-    private Double totalPrice;
+    private BigDecimal totalPrice;
 }

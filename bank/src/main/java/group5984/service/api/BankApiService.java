@@ -69,5 +69,4 @@ public interface BankApiService {
      */
     Message saveClient(Client client);
 
-    User getUserByUserName(String name);
 }

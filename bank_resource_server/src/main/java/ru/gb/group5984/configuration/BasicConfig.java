@@ -22,8 +22,8 @@ import ru.gb.group5984.aspect.UserActionAspect;
 @Getter
 @Setter
 public class BasicConfig {
-    private String CLIENT_API;
     private RestTemplate restTemplate;
+    private String CLIENT_API;
 
     @Bean
     public UserActionAspect loginAspect() {

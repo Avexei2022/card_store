@@ -1,9 +1,10 @@
 package group5984.service.api;
 
+import group5984.auth.AuthenticationService;
 import group5984.configuration.BasicConfig;
 import group5984.model.basket.Basket;
 import group5984.model.clients.Cards;
-import group5984.model.users.User;
+import group5984.model.messeges.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private HttpHeaders headers;
+    private final AuthenticationService authenticationService;
 
     private final BasicConfig basicConfig;
 
@@ -40,7 +40,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     public Cards getAllFromSale(String page) {
         String url = basicConfig.getSERVER_API() + "/sale/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Cards> responseType = Cards.class;
         log.info("URI - " + url);
         ResponseEntity<Cards> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -56,7 +56,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     public Basket getAllFromBasket(String page) {
         String url = basicConfig.getSERVER_API() + "/basket/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Basket> responseType = Basket.class;
         log.info("URI - " + url);
         ResponseEntity<Basket> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -71,7 +71,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     public void addToBasketById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -86,7 +86,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     public void deleteFromBasketById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/basket/return_to_sale/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -97,38 +97,14 @@ public class ContentApiServiceImpl implements ContentApiService {
      * Оплатить товар в корзине.
      */
     @Override
-    public void basketPay() {
+    public Message basketPay() {
         String url = basicConfig.getSERVER_API() + "/basket/pay";
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
-        Class<HttpStatusCode> responseType = HttpStatusCode.class;
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
+        Class<Message> responseType = Message.class;
         log.info("URI - " + url);
-        ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
-        response.getStatusCode();
-    }
-
-    /**
-     * Получить пользователя по имени.
-     * @param name имя пользователя.
-     * @return пользователь.
-     */
-    @Override
-    public User getUserByUserName(String name) {
-        String url = basicConfig.getSERVER_API() + "/user/" + name;
-        HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
-        Class<User> responseType = User.class;
-        log.info("URI - " + url);
-        ResponseEntity<User> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        ResponseEntity<Message> response = restTemplate.exchange(url, method, requestEntity, responseType);
         return response.getBody();
     }
 
-    /**
-     * Подготовка объекта HTTP-запроса.
-     * @return
-     */
-    private HttpEntity<String> getRequestEntity() {
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(headers);
-    }
 }

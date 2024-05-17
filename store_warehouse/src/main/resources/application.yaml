@@ -20,5 +20,5 @@ eureka:
 url:
   CHARACTER_API: "https://rickandmortyapi.com/api/character"
   SERVER_API: "http://localhost:8084/store_server"
-  BANK_API: "http://localhost:8085/bank_server"
+
 

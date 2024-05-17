@@ -8,6 +8,11 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+
+/**
+ * Реализация UserDetails.
+ * DaoAuthenticationProvider проверяет UserDetails, а затем возвращает аутентификацию.
+ */
 @Data
 @AllArgsConstructor
 public class ThisUserDetails implements UserDetails{
@@ -33,21 +38,21 @@ public class ThisUserDetails implements UserDetails{
 
     @Override
     public boolean isAccountNonExpired() {
-        return true;
+        return user.isAccountNonExpired();
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true;
+        return user.isAccountNonLocked();
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true;
+       return user.isCredentialsNonExpired();
     }
 
     @Override
     public boolean isEnabled() {
-        return user.getEnabled();
+        return true;
     }
 }

@@ -1,10 +1,10 @@
 package group5984.service.api;
 
+import group5984.auth.AuthenticationService;
 import group5984.configuration.BasicConfig;
 import group5984.model.clients.Client;
 import group5984.model.clients.ClientsList;
 import group5984.model.messeges.Message;
-import group5984.model.users.User;
 import group5984.model.visitors.CharacterResult;
 
 import group5984.model.visitors.Characters;
@@ -29,21 +29,11 @@ import java.util.List;
 @Log
 public class BankApiServiceImpl implements BankApiService {
     private final BasicConfig basicConfig;
-
+    private final AuthenticationService authenticationService;
     @Autowired
     private RestTemplate restTemplate;
 
-    @Autowired
-    private HttpHeaders headers;
 
-    /**
-     * Подготовка объекта HTTP-запроса.
-     * @return
-     */
-    private HttpEntity<String> getRequestEntity() {
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return new HttpEntity<>(headers);
-    }
 
     @Override
     public void saveOneVisitor(CharacterResult characterResult) {
@@ -63,7 +53,7 @@ public class BankApiServiceImpl implements BankApiService {
     public Message deleteVisitorById(Integer id) {
         String url = basicConfig.getBANK_API() + "/candidates/delete_from_bank/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
         try {
@@ -87,7 +77,7 @@ public class BankApiServiceImpl implements BankApiService {
     public Characters getPageCandidates(String page) throws RuntimeException{
         String url = basicConfig.getBANK_API() + "/candidates/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Characters> responseType = Characters.class;
         log.info("URI - " + url);
         try {
@@ -109,7 +99,7 @@ public class BankApiServiceImpl implements BankApiService {
     public Message saveOneClientById(Integer id) {
         String url = basicConfig.getBANK_API() + "/candidates/add_to_client/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
         try {
@@ -146,7 +136,7 @@ public class BankApiServiceImpl implements BankApiService {
     public ClientsList getPageBankClients(Integer page) throws RuntimeException {
         String url = basicConfig.getBANK_API() + "/clients/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<ClientsList> responseType = ClientsList.class;
         log.info("URI - " + url);
         try {
@@ -166,7 +156,7 @@ public class BankApiServiceImpl implements BankApiService {
     public Message deleteClientById(Integer id) {
         String url = basicConfig.getBANK_API() + "/clients/delete_client/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
         try {
@@ -189,7 +179,7 @@ public class BankApiServiceImpl implements BankApiService {
 
         String url = basicConfig.getBANK_API() + "/clients/update";
         HttpMethod method = HttpMethod.POST;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
 
@@ -203,21 +193,6 @@ public class BankApiServiceImpl implements BankApiService {
         }
     }
 
-    /**
-     * Получить пользователя по имени.
-     * @param name имя пользователя.
-     * @return пользователь.
-     */
-    @Override
-    public User getUserByUserName(String name) {
-        String url = basicConfig.getBANK_API() + "/user/" + name;
-        HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
-        Class<User> responseType = User.class;
-        log.info("URI - " + url);
-        ResponseEntity<User> response = restTemplate.exchange(url, method, requestEntity, responseType);
-        return response.getBody();
-    }
 
 
 }

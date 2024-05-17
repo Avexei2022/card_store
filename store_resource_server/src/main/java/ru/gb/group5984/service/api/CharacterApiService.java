@@ -2,6 +2,7 @@ package ru.gb.group5984.service.api;
 
 
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.messeges.Message;
 
 /**
  * Интерфейс сервиса получения данных с сайта Rick and Morty
@@ -24,5 +25,5 @@ public interface CharacterApiService {
     /**
      * Оплата товара из корзины покупателя через банк.
      */
-    void basketPay();
+    Message basketPay();
 }

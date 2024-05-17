@@ -2,6 +2,7 @@ package group5984.service.api;
 
 import group5984.model.basket.Basket;
 import group5984.model.clients.Cards;
+import group5984.model.messeges.Message;
 import group5984.model.users.User;
 
 
@@ -40,7 +41,6 @@ public interface ContentApiService {
     /**
      * Оплатить товар в корзине
      */
-    void basketPay();
+    Message basketPay();
 
-    User getUserByUserName(String name);
 }

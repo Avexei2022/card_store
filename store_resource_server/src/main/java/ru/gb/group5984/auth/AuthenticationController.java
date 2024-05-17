@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 public class AuthenticationController {
     private final AuthenticationService service;
 
-    @GetMapping("/register")
+    @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ) {

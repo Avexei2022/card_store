@@ -22,6 +22,7 @@ import ru.gb.group5984.repository.BasketRepository;
 import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.repository.CharacterRepository;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 
@@ -134,7 +135,7 @@ public class ServerDbServiceImpl implements ServerDbService {
             CardsStorage cardsStorage = new CardsStorage();
             cardsStorage.setCard(characterResult);
             cardsStorage.setAmount(100);
-            cardsStorage.setPrice(19.99);
+            cardsStorage.setPrice(BigDecimal.valueOf(19.99));
             cardsRepository.save(cardsStorage);
         }
     }
@@ -292,8 +293,8 @@ public class ServerDbServiceImpl implements ServerDbService {
         basketInfo.setTotalPrice(basketRepository.findAll()
                 .stream()
                 .map(CardInBasket::getPrice)
-                .reduce(Double::sum)
-                .orElse(0.0));
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.valueOf(0)));
         basket.setCardInBasketList(cardInBasketPage.toList());
         basket.setInfo(basketInfo);
         return basket;
@@ -304,11 +305,11 @@ public class ServerDbServiceImpl implements ServerDbService {
      * @return сумма товаров в корзине
      */
     @Override
-    public Double getTotalPriceFromBasket() {
+    public BigDecimal getTotalPriceFromBasket() {
         return basketRepository.findAll().stream()
                 .map(CardInBasket::getPrice)
-                .reduce(Double::sum)
-                .orElse(0.0);
+                .reduce(BigDecimal::add)
+                .orElse(BigDecimal.valueOf(0));
     }
 
     /**

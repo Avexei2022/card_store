@@ -84,7 +84,6 @@ public class StorageWebController {
     @TrackUserAction
     @GetMapping("/characters/delete_from_storage/{id}/{page}")
     public String deleteFromStorage(@PathVariable("id") Integer id, @PathVariable("page") String page, Model model) {
-        serverApiService.deleteFromStorageById(id);
         Message message = serverApiService.deleteFromStorageById(id);
         log.info(message.getMessage());
         if (message.getMessage().equals("none")) return "redirect:/storage/storage/page/" + page;

@@ -1,28 +1,18 @@
 package ru.gb.group5984.service.api;
 
-import com.fasterxml.jackson.databind.jsonFormatVisitors.JsonFormatTypes;
-import io.swagger.v3.core.util.Json;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.gb.group5984.aspect.TrackUserAction;
-import ru.gb.group5984.auth.AuthenticationRequest;
-import ru.gb.group5984.auth.AuthenticationResponse;
+import ru.gb.group5984.auth.AuthenticationService;
 import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
-import ru.gb.group5984.model.users.User;
-
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
 
 
 /**
@@ -37,24 +27,10 @@ import java.util.Objects;
 @Log
 public class ServerApiServiceImpl implements ServerApiService {
     private final BasicConfig basicConfig;
+    private final AuthenticationService authenticationService;
 
     @Autowired
     private RestTemplate restTemplate;
-
-    @Autowired
-    private HttpHeaders headers;
-
-    /**
-     * Подготовка объекта HTTP-запроса.
-     * @return
-     */
-    private HttpEntity<String> getRequestEntity() {
-        String token = getToken("storage", "storage");
-        headers.setBearerAuth(token);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return new HttpEntity<>(headers);
-    }
 
     /**
      * Получить полный список товаров из базы данных товаров на складе
@@ -66,7 +42,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public Characters getPageFromStorage(String page) {
         String url = basicConfig.getSERVER_API() + "/storage/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Characters> responseType = Characters.class;
         log.info("URI - " + url);
         ResponseEntity<Characters> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -84,7 +60,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public Message deleteFromStorageById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/characters/delete_from_storage/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
         ResponseEntity<Message> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -103,7 +79,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public void saveOneCardToSaleById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/storage/add_to_sale/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -128,7 +104,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public Cards getPageCardsStorageFromSale(Integer page) {
         String url = basicConfig.getSERVER_API() + "/sale/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Cards> responseType = Cards.class;
         log.info("URI - " + url);
         ResponseEntity<Cards> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -146,7 +122,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public void deleteCardFromSaleById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/storage/delete_from_sale/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -167,7 +143,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public void moveCardToBasket(Long id) {
         String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -189,7 +165,7 @@ public class ServerApiServiceImpl implements ServerApiService {
     public void returnCardFromBasketToSale(Long id) {
         String url = basicConfig.getSERVER_API() + "/basket/return_to_sale/" + id;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -215,50 +191,13 @@ public class ServerApiServiceImpl implements ServerApiService {
     public Basket getAllFromBasket(Integer page) {
         String url = basicConfig.getSERVER_API() + "/basket/page/" + page;
         HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
+        HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Basket> responseType = Basket.class;
         log.info("URI - " + url);
         ResponseEntity<Basket> response = restTemplate.exchange(url, method, requestEntity, responseType);
         return response.getBody();
     }
 
-    /**
-     * Получить пользователя по имени.
-     * @param name имя пользователя.
-     * @return пользователь.
-     */
-    @Override
-    public User getUserByUserName(String name) {
-        String url = basicConfig.getSERVER_API() + "/user/" + name;
-        HttpMethod method = HttpMethod.GET;
-        HttpEntity<String> requestEntity = getRequestEntity();
-        Class<User> responseType = User.class;
-        log.info("LOG: ServerApiServiceImpl.getUserByUserName.URI = " + url);
-        ResponseEntity<User> response = restTemplate.exchange(url, method, requestEntity, responseType);
-        User user = response.getBody();
-        assert user != null;
-        log.info("LOG: ServerApiServiceImpl.getUserByUserName.userDetails = " + user);
-        return user;
-    }
 
-    private String getToken(String username, String password) {
-        String url = basicConfig.getSERVER_API() + "/auth/authenticate";
-        HttpMethod method = HttpMethod.POST;
-        var requestBody = AuthenticationRequest.builder()
-                .username(username)
-                        .password(password).build();
-        log.info("LOG:  ServerApiServiceImpl.getToken.requestBody = " + requestBody.getRequest() + "\n" + requestBody);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> requestEntity = new HttpEntity<>(requestBody.getRequest(), headers);
-        log.info("LOG:  ServerApiServiceImpl.getToken.requestEntity.Header = " + requestEntity.getHeaders());
-        log.info("LOG:  ServerApiServiceImpl.getToken.requestEntity.Body = " + requestEntity.getBody());
-        Class<AuthenticationResponse> responseType = AuthenticationResponse.class;
-        ResponseEntity<AuthenticationResponse> response = restTemplate.exchange(url, method, requestEntity, responseType);
-        String token = Objects.requireNonNull(response.getBody()).getToken();
-        log.info("LOG:  ServerApiServiceImpl.getToken.token = " + token);
-        return token;
-
-    }
 
 }

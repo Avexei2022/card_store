@@ -3,6 +3,7 @@ package ru.gb.group5984.model.basket;
 import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -14,7 +15,7 @@ public class CardInBasket {
     private Long id;
     private CharacterResult card;
     private Integer amount;
-    private Double price;
+    private BigDecimal price;
     private Long cardsStorageId;
     private LocalDateTime created;
 }

@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
@@ -23,7 +24,7 @@ public class CardInBasket {
     @Column(name = "amount")
     private Integer amount;
     @Column(name = "price")
-    private Double price;
+    private BigDecimal price;
     @Column(name="cards_storage_id")
     private Long cardsStorageId;
     @Column(name = "created")

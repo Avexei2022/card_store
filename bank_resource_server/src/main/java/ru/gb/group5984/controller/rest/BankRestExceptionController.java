@@ -4,9 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import ru.gb.group5984.model.exceptoins.ExceptionBody;
-import ru.gb.group5984.model.exceptoins.ExcessAmountException;
-import ru.gb.group5984.model.exceptoins.ResourceNotFoundException;
+import ru.gb.group5984.model.exceptions.ExceptionBody;
+import ru.gb.group5984.model.exceptions.ExcessAmountException;
+import ru.gb.group5984.model.exceptions.ResourceNotFoundException;
 
 import java.time.LocalDateTime;
 

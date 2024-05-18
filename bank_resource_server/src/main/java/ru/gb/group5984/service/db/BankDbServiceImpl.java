@@ -12,7 +12,7 @@ import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.model.clients.Client;
 import ru.gb.group5984.model.clients.ClientsList;
 import ru.gb.group5984.model.clients.ClientsListInfo;
-import ru.gb.group5984.model.exceptoins.ExcessAmountException;
+import ru.gb.group5984.model.exceptions.ExcessAmountException;
 import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.transactions.Transaction;
 import ru.gb.group5984.model.visitors.CharacterInfo;
@@ -23,7 +23,7 @@ import ru.gb.group5984.repository.VisitorRepository;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Objects;
+import java.util.NoSuchElementException;
 
 /**
  * Сервис базы данных банка
@@ -187,10 +187,6 @@ public class BankDbServiceImpl implements BankDbService {
         Message message = new Message();
         message.setMessage("");
         try {
-//            List<Client> clientList = clientsRepository.findAll();
-//            Long clientId = clientList.stream()
-//                    .filter(client -> Objects.equals(client.getClientDetail().getId(), id))
-//                    .toList().getFirst().getId();
             clientsRepository.deleteById(id);
         } catch (RuntimeException e) {
             message.setMessage("Ошибка при удалении клиента: " + e.getMessage());
@@ -237,16 +233,16 @@ public class BankDbServiceImpl implements BankDbService {
         Client debitClient = new Client();
         try {
             creditClient = findClientById(transaction.getCreditAccount());
-        } catch (ExcessAmountException e) {
-            throw new ExcessAmountException("Клиент для списания средств не найден.");
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Клиент для списания средств не найден.");
         }
         if (creditClient.getBalance().compareTo(transaction.getTransferAmount()) < 0) {
             throw  new ExcessAmountException("Средств на счете недостаточно");
         }
         try {
             debitClient = findClientById(transaction.getDebitAccount());
-        } catch (ExcessAmountException e) {
-            throw new ExcessAmountException("Клиент для пополнения средств не найден.");
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Клиент для пополнения средств не найден.");
         }
         creditClient.setBalance(creditClient.getBalance().subtract(transaction.getTransferAmount()));
         debitClient.setBalance(debitClient.getBalance().add(transaction.getTransferAmount()));

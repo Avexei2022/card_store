@@ -1,5 +1,7 @@
 package ru.gb.group5984.configuration;
 
+import lombok.extern.java.Log;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -13,8 +15,10 @@ import ru.gb.group5984.service.UserDetailsServiceImpl;
 /**
  * Конфигуратор безопасности
  */
+@Slf4j
 @Configuration
 @EnableWebSecurity
+@Log
 public class WebSecurityConfig{
 
     /**
@@ -45,7 +49,7 @@ public class WebSecurityConfig{
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
-        authProvider.setUserDetailsService(userDetailsService());
+                authProvider.setUserDetailsService(userDetailsService());
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }

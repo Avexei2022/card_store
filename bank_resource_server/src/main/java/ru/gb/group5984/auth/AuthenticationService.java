@@ -21,6 +21,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final AuthConfig authConfig;
 
     public AuthenticationResponse register(RegisterRequest request) {
         log.info("LOG: AuthenticationService.register = " + request.toString());
@@ -44,8 +45,10 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        var user = repository.findUserByUsername(request.getUsername())
-                .orElseThrow();
+//        var user = userRepository.findUserByUsername(request.getUsername())
+//                .orElseThrow();
+        User user = new User(111L, authConfig.getBankUsername(), authConfig.getBankPassword()
+                ,Role.Admin, true);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

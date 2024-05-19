@@ -31,3 +31,10 @@ eureka:
 url:
   CHARACTER_API: "https://rickandmortyapi.com/api/character"
   BANK_API: "http://localhost:8085/bank_server"
+
+#AUTHENTICATE
+auth-data:
+  username: store_server
+  password: $2y$10$W2JuXPbklBdGi.IORhRapuxgSaPEeq3CHwUTWLDCor.bFFdk6OA3m
+  bankUsername: bank-server
+  bankPassword: bank-server

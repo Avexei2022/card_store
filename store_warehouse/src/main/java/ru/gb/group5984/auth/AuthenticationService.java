@@ -17,6 +17,7 @@ import java.util.Objects;
 @Log
 public class AuthenticationService {
     private final BasicConfig basicConfig;
+    private final AuthConfig authConfig;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -29,7 +30,7 @@ public class AuthenticationService {
      * @return
      */
     public HttpEntity<String> getRequestEntity() {
-        String token = getToken("storage", "storage");
+        String token = getToken(authConfig.getUsername(), authConfig.getPassword());
         headers.setBearerAuth(token);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -47,11 +48,11 @@ public class AuthenticationService {
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<User> responseType = User.class;
-        log.info("LOG: ServerApiServiceImpl.getUserByUserName.URI = " + url);
+        log.info("LOG: AuthenticationService.getUserByUserName.URI = " + url);
         ResponseEntity<User> response = restTemplate.exchange(url, method, requestEntity, responseType);
         User user = response.getBody();
         assert user != null;
-        log.info("LOG: ServerApiServiceImpl.getUserByUserName.userDetails = " + user);
+        log.info("LOG: AuthenticationService.getUserByUserName.userDetails = " + user);
         return user;
     }
 

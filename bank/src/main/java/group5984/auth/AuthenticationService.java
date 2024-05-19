@@ -18,6 +18,7 @@ import java.util.Objects;
 @Log
 public class AuthenticationService {
     private final BasicConfig basicConfig;
+    private final AuthConfig authConfig;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -30,7 +31,7 @@ public class AuthenticationService {
      * @return
      */
     public HttpEntity<String> getRequestEntity() {
-        String token = getToken("bank", "bank");
+        String token = getToken(authConfig.getBankUsername(), authConfig.getBankPassword());
         headers.setBearerAuth(token);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -55,6 +56,12 @@ public class AuthenticationService {
         return user;
     }
 
+    /**
+     * Получить токен.
+     * @param username логин.
+     * @param password пароль.
+     * @return токен.
+     */
     private String getToken(String username, String password) {
         String url = basicConfig.getBANK_API() + "/auth/authenticate";
         HttpMethod method = HttpMethod.POST;

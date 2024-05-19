@@ -88,36 +88,38 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     @TrackUserAction
     public Message basketPay() {
         BigDecimal totalAmount = serverDbService.getTotalPriceFromBasket();
-        String url = basicConfig.getBANK_API() + "/transaction";
-        HttpMethod method = HttpMethod.POST;
-                Class<Message> responseType = Message.class;
-        var transaction = Transaction.builder()
-                .creditAccount(2L)
-                .debitAccount(1L)
-                .transferAmount(totalAmount)
-                .build();
-        String jsonTransaction = "";
-        try {
-            jsonTransaction = new ObjectMapper().writeValueAsString(transaction);
-        } catch (JsonProcessingException ignored){
-        }
-
-        HttpEntity<String> requestEntity = new HttpEntity<>(jsonTransaction, authenticationService.getHeaders());
-        log.info("Тест платежа: " + transaction);
-        log.info("URL: " + url);
         Message message = new Message();
-        try {
-            ResponseEntity<Message> response = restTemplate
-                    .exchange(url, method, requestEntity, responseType);
-            message = response.getBody();
-            assert message != null;
-            if (message.getMessage().equals("OK")) {
-                serverDbService.deleteAllFromBasket();
-                message.setMessage("Оплата товара прошла успешно. Поздравляем с покупкой!");
+        if (totalAmount.compareTo(BigDecimal.valueOf(0)) > 0) {
+            String url = basicConfig.getBANK_API() + "/transaction";
+            HttpMethod method = HttpMethod.POST;
+            Class<Message> responseType = Message.class;
+            var transaction = Transaction.builder()
+                    .creditAccount(2L)
+                    .debitAccount(1L)
+                    .transferAmount(totalAmount)
+                    .build();
+            String jsonTransaction = "";
+            try {
+                jsonTransaction = new ObjectMapper().writeValueAsString(transaction);
+            } catch (JsonProcessingException ignored){
             }
-        } catch (RuntimeException e) {
-            message.setMessage("Ресурс банка временно недоступен: " + e.getMessage());
-        }
+
+            HttpEntity<String> requestEntity = new HttpEntity<>(jsonTransaction, authenticationService.getHeaders());
+
+            try {
+                ResponseEntity<Message> response = restTemplate
+                        .exchange(url, method, requestEntity, responseType);
+                message = response.getBody();
+                assert message != null;
+                if (message.getMessage().equals("OK")) {
+                    serverDbService.deleteAllFromBasket();
+                    message.setMessage("Оплата товара прошла успешно. Поздравляем с покупкой!");
+                }
+            } catch (RuntimeException e) {
+                message.setMessage("Ресурс банка временно недоступен: " + e.getMessage());
+            }
+        } else message.setMessage("Оплачивать нечего, корзина пуста.");
+
         return message;
     }
 }

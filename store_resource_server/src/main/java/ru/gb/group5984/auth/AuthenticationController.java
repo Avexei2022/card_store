@@ -1,19 +1,20 @@
 package ru.gb.group5984.auth;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.ResponseEntity;
 
 
+/**
+ * Контроллер регистрации и аутентификации
+ */
 @RestController
 @RequestMapping("/store_server/auth")
 @RequiredArgsConstructor
 @Log
 public class AuthenticationController {
-    private final AuthenticationService service;
+    private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
@@ -21,7 +22,8 @@ public class AuthenticationController {
     ) {
         log.info("LOG: AuthenticationController" +
                 ".register.request  =  " + request.toString());
-        ResponseEntity<AuthenticationResponse> response = ResponseEntity.ok(service.register(request));
+        ResponseEntity<AuthenticationResponse> response = ResponseEntity
+                .ok(authenticationService.register(request));
         log.info("LOG: AuthenticationController" +
                 ".register.response =  " + response);
         return response;
@@ -33,7 +35,8 @@ public class AuthenticationController {
     ) {
         log.info("LOG: AuthenticationController" +
                 ".authenticate.request =  " + request.toString());
-        ResponseEntity<AuthenticationResponse> response = ResponseEntity.ok(service.authenticate(request));
+        ResponseEntity<AuthenticationResponse> response = ResponseEntity
+                .ok(authenticationService.authenticate(request));
         log.info("LOG: AuthenticationController" +
                 ".authenticate.response =  " + response);
         return response;

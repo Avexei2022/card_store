@@ -31,3 +31,8 @@ eureka:
 #RESOURCE_URL
 url:
   CLIENT_API: "https://rickandmortyapi.com/api/character"
+
+#AUTHENTICATE
+auth-data:
+  bankUsername: bank-server
+  bankPassword: $2y$10$Lr9PcOrOC1jKWUZRpVLWTuRpMXH13NRqNiUvu/1qfP4Kb8tI9/0by

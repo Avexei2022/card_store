@@ -24,11 +24,12 @@ import java.util.Objects;
 @Log
 public class AuthenticationService {
 
-    private final UserRepository repository;
+    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final BasicConfig basicConfig;
+    private final AuthConfig authConfig;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -36,6 +37,11 @@ public class AuthenticationService {
     @Autowired
     private HttpHeaders headers;
 
+    /**
+     * Регистрация нового сервиса.
+     * @param request запрос на регистрацию.
+     * @return Ответ с результатом регистрации.
+     */
     public AuthenticationResponse register(RegisterRequest request) {
         log.info("LOG: AuthenticationService.register = " + request.toString());
         var user = User.builder()
@@ -44,22 +50,32 @@ public class AuthenticationService {
                 .role(Role.User)
                 .enabled(true)
                 .build();
-        repository.save(user);
+        userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();
     }
 
+    /**
+     * Аутентификация сервиса.
+     * @param request запрос.
+     * @return ответ с результатом.
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
+        log.info("LOG: AuthenticationService.authenticate.request = " + request);
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getUsername(),
                         request.getPassword()
                 )
         );
-        var user = repository.findUserByUsername(request.getUsername())
-                .orElseThrow();
+        // Закомментированный код предназначен на случай регистрации сервисов в базе данных.
+//        var user = userRepository.findUserByUsername(request.getUsername())
+//                .orElseThrow();
+        User user = new User(111L, authConfig.getUsername(), authConfig.getPassword()
+                ,Role.Admin, true);
+        log.info("LOG: AuthenticationService.authenticate.user = " + user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -71,13 +87,19 @@ public class AuthenticationService {
      * @return
      */
     public HttpHeaders getHeaders() {
-        String token = getToken("bank", "bank");
+        String token = getToken(authConfig.getBankUsername(), authConfig.getBankPassword());
         headers.setBearerAuth(token);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);
         return headers;
     }
 
+    /**
+     * Получить токен.
+     * @param username логин.
+     * @param password пароль.
+     * @return токен.
+     */
     private String getToken(String username, String password) {
         String url = basicConfig.getBANK_API() + "/auth/authenticate";
         HttpMethod method = HttpMethod.POST;

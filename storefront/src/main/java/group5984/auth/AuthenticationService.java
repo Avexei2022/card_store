@@ -17,7 +17,7 @@ import java.util.Objects;
 @Log
 public class AuthenticationService {
     private final BasicConfig basicConfig;
-
+    private final AuthConfig authConfig;
     @Autowired
     private RestTemplate restTemplate;
 
@@ -29,7 +29,7 @@ public class AuthenticationService {
      * @return
      */
     public HttpEntity<String> getRequestEntity() {
-        String token = getToken("storefront", "storefront");
+        String token = getToken(authConfig.getUsername(), authConfig.getPassword());
         headers.setBearerAuth(token);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         headers.setContentType(MediaType.APPLICATION_JSON);

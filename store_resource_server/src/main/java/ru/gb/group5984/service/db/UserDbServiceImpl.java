@@ -24,16 +24,6 @@ public class UserDbServiceImpl implements UserDbService{
      */
     @Override
     public User findUserByUsername(String username) {
-//        userRepository.deleteAll();
-//        User admin = new User();
-//        admin.setUsername("admin");
-//        admin.setPassword("admin");
-//        admin.setRole("ADMIN");
-//        admin.setEnabled(true);
-//        userRepository.save(admin);
-//        User admin = userRepository.findUserByUsername("admin");
-//        admin.setPassword("{noop}admin");
-//        userRepository.save(admin);
         User user = userRepository.findUserByUsername(username).orElseThrow();
         log.info(user.toString());
         return userRepository.findUserByUsername(username).orElseThrow();

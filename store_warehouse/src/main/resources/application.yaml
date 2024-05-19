@@ -21,4 +21,8 @@ url:
   CHARACTER_API: "https://rickandmortyapi.com/api/character"
   SERVER_API: "http://localhost:8084/store_server"
 
+#AUTHENTICATE
+auth-data:
+  username: store_server
+  password: store_server
 

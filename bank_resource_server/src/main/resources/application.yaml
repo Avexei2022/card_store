@@ -6,11 +6,6 @@ server:
 spring:
   application:
     name: bank_resource_server
-  datasource:
-    url: jdbc:postgresql://localhost:5432/db_trading_floor
-    username: admin
-    password: admin
-    driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
       jdbc:
@@ -20,7 +15,11 @@ spring:
     show-sql: true
   config:
     import: configserver:http://localhost:8888
-
+#  datasource:
+#    url: jdbc:postgresql://localhost:5432/db_trading_floor
+#    username: admin
+#    password: admin
+#    driver-class-name: org.postgresql.Driver
 
 #EUREKA
 eureka:

@@ -37,6 +37,7 @@ public class AuthenticationService {
     @Autowired
     private HttpHeaders headers;
 
+    //TODO Реализовать
     /**
      * Регистрация нового сервиса.
      * @param request запрос на регистрацию.

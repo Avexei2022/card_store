@@ -16,6 +16,11 @@ import org.springframework.http.ResponseEntity;
 public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
+    /**
+     * Регистрация нового пользователя - нового сервиса
+     * @param request
+     * @return
+     */
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
@@ -29,6 +34,11 @@ public class AuthenticationController {
         return response;
     }
 
+    /**
+     * Аутентификация пользователя - сервиса
+     * @param request
+     * @return
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request

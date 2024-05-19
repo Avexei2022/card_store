@@ -228,7 +228,7 @@ public class BankDbServiceImpl implements BankDbService {
     @Override
     @Transactional
     @TrackUserAction
-    public void transaction(Transaction transaction) throws ExcessAmountException{
+    public void transaction(Transaction transaction) throws ExcessAmountException, NoSuchElementException {
         Client creditClient = new Client();
         Client debitClient = new Client();
         try {

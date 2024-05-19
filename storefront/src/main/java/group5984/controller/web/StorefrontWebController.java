@@ -12,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-
-
 /**
  * Веб контроллер пользовательского сайта магазина
  */
@@ -64,10 +62,23 @@ public class StorefrontWebController {
      * @param page номер текущей страницы для последующего возврата к ней
      * @return возврат к методу подготовки основной веб-страницы магазина со списком товара
       */
+
+    /**
+     * Добавить товар в корзину.
+     * @param id уникальный номер товара.
+     * @param page номер текущей страницы для последующего возврата к ней.
+     * @param model Модель веб-страницы сообщений.
+     * @return возврат к странице выбора товара при удачном сохранении товара в корзине,
+     * или переход к странице сообщений.
+     */
     @GetMapping("/basket/add_to_basket/{id}/{page}")
-    public String addToBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page) {
-        serviceApi.addToBasketById(id);
-        return "redirect:/storefront/cards/page/" + page;
+    public String addToBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page, Model model) {
+        Message message = serviceApi.addToBasketById(id);
+        if (message.getMessage().equals("OK")) return "redirect:/storefront/cards/page/" + page;
+        else {
+            model.addAttribute("message", message.getMessage());
+            return "message";
+        }
     }
 
     /**

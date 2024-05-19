@@ -13,12 +13,15 @@ import ru.gb.group5984.auth.RegisterRequest;
 import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.exceptions.ExcessAmountException;
 import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.db.ServerDbService;
 import ru.gb.group5984.service.db.UserDbService;
+
+import java.util.NoSuchElementException;
 
 
 /**
@@ -123,9 +126,15 @@ public class StoreServerRestController {
      * @return статус ответа.
      */
     @GetMapping("/basket/add_to_basket/{id}")
-    public ResponseEntity<Void> addToBasket(@PathVariable("id") Long id) {
-        serverDbService.moveCardToBasket(id);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Message> addToBasket(@PathVariable("id") Long id) {
+        Message message = new Message();
+        try {
+            serverDbService.moveCardToBasket(id);
+            message.setMessage("OK");
+        } catch (NoSuchElementException | ExcessAmountException e) {
+            message.setMessage(e.getMessage());
+        }
+        return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     /**

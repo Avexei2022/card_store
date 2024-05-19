@@ -14,6 +14,7 @@ import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterInfo;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
+import ru.gb.group5984.model.exceptions.ExcessAmountException;
 import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
@@ -23,7 +24,9 @@ import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.repository.CharacterRepository;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.NoSuchElementException;
 
 
 /**
@@ -210,8 +213,13 @@ public class ServerDbServiceImpl implements ServerDbService {
     //TODO доработать ввод количества товара и проверку на валидность
     @Override
     @Transactional
-    public void moveCardToBasket(Long id) {
-        CardsStorage cardInSale = cardsRepository.findById(id).orElseThrow();
+    public void moveCardToBasket(Long id)  throws ExcessAmountException, NoSuchElementException {
+        CardsStorage cardInSale;
+        try {
+            cardInSale = cardsRepository.findById(id).orElseThrow();
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Товар на складе не найден.");
+        }
         if (cardInSale.getAmount() > 0) {
             CardInBasket cardInBasket = new CardInBasket();
             cardInBasket.setCard(cardInSale.getCard());
@@ -219,11 +227,11 @@ public class ServerDbServiceImpl implements ServerDbService {
             cardInSale.setAmount(cardInSale.getAmount() - 1);
             cardInBasket.setPrice(cardInSale.getPrice());
             cardInBasket.setCardsStorageId(cardInSale.getId());
-            cardInBasket.setCreated(LocalDateTime.now());
+            cardInBasket.setCreated(LocalDate.now());
             if (cardInSale.getAmount() < 1) cardsRepository.deleteById(id);
             else cardsRepository.save(cardInSale);
             basketRepository.save(cardInBasket);
-        }
+        } else throw new ExcessAmountException("Отрицательный баланс товара на складе");
     }
 
 

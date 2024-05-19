@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Entity
 @Data
 @Table(name = "clientOfBank")
-public class Client implements Cloneable{
+public class Client {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account")
@@ -25,14 +25,4 @@ public class Client implements Cloneable{
     @Column(name = "balance")
     private BigDecimal balance;
 
-    @Override
-    public Client clone() {
-        try {
-            Client clone = (Client) super.clone();
-            // TODO: copy mutable state here, so the clone can't change the internals of the original
-            return clone;
-        } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
-        }
-    }
 }

@@ -30,7 +30,7 @@ public interface ContentApiService {
      * Добавить товар в корзину покупателя
      * @param id - id товара
      */
-    void addToBasketById(Integer id);
+    Message addToBasketById(Integer id);
 
     /**
      * Вернуть товар из корзины покупателя на полку

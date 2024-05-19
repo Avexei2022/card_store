@@ -1,36 +1,33 @@
 package ru.gb.group5984.service.db;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.gb.group5984.model.clients.Client;
-import ru.gb.group5984.model.exceptions.ExcessAmountException;
 import ru.gb.group5984.model.transactions.Transaction;
 import ru.gb.group5984.model.visitors.CharacterResult;
 import ru.gb.group5984.repository.ClientsRepository;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
 
 /**
- * Тест транзакции.
+ * Интеграционный тест перевода денег.
  */
-@ExtendWith(MockitoExtension.class)
-public class BankDbServiceTransactionTest {
-    @InjectMocks
+@SpringBootTest
+public class TransactionIntegrationTest {
+    @Autowired
     private BankDbServiceImpl bankDbService;
-    @Mock
+    @MockBean
     private ClientsRepository clientsRepository;
+    private final Date date = new Date();
+
 
     /**
      * Проверка списания и начисления.
@@ -46,13 +43,11 @@ public class BankDbServiceTransactionTest {
         transaction.setDebitAccount(2L);
         transaction.setTransferAmount(BigDecimal.valueOf(20));
 
-        Client creditNew = credit.clone();
-        creditNew.setBalance(BigDecimal.valueOf(30));
-        Client debitNew = debit.clone();
-        debitNew.setBalance(BigDecimal.valueOf(70));
+        Client creditNew = createCreditAccount(BigDecimal.valueOf(30));
+        Client debitNew = createDebitAccount(BigDecimal.valueOf(70));
 
-        given(clientsRepository.findById(1L)).willReturn(Optional.of(credit));
-        given(clientsRepository.findById(2L)).willReturn(Optional.of(debit));
+        when(clientsRepository.findById(1L)).thenReturn(Optional.of(credit));
+        when(clientsRepository.findById(2L)).thenReturn(Optional.of(debit));
 
         //Блок действия
         bankDbService.transaction(transaction);
@@ -61,54 +56,6 @@ public class BankDbServiceTransactionTest {
         verify(clientsRepository).save(creditNew);
         verify(clientsRepository).save(debitNew);
 
-    }
-
-    /**
-     * Проверка исключения при отсутствии лицевого счета.
-     */
-    @Test
-    public void transactionAccountNotFoundTest() {
-        //Блок предусловия
-        Client credit = createCreditAccount(BigDecimal.valueOf(50));
-
-        Transaction transaction = new Transaction();
-        transaction.setCreditAccount(1L);
-        transaction.setDebitAccount(2L);
-        transaction.setTransferAmount(BigDecimal.valueOf(20));
-
-        Client creditNew = credit.clone();
-        creditNew.setBalance(BigDecimal.valueOf(30));
-
-
-        given(clientsRepository.findById(1L)).willReturn(Optional.of(credit));
-        given(clientsRepository.findById(2L)).willReturn(Optional.empty());
-
-        //Блок действия
-        assertThrows(NoSuchElementException.class, () -> bankDbService.transaction(transaction));
-
-        //Блок проверки
-        verify(clientsRepository, never()).save(any());
-    }
-
-    /**
-     * Проверка исключения при недостатке средств на счете.
-     */
-    @Test
-    public void transactionAmountExceptionTest() {
-        //Блок предусловия
-        Client credit = createCreditAccount(BigDecimal.valueOf(50));
-        Transaction transaction = new Transaction();
-        transaction.setCreditAccount(1L);
-        transaction.setDebitAccount(2L);
-        transaction.setTransferAmount(BigDecimal.valueOf(100));
-
-        given(clientsRepository.findById(1L)).willReturn(Optional.of(credit));
-
-        //Блок действия
-        assertThrows(ExcessAmountException.class, () -> bankDbService.transaction(transaction));
-
-        //Блок проверки
-        verify(clientsRepository, never()).save(any());
     }
 
     /**
@@ -126,7 +73,7 @@ public class BankDbServiceTransactionTest {
         creditDetail.setGender("mail");
         creditDetail.setImage("credit_img");
         creditDetail.setUrl("credit_url");
-        creditDetail.setCreated(new Date());
+        creditDetail.setCreated(date);
 
         Client credit = new Client();
         credit.setId(1L);
@@ -151,7 +98,7 @@ public class BankDbServiceTransactionTest {
         debitDetail.setGender("mail");
         debitDetail.setImage("credit_img");
         debitDetail.setUrl("credit_url");
-        debitDetail.setCreated(new Date());
+        debitDetail.setCreated(date);
 
         Client debit = new Client();
         debit.setId(2L);

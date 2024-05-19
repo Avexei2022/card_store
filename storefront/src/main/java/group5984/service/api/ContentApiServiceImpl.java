@@ -68,14 +68,14 @@ public class ContentApiServiceImpl implements ContentApiService {
      * @param id - id товара.
      */
     @Override
-    public void addToBasketById(Integer id) {
+    public Message addToBasketById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
-        Class<HttpStatusCode> responseType = HttpStatusCode.class;
+        Class<Message> responseType = Message.class;
         log.info("URI - " + url);
-        ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
-        response.getStatusCode();
+        ResponseEntity<Message> response = restTemplate.exchange(url, method, requestEntity, responseType);
+        return response.getBody();
     }
 
     /**

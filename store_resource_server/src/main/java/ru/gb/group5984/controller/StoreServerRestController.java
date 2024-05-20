@@ -1,5 +1,7 @@
 package ru.gb.group5984.controller;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -38,6 +40,8 @@ public class StoreServerRestController {
     private final UserDbService userDbService;
     private final CharacterApiService characterApiService;
 
+    private final Counter addCardToStorageCounter = Metrics.counter("add_card_to_storage_ count");
+    private final Counter addCardToBasketCounter = Metrics.counter("add_card_to_basket_count");
 
     /**
      * Запрос списка товаров с рессурса поставщика - Rick and Morty.
@@ -59,6 +63,7 @@ public class StoreServerRestController {
     @GetMapping("/characters/add_to_storage/{id}")
     public ResponseEntity<Void> addToStorage(@PathVariable("id") Integer id) {
         characterApiService.saveOneCharacterById(id);
+        addCardToStorageCounter.increment();
         return ResponseEntity.ok().build();
     }
 
@@ -130,6 +135,7 @@ public class StoreServerRestController {
         Message message = new Message();
         try {
             serverDbService.moveCardToBasket(id);
+            addCardToBasketCounter.increment();
             message.setMessage("OK");
         } catch (NoSuchElementException | ExcessAmountException e) {
             message.setMessage(e.getMessage());

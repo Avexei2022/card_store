@@ -65,6 +65,7 @@ public class WebSecurityConfig {
                         auth -> auth
                                 .requestMatchers("/css/**", "/", "/index")
                                     .permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .exceptionHandling(exception -> exception.accessDeniedPage("/index"))

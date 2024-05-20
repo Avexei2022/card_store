@@ -43,6 +43,7 @@ public class SecurityConfig {
                         auth -> auth
                                 .requestMatchers(HttpMethod.POST,"/bank_server/auth/**")
                                 .permitAll()
+                                .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(e -> e.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

@@ -22,3 +22,14 @@ url:
 auth-data:
   bankUsername: bank-server
   bankPassword: bank-server
+
+#MANAGEMENT
+management:
+  endpoints:
+    web:
+      exposure:
+        #        include: env, info, health, *
+        include: metrics, prometheus, health
+  endpoint:
+    health:
+      show-details: always

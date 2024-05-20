@@ -8,6 +8,7 @@ import group5984.model.messeges.Message;
 import group5984.model.visitors.CharacterResult;
 
 import group5984.model.visitors.Characters;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 

@@ -1,6 +1,8 @@
 package ru.gb.group5984.controller.rest;
 
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Metrics;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,8 @@ public class BankRestController {
     private final BankApiService serviceApi;
     private final BankDbService serviceDb;
     private final UserDbService userDbService;
+
+    private final Counter transactionGoodCounter = Metrics.counter("transactionGoodCounter");
 
     /**
      * Запрос списка "посетителей банка" -
@@ -142,6 +146,7 @@ public class BankRestController {
         } catch (ExcessAmountException e) {
             message.setMessage(e.getMessage());
         }
+        transactionGoodCounter.increment();
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 

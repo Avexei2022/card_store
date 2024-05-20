@@ -24,3 +24,14 @@ url:
 auth-data:
   username: store_server
   password: store_server
+
+#MANAGEMENT
+management:
+  endpoints:
+    web:
+      exposure:
+        #        include: env, info, health, *
+        include: metrics, prometheus, health
+  endpoint:
+    health:
+      show-details: always

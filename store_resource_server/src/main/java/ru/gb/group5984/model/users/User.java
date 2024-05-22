@@ -30,6 +30,10 @@ public class User implements UserDetails {
     private Role role;
     @Column(name = "enabled")
     private Boolean enabled;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "subscribe")
+    private Boolean isSubscribe;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

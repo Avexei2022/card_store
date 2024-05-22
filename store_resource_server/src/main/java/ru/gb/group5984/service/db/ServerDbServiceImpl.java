@@ -2,6 +2,8 @@ package ru.gb.group5984.service.db;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,6 +18,7 @@ import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.exceptions.ExcessAmountException;
 import ru.gb.group5984.model.messeges.Message;
+import ru.gb.group5984.model.observer.NewProductEvent;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
@@ -26,6 +29,7 @@ import ru.gb.group5984.repository.CharacterRepository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 
@@ -43,6 +47,8 @@ public class ServerDbServiceImpl implements ServerDbService {
     private final CharacterRepository characterRepository;
     private final CardsRepository cardsRepository;
     private final BasketRepository basketRepository;
+    @Autowired
+    private ApplicationEventPublisher publisher;
 
     /**
      * Сохранение единицы товара, закупленного у поставщика,
@@ -140,6 +146,7 @@ public class ServerDbServiceImpl implements ServerDbService {
             cardsStorage.setAmount(100);
             cardsStorage.setPrice(BigDecimal.valueOf(19.99));
             cardsRepository.save(cardsStorage);
+            publisher.publishEvent(new NewProductEvent(this, cardsStorage));
         }
     }
 
@@ -282,7 +289,7 @@ public class ServerDbServiceImpl implements ServerDbService {
      */
     @TrackUserAction
     @Override
-    public Basket getAllFromBasket(Integer page) {
+    public Basket getPageFromBasket(Integer page) {
         page = page - 1;
         if (page < 0) page = 0;
         Pageable pageable = PageRequest.of(page, 20);
@@ -306,6 +313,11 @@ public class ServerDbServiceImpl implements ServerDbService {
         basket.setCardInBasketList(cardInBasketPage.toList());
         basket.setInfo(basketInfo);
         return basket;
+    }
+
+    @Override
+    public List<CardInBasket> getAllFromBasket() {
+        return basketRepository.findAll();
     }
 
     /**

@@ -1,6 +1,7 @@
 package ru.gb.group5984.service.db;
 
 import ru.gb.group5984.model.basket.Basket;
+import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.messeges.Message;
@@ -8,6 +9,7 @@ import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsStorage;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * Интерфейс сервиса склада магазина
@@ -78,7 +80,13 @@ public interface ServerDbService {
      * @param page - запрашиваемая пользователем страница.
      * @return список товаров в корзине.
      */
-    Basket getAllFromBasket(Integer page);
+    Basket getPageFromBasket(Integer page);
+
+    /**
+     * Получить все товары, зарезервированные в корзине.
+     * @return список товаров в корзине.
+     */
+    List<CardInBasket> getAllFromBasket();
 
     /**
      * Получить общую сумму товаров в корзине.

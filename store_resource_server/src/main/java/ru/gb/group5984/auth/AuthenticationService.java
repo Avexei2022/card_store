@@ -14,7 +14,7 @@ import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.users.Role;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.UserRepository;
-import ru.gb.group5984.service.JwtService;
+import ru.gb.group5984.service.auth.JwtService;
 
 import java.util.List;
 import java.util.Objects;
@@ -75,7 +75,7 @@ public class AuthenticationService {
 //        var user = userRepository.findUserByUsername(request.getUsername())
 //                .orElseThrow();
         User user = new User(111L, authConfig.getUsername(), authConfig.getPassword()
-                ,Role.Admin, true);
+                ,Role.Admin, true, "user@gmail.com", true);
         log.info("LOG: AuthenticationService.authenticate.user = " + user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

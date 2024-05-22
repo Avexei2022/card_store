@@ -2,6 +2,8 @@ package ru.gb.group5984.service.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -12,11 +14,16 @@ import org.springframework.web.client.RestTemplate;
 import ru.gb.group5984.aspect.TrackUserAction;
 import ru.gb.group5984.auth.AuthenticationService;
 import ru.gb.group5984.configuration.BasicConfig;
+import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.messeges.Message;
+import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.transactions.Transaction;
+import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.service.db.ServerDbService;
+import ru.gb.group5984.service.db.UserDbService;
+import ru.gb.group5984.service.integration.FileGateway;
 
 import java.math.BigDecimal;
 import java.util.List;
@@ -32,6 +39,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     private final ServerDbService serverDbService;
     private final BasicConfig basicConfig;
     private final AuthenticationService authenticationService;
+    private final FileGateway fileGateway;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -79,7 +87,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
         if (characterResult != null) serverDbService.saveOneCharacter(characterResult);
     }
 
-    //TODO Доработать
+    //TODO Доработать. Необходимо добавить конкретных покупателей.
     /**
      * Оплата товара из корзины покупателя через банк.
      */
@@ -112,6 +120,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
                 message = response.getBody();
                 assert message != null;
                 if (message.getMessage().equals("OK")) {
+                    integrationMessage();
                     serverDbService.deleteAllFromBasket();
                     message.setMessage("Оплата товара прошла успешно. Поздравляем с покупкой!");
                 }
@@ -121,5 +130,17 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
         } else message.setMessage("Оплачивать нечего, корзина пуста.");
 
         return message;
+    }
+
+    /**
+     * Интеграционное сообщение о проданном товаре после его оплаты.
+     * Вызывается из метода basketPay.
+     */
+    private void integrationMessage() {
+        List<CardInBasket> cardInBasketList = serverDbService.getAllFromBasket();
+        for (CardInBasket cardInBasket: cardInBasketList) {
+            String fileName = cardInBasket.getCard().getName().concat(".txt");
+            fileGateway.writeToFile(fileName, cardInBasket);
+        }
     }
 }

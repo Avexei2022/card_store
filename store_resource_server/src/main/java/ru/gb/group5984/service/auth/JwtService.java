@@ -1,4 +1,4 @@
-package ru.gb.group5984.service;
+package ru.gb.group5984.service.auth;
 
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Service;

@@ -13,7 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
-import ru.gb.group5984.service.JwtService;
+import ru.gb.group5984.service.auth.JwtService;
 
 import java.io.IOException;
 

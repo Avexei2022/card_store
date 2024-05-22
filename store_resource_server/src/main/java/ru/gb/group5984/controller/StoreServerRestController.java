@@ -8,11 +8,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.gb.group5984.aspect.TrackUserAction;
-import ru.gb.group5984.auth.AuthenticationRequest;
-import ru.gb.group5984.auth.AuthenticationResponse;
-import ru.gb.group5984.auth.AuthenticationService;
-import ru.gb.group5984.auth.RegisterRequest;
-import ru.gb.group5984.configuration.BasicConfig;
 import ru.gb.group5984.model.basket.Basket;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.exceptions.ExcessAmountException;
@@ -150,7 +145,7 @@ public class StoreServerRestController {
      */
     @GetMapping("/basket/page/{page}")
     public ResponseEntity<Basket> getAllFromBasket(@PathVariable("page") Integer page) {
-        return new ResponseEntity<>(serverDbService.getAllFromBasket(page), HttpStatus.OK);
+        return new ResponseEntity<>(serverDbService.getPageFromBasket(page), HttpStatus.OK);
     }
 
     /**

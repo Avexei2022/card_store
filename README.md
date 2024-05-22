@@ -1,20 +1,28 @@
 # Фреймворк Spring (семинары)  
-## Урок 11. Spring Actuator. Настройка мониторинга с Prometheus и Grafana.  
+## Урок 12.  
 ### Задание: 
-Используйте Spring Actuator для отслеживания метрик вашего приложения.  
-Настройте визуализацию этих метрик с использованием Prometheus и Grafana.  
+На базе первого примера разобранного на семинаре, добавить в один из проектов разработанных ранее spring Integration.  
+Сохранять запросы от пользователя в файл.  
+Добавить в проект один из паттернов разобранных на лекции.   
 
  
 ## Выполнение:
-В сервис bank_resource_server добавлена метрика подсчета количества транзакций.  
-В сервис store_resource_server добавлены метрики подсчета количества закупленного товара у поставщика 
-и подсчета товара в, побывавшего в корзинах покупателей.  
-Файл настройки Прометеуса приложен.  
-В Графане на дашборд выведены метрики, указанные выше, а также метрики:  
-- spring_security_authentications_seconds_count;
-- spring_data_repository_invocations_seconds_sum;
-- Connection creation time.  
-Скрин экрана приложен.
+Spring integration добавлен в сервис store_resource_server.  
+При оплате товара направляется сообщение (записывается в файл с наименованием товара) о дате и времени продажи товара,  
+его количестве и стоимости, а также дате когда данный товар был зарезервирован.
+IntegrationConfig - пакет configuration.  
+FileGateway -  пакет service.integration.
+Реализация в методе basketPay() класса CharacterApiServiceImpl - пакет service.api  
+Файлы сохраняются в папке messages.  
+
+В сервис store_resource_server также добавлен паттерн Observer.  
+При поступлении нового товара в продажу всем подписчикам направляется уведомление.  
+Уведомление реализовано через ранее добавленный integration в виде записи в файл с именем пользователя.  
+NewProductListener - в пакете service.observer.  
+NewProductEvent - в пакете model.observer.   
+Метод notifyUser в классе IntegrationConfig - пакет configuration. 
+Метод saveOneCardById в классе ServerDbServiceImpl.  
+
 
 # Краткое описание проекта.  
 

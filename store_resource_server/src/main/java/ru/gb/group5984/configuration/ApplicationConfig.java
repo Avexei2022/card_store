@@ -27,7 +27,7 @@ public class ApplicationConfig {
 //        return username -> userRepository.findUserByUsername(username)
 //                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return username -> new User(111L, authConfig.getUsername(), authConfig.getPassword()
-                , Role.Admin, true);
+                , Role.Admin, true, "user@gmail.com", true);
     }
 
     @Bean

@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
+/**
+ * Точка входа для сервера ресурсов магазина.
+ */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
 @ConfigurationPropertiesScan

@@ -10,6 +10,9 @@ import ru.gb.group5984.model.users.Role;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.UserRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Сервис пользователей.
  */
@@ -19,6 +22,7 @@ import ru.gb.group5984.repository.UserRepository;
 @Getter
 public class UserDbServiceImpl implements UserDbService{
     private final UserRepository userRepository;
+    private final  List<User> userList = createUsers();
 
     //TODO После сдачи домашних работ вернуться к БД
     /**
@@ -32,15 +36,29 @@ public class UserDbServiceImpl implements UserDbService{
         //Временно деактивировано
 //        User user = userRepository.findUserByUsername(username).orElseThrow();
 //        log.info(user.toString());
-
         return switch (username) {
-            case "admin" -> new User(1L, "admin", "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
-                    , Role.Admin, true);
-            case "user" -> new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
-                    , Role.User, true);
+            case "admin" -> userList.get(0);
+            case "user" -> userList.get(1);
             default -> throw new UsernameNotFoundException("Пользователь не найден");
         };
     }
 
+    @Override
+    public List<User> findAllUser() {
+        return userList;
+    }
+
+    /**
+     * Временная замена репозиторию
+     * @return список пользователей
+     */
+    private List<User> createUsers() {
+        List<User> userList = new ArrayList<>();
+        userList.add(new User(1L, "admin", "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
+                , Role.Admin, true, "admin@gmail.com", false));
+        userList.add(new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
+                , Role.User, true, "user@gmail.com", true));
+        return userList;
+    }
 
 }

@@ -7,6 +7,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.storage.CardsStorage;
+import ru.gb.group5984.model.users.Role;
+import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.BasketRepository;
 import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.service.db.ServerDbServiceImpl;
@@ -46,7 +48,7 @@ public class MoveCardToBasketIntegrationTest {
         when(cardsRepository.findById(1L)).thenReturn(Optional.of(cardsStorage));
 
         //Блок действия
-        serverDbService.moveCardToBasket(1L);
+        serverDbService.moveCardToBasket(1L, "user");
 
         //Блок проверки
         verify(cardsRepository).save(cardsStorageAfterSale);
@@ -80,6 +82,15 @@ public class MoveCardToBasketIntegrationTest {
     }
 
     /**
+     * Создание тестового пользователя
+     * @return тестовый пользователь
+     */
+    private User createUser() {
+        return new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
+                        , Role.User, true, "user@gmail.com", true);
+    }
+
+    /**
      * Создание тестового товара в корзине.
      * @return товар.
      */
@@ -102,6 +113,7 @@ public class MoveCardToBasketIntegrationTest {
         cardInBasket.setPrice(BigDecimal.valueOf(20));
         cardInBasket.setCardsStorageId(1L);
         cardInBasket.setCreated(localDate);
+        cardInBasket.setUser(createUser());
 
         return cardInBasket;
     }

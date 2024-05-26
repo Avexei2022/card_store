@@ -23,7 +23,7 @@ public class StorefrontWebController {
     private final ContentApiService serviceApi;
 
     /**
-     * Перенаправление к методу вызова основной веб-страницы списка товаров
+     * Перенаправление к методу вызова основной веб-страницы списка товаров в продаже.
      * @return строка вызова
      */
     @GetMapping("/")
@@ -32,11 +32,10 @@ public class StorefrontWebController {
     }
 
     /**
-     * Основной метод подготовки веб-страницы
+     * Подготовка веб-страницы списка товаров в продаже
      * @param page номер страницы в списке товаров, выставленных на продажу
      * @param model Модель веб-страницы
-     * @return готовая страница purchase.html
-     *  с загруженной в нее информацией:
+     * @return готовая страница purchase.html с загруженной в нее информацией:
      *      - количество товара, выставленного на продажу;
      *      - количество страниц для загрузки товара;
      *      - номер текущей страницы;
@@ -45,7 +44,7 @@ public class StorefrontWebController {
      *      - список товара;
      */
     @GetMapping("/cards/page/{page}")
-    public String getAllCardsStorage(@PathVariable("page") String page, Model model) {
+    public String getPageCardsStorage(@PathVariable("page") String page, Model model) {
         Cards cards = serviceApi.getAllFromSale(page);
         model.addAttribute("sale_size", cards.getInfo().getCount())
                 .addAttribute("amount_pages", cards.getInfo().getPages())
@@ -58,22 +57,17 @@ public class StorefrontWebController {
 
     /**
      * Добавить товар в корзину.
-     * @param id id товара.
-     * @param page номер текущей страницы для последующего возврата к ней
-     * @return возврат к методу подготовки основной веб-страницы магазина со списком товара
-      */
-
-    /**
-     * Добавить товар в корзину.
      * @param id уникальный номер товара.
+     * @param userName имя/логин покупателя
      * @param page номер текущей страницы для последующего возврата к ней.
      * @param model Модель веб-страницы сообщений.
      * @return возврат к странице выбора товара при удачном сохранении товара в корзине,
      * или переход к странице сообщений.
      */
-    @GetMapping("/basket/add_to_basket/{id}/{page}")
-    public String addToBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page, Model model) {
-        Message message = serviceApi.addToBasketById(id);
+    @GetMapping("/basket/add_to_basket/{id}/{user_name}/{page}")
+    public String addToBasketById(@PathVariable("id") Integer id
+            , @PathVariable("user_name") String userName, @PathVariable("page") String page, Model model) {
+        Message message = serviceApi.addToBasketById(id, userName);
         if (message.getMessage().equals("OK")) return "redirect:/storefront/cards/page/" + page;
         else {
             model.addAttribute("message", message.getMessage());
@@ -82,22 +76,23 @@ public class StorefrontWebController {
     }
 
     /**
-     * Основной метод подготовки веб-страницы
-     * @param page номер страницы в списке товаров, выставленных на продажу
-     * @param model Модель веб-страницы
-     * @return готовая страница purchase.html
-     *  с загруженной в нее информацией:
-     *      - количество товара, выставленного на продажу;
+     * Подготовка веб-страницы корзины покупателя.
+     * @param page номер страницы в списке товаров, выставленных на продажу.
+     * @param userName имя/логин покупателя.
+     * @param model Модель веб-страницы.
+     * @return готовая страница basket.html с загруженной в нее информацией:
+     *      - количество товара в корзине;
      *      - количество страниц для загрузки товара;
      *      - номер текущей страницы;
      *      - номер предыдущей страницы;
      *      - номер следующей страницы;
-     *      - список товара;
+     *      - список товара в корзине;
      *      - общая сумма товаров в корзине.
      */
-    @GetMapping("/basket/page/{page}")
-    public String getAllFromBasket(@PathVariable("page") String page, Model model) {
-        Basket basket = serviceApi.getAllFromBasket(page);
+    @GetMapping("/basket/page/{page}/{user_name}")
+    public String getPageFromBasket(@PathVariable("page") String page
+            , @PathVariable("user_name") String userName, Model model) {
+        Basket basket = serviceApi.getPageFromBasket(userName, page);
         model.addAttribute("sale_size", basket.getInfo().getCount())
                 .addAttribute("amount_pages", basket.getInfo().getPages())
                 .addAttribute("current_page", basket.getInfo().getCurrent())
@@ -109,12 +104,12 @@ public class StorefrontWebController {
     }
 
     /**
-     * Добавить товар в корзину.
+     * Удалить товар из корзины.
      * @param id id товара.
      * @param page номер текущей страницы для последующего возврата к ней
      * @return возврат к методу подготовки основной веб-страницы магазина со списком товара
      */
-    @GetMapping("/basket/delete_from_basket/{id}/{page}")
+    @GetMapping("/basket/delete_from_basket/{id}/{page}/{user_name}")
     public String deleteFromBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         serviceApi.deleteFromBasketById(id);
         return "redirect:/storefront/basket/page/" + page;
@@ -122,12 +117,13 @@ public class StorefrontWebController {
 
     //TODO Поработать над исключениями
     /**
-     * Оплатить товар из корзины
+     * Оплатить товар из корзины.
+     * @param userName имя/логин покупателя.
      * @return переход к веб-странице покупок
      */
-    @GetMapping("/basket/pay")
-    public String basketPay(Model model) {
-        Message message = serviceApi.basketPay();
+    @GetMapping("/basket/pay/{user_name}")
+    public String basketPay(@PathVariable("user_name") String userName, Model model) {
+        Message message = serviceApi.basketPay(userName);
         model.addAttribute("message", message.getMessage());
         return "message";
     }

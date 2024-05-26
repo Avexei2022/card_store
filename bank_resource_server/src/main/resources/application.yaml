@@ -15,11 +15,11 @@ spring:
     show-sql: true
   config:
     import: configserver:http://localhost:8888
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/db_trading_floor
-#    username: admin
-#    password: admin
-#    driver-class-name: org.postgresql.Driver
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_trading_floor
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
 
 #EUREKA
 eureka:

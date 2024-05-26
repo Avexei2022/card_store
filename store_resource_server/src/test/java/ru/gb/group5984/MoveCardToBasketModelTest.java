@@ -8,6 +8,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.storage.CardsStorage;
+import ru.gb.group5984.model.users.Role;
+import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.BasketRepository;
 import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.service.db.ServerDbServiceImpl;
@@ -54,7 +56,7 @@ public class MoveCardToBasketModelTest {
         given(cardsRepository.findById(1L)).willReturn(Optional.of(cardsStorage));
 
         //Блок действия
-        serverDbService.moveCardToBasket(1L);
+        serverDbService.moveCardToBasket(1L, "user");
 
         //Блок проверки
         verify(cardsRepository).save(cardsStorageAfterSale);
@@ -70,7 +72,7 @@ public class MoveCardToBasketModelTest {
         given(cardsRepository.findById(2L)).willReturn(Optional.empty());
         //Блок действия
 
-        assertThrows(NoSuchElementException.class, () -> serverDbService.moveCardToBasket(2L));
+        assertThrows(NoSuchElementException.class, () -> serverDbService.moveCardToBasket(2L, "user"));
 
         //Блок проверки
         verify(cardsRepository, never()).save(any());
@@ -104,6 +106,15 @@ public class MoveCardToBasketModelTest {
     }
 
     /**
+     * Создание тестового пользователя
+     * @return тестовый пользователь
+     */
+    private User createUser() {
+        return new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
+                , Role.User, true, "user@gmail.com", true);
+    }
+
+    /**
      * Создание тестового товара в корзине.
      * @return товар.
      */
@@ -126,6 +137,7 @@ public class MoveCardToBasketModelTest {
         cardInBasket.setPrice(BigDecimal.valueOf(20));
         cardInBasket.setCardsStorageId(1L);
         cardInBasket.setCreated(localDate);
+        cardInBasket.setUser(createUser());
 
         return cardInBasket;
     }

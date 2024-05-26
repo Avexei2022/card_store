@@ -35,7 +35,7 @@
             ></path>
           </svg>
         </a>
-        <ul class="header_nav_ul">
+        <ul class="header_nav_ul" sec:authorize="isAuthenticated()">
           <li class="header_nav_ul_li" >
             <a
               class="header_nav_ul_li_a"
@@ -45,7 +45,7 @@
               >Purchase</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
               th:href="@{/storage/storage/page/1}"
@@ -54,40 +54,13 @@
               >Storage</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
               th:href="@{/storage/sale/page/1}"
               title="В продаже"
               style="text-decoration: none"
               >Sale</a
-            >
-          </li>
-          <li class="header_nav_ul_li">
-            <a
-              class="header_nav_ul_li_a"
-              href="#"
-              title="Зарезервированный товар"
-              style="text-decoration: none"
-              >Reserved</a
-            >
-          </li>
-          <li class="header_nav_ul_li" sec:authorize="hasRole('admin')">
-            <a
-              class="header_nav_ul_li_a"
-              href="#"
-              title="Проданный товар"
-              style="text-decoration: none"
-              >Sold</a
-            >
-          </li>
-          <li class="header_nav_ul_li" sec:authorize="hasRole('ADMIN')">
-            <a
-              class="header_nav_ul_li_a"
-              href="#"
-              title="Покупатели"
-              style="text-decoration: none"
-              >Customers</a
             >
           </li>
           <li class="header_nav_ul_li_buy" sec:authorize="!isAuthenticated()">
@@ -124,7 +97,7 @@
     <footer class="footer_1" th:fragment="footer">
       <div class="footer_about">
         <span class="footer_about_span"
-          >Homework by Aleksei Kolodin as a student
+          >Graduation project by Aleksei Kolodin
         </span>
         <span class="footer_about_span">2024</span>
       </div>

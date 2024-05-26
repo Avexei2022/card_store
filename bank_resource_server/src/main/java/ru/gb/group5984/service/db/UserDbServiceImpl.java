@@ -19,7 +19,6 @@ import ru.gb.group5984.repository.UserRepository;
 public class UserDbServiceImpl implements UserDbService{
     private final UserRepository userRepository;
 
-    //TODO Вернуть БД
     /**
      * Поиск пользователя по имени
      * @param username - имя пользователя.
@@ -27,14 +26,14 @@ public class UserDbServiceImpl implements UserDbService{
      */
     @Override
     public User findUserByUsername(String username) {
-        // Деактивирован на период домашних работ
-//        return userRepository.findUserByUsername(username).orElseThrow();
-        return switch (username) {
-            case "admin" -> new User(1L, "admin", "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
-                    , Role.Admin, true);
-            case "user" -> new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
-                    , Role.User, true);
-            default -> throw new UsernameNotFoundException("Пользователь не найден");
-        };
+        return userRepository.findUserByUsername(username).orElseThrow();
+
+//        return switch (username) {
+//            case "admin" -> new User(1L, "admin", "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
+//                    , Role.Admin, true);
+//            case "user" -> new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
+//                    , Role.User, true);
+//            default -> throw new UsernameNotFoundException("Пользователь не найден");
+//        };
     }
 }

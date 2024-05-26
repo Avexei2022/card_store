@@ -6,6 +6,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+/**
+ * Компонент получающий из файла application.yaml
+ * логин и пароль для подключения к сервису ресурсов банка.
+ */
 @Component
 @ConfigurationProperties(prefix = "auth-data")
 @ComponentScan

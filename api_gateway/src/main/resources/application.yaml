@@ -8,6 +8,7 @@ spring:
   config:
     import: optional:configserver:http://localhost:8888
 
+# TODO Реализовать авторизацию через шлюз.
 #  security:
 #    oauth2:
 #      client:

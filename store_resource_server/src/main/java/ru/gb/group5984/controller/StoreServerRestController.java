@@ -122,14 +122,16 @@ public class StoreServerRestController {
 
     /**
      * Добавить товар в корзину.
-     * @param id -id товара.
-     * @return статус ответа.
+     * @param cardId - уникальный номер товара в продаже
+     * @param userName - имя покупателя
+     * @return
      */
-    @GetMapping("/basket/add_to_basket/{id}")
-    public ResponseEntity<Message> addToBasket(@PathVariable("id") Long id) {
+    @GetMapping("/basket/add_to_basket/{card_id}/{user_name}")
+    public ResponseEntity<Message> addToBasket(@PathVariable("card_id") Long cardId
+            , @PathVariable("user_name") String userName) {
         Message message = new Message();
         try {
-            serverDbService.moveCardToBasket(id);
+            serverDbService.moveCardToBasket(cardId, userName);
             addCardToBasketCounter.increment();
             message.setMessage("OK");
         } catch (NoSuchElementException | ExcessAmountException e) {
@@ -139,13 +141,15 @@ public class StoreServerRestController {
     }
 
     /**
-     * Получить список товаров в корзине.
+     * Получить список товаров в корзине покупателя.
      * @param page номер запрашиваемой пользователем страницы из списка товаров.
+     * @param userName имя/логин покупателя.
      * @return список товаров в корзине и статус ответа.
      */
-    @GetMapping("/basket/page/{page}")
-    public ResponseEntity<Basket> getAllFromBasket(@PathVariable("page") Integer page) {
-        return new ResponseEntity<>(serverDbService.getPageFromBasket(page), HttpStatus.OK);
+    @GetMapping("/basket/page/{page}/{user_name}")
+    public ResponseEntity<Basket> getAllFromBasket(@PathVariable("page") Integer page
+                                                    ,@PathVariable("user_name") String userName) {
+        return new ResponseEntity<>(serverDbService.getPageFromBasket(page, userName), HttpStatus.OK);
     }
 
     /**
@@ -161,12 +165,13 @@ public class StoreServerRestController {
 
     /**
      * Оплата товара из корзины покупателя.
+     * @param userName имя/логин покупателя.
      * @return статус ответа.
      */
     @TrackUserAction
-    @GetMapping("/basket/pay")
-    public ResponseEntity<Message> basketPay() {
-        return new ResponseEntity<>(characterApiService.basketPay(), HttpStatus.OK);
+    @GetMapping("/basket/pay/{user_name}")
+    public ResponseEntity<Message> basketPay(@PathVariable("user_name") String userName) {
+        return new ResponseEntity<>(characterApiService.basketPay(userName), HttpStatus.OK);
     }
 
     /**

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.w3.org/1999/xhtml">
   <head>
     <title>The Rick and Morty Card Store</title>
     <!-- Required meta tags -->
@@ -56,7 +56,7 @@
             class="main_section_2_div_1_card"
             title="В корзину"
             style="text-decoration: none"
-            th:href="@{/storefront/basket/add_to_basket/{id}/{page} (id=${cards_storage.id}, page=${current_page})}"
+            th:href="@{/storefront/basket/add_to_basket/{id}/{name}/{page} (id=${cards_storage.id}, name = ${#authentication.name}, page=${current_page})}"
             th:object="${cards_storage}"
           >
             <div class="main_section_2_div_1_card_divimg">

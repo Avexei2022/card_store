@@ -20,6 +20,7 @@ import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.transactions.Transaction;
+import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.service.db.ServerDbService;
 import ru.gb.group5984.service.db.UserDbService;
@@ -40,6 +41,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     private final BasicConfig basicConfig;
     private final AuthenticationService authenticationService;
     private final FileGateway fileGateway;
+    private final UserRepository userRepository;
 
     @Autowired
     private RestTemplate restTemplate;
@@ -90,20 +92,24 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     //TODO Доработать. Необходимо добавить конкретных покупателей.
     /**
      * Оплата товара из корзины покупателя через банк.
+     * По легенде Номер счета продавца - 1.
+     * @param userName имя/логин покупателя.
      */
     @Override
     @Transactional
     @TrackUserAction
-    public Message basketPay() {
-        BigDecimal totalAmount = serverDbService.getTotalPriceFromBasket();
+    public Message basketPay(String userName) {
+        User creditUser = userRepository.findUserByUsername(userName).orElseThrow();
+        User debitUser = userRepository.findUserByUsername(basicConfig.getDEBIT_USER()).orElseThrow();
+        BigDecimal totalAmount = serverDbService.getTotalPriceFromBasket(creditUser.getId());
         Message message = new Message();
         if (totalAmount.compareTo(BigDecimal.valueOf(0)) > 0) {
             String url = basicConfig.getBANK_API() + "/transaction";
             HttpMethod method = HttpMethod.POST;
             Class<Message> responseType = Message.class;
             var transaction = Transaction.builder()
-                    .creditAccount(2L)
-                    .debitAccount(1L)
+                    .creditAccount(creditUser.getId())
+                    .debitAccount(debitUser.getId())
                     .transferAmount(totalAmount)
                     .build();
             String jsonTransaction = "";
@@ -121,7 +127,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
                 assert message != null;
                 if (message.getMessage().equals("OK")) {
                     integrationMessage();
-                    serverDbService.deleteAllFromBasket();
+                    serverDbService.deleteAllFromBasket(creditUser.getId());
                     message.setMessage("Оплата товара прошла успешно. Поздравляем с покупкой!");
                 }
             } catch (RuntimeException e) {

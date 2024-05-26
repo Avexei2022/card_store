@@ -65,9 +65,10 @@ public interface ServerDbService {
 
     /**
      * Переместить единицу товара с полки в корзину покупателя.
-     * @param id - id товара.
+     * @param cardId - уникальный номер товара в продаже.
+     * @param userName - имя/логин покупателя.
      */
-    void moveCardToBasket(Long id);
+    void moveCardToBasket(Long cardId, String userName);
 
     /**
      * Возврат единицы товара из корзины покупателя на полку магазина.
@@ -78,9 +79,10 @@ public interface ServerDbService {
     /**
      * Получить все товары постранично, зарезервированные в корзине.
      * @param page - запрашиваемая пользователем страница.
+     * @param userName - имя/логин покупателя.
      * @return список товаров в корзине.
      */
-    Basket getPageFromBasket(Integer page);
+    Basket getPageFromBasket(Integer page, String userName);
 
     /**
      * Получить все товары, зарезервированные в корзине.
@@ -89,13 +91,15 @@ public interface ServerDbService {
     List<CardInBasket> getAllFromBasket();
 
     /**
-     * Получить общую сумму товаров в корзине.
+     * Получить общую сумму товаров в корзине покупателя.
+     * @param userId - уникальный номер покупателя.
      * @return сумма товаров в корзине.
      */
-    BigDecimal getTotalPriceFromBasket();
+    BigDecimal getTotalPriceFromBasket(Long userId);
 
     /**
-     * Удалить все товары из корзины.
+     * Удалить все товары из корзины покупателя.
+     * @param userId - уникальный номер покупателя.
      */
-    void deleteAllFromBasket();
+    void deleteAllFromBasket(Long userId);
 }

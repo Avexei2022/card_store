@@ -3,6 +3,7 @@ package ru.gb.group5984.model.basket;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
+import ru.gb.group5984.model.users.User;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -30,4 +31,7 @@ public class CardInBasket {
     private Long cardsStorageId;
     @Column(name = "created")
     private LocalDate created;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

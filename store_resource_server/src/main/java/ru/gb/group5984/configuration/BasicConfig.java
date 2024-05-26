@@ -23,6 +23,7 @@ import ru.gb.group5984.aspect.UserActionAspect;
 public class BasicConfig {
     private String CHARACTER_API;
     private String BANK_API;
+    private String DEBIT_USER;
     private RestTemplate restTemplate;
 
     @Bean

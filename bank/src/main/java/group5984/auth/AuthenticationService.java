@@ -9,10 +9,12 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Сервис аутентификации.
+ */
 @Service
 @RequiredArgsConstructor
 @Log
@@ -28,7 +30,7 @@ public class AuthenticationService {
 
     /**
      * Подготовка объекта HTTP-запроса.
-     * @return
+     * @return HTTP-запрос.
      */
     public HttpEntity<String> getRequestEntity() {
         String token = getToken(authConfig.getBankUsername(), authConfig.getBankPassword());

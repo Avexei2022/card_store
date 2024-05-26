@@ -6,8 +6,7 @@ import lombok.Data;
 import java.math.BigDecimal;
 
 /**
- * Клиент банка
- * Добавлены аннотации для базы данных
+ * Клиент банка.
  */
 @Data
 public class Client {

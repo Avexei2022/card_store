@@ -35,7 +35,7 @@
             ></path>
           </svg>
         </a>
-        <ul class="header_nav_ul">
+        <ul class="header_nav_ul" sec:authorize="isAuthenticated()">
           <li class="header_nav_ul_li">
             <a
               class="header_nav_ul_li_a"
@@ -45,34 +45,24 @@
               >Товар</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/storefront/basket/page/1}"
+              th:href="@{/storefront/basket/page/1/{name} (name = ${#authentication.name})}"
               title="Корзина"
               style="text-decoration: none"
               >Корзина</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
-              th:href="@{/storefront/basket/pay}"
+              th:href="@{/storefront/basket/pay/{name} (name = ${#authentication.name})}"
               title="Оплатить товар в корзине"
               style="text-decoration: none"
               >Оплатить</a
             >
           </li>
-          <li class="header_nav_ul_li">
-            <a
-              class="header_nav_ul_li_a"
-              href="#"
-              title="Приобретенный товар"
-              style="text-decoration: none"
-              >Покупки</a
-            >
-          </li>
-
           <li class="header_nav_ul_li_buy" sec:authorize="!isAuthenticated()">
             <a
                     class="header_nav_ul_li_a_buy"
@@ -106,7 +96,7 @@
     <footer class="footer_1" th:fragment="footer">
       <div class="footer_about">
         <span class="footer_about_span"
-          >Homework by Aleksei Kolodin as a student
+          >Graduation project by Aleksei Kolodin
         </span>
         <span class="footer_about_span">2024</span>
       </div>

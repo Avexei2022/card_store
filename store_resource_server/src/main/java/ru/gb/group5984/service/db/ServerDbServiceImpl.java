@@ -22,9 +22,11 @@ import ru.gb.group5984.model.observer.NewProductEvent;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
+import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.BasketRepository;
 import ru.gb.group5984.repository.CardsRepository;
 import ru.gb.group5984.repository.CharacterRepository;
+import ru.gb.group5984.repository.UserRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -47,6 +49,7 @@ public class ServerDbServiceImpl implements ServerDbService {
     private final CharacterRepository characterRepository;
     private final CardsRepository cardsRepository;
     private final BasketRepository basketRepository;
+    private final UserRepository userRepository;
     @Autowired
     private ApplicationEventPublisher publisher;
 
@@ -62,12 +65,11 @@ public class ServerDbServiceImpl implements ServerDbService {
         if (characterResult != null) characterRepository.save(characterResult);
     }
 
-
     /**
      * Получить все товары постранично, хранящиеся на складе.
      * @param page - номер страницы.
      * @return список товаров на складе.
-     * По умолчанию страница содержит 20 товаров
+     * По умолчанию страница содержит 20 товаров.
      * Список товаров дополнен следующей информацией о нем:
      * - общее количество товаров на складе;
      * - количество страниц;
@@ -98,10 +100,9 @@ public class ServerDbServiceImpl implements ServerDbService {
         return characters;
     }
 
-    //TODO Добавить проверку на наличие товара в продаже и в корзине
     /**
-     * Удалить единицу товара из базы данных товаров на складе
-     * @param id Id Товара
+     * Удалить единицу товара из базы данных товаров на складе.
+     * @param id Id Товара.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @Override
@@ -131,8 +132,8 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     //TODO Реализовать ввод данных от пользователя
     /**
-     * Выствить товар на продажу
-     * @param id - id товара
+     * Выствить товар на продажу.
+     * @param id - id товара.
      * Устанавливается количество товара и стоимость единицы товара
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
@@ -154,13 +155,13 @@ public class ServerDbServiceImpl implements ServerDbService {
      * Получить все товары постранично, выставленные на продажу.
      * @param page - номер страницы.
      * @return список товаров в продаже.
-     * По умолчанию страница содержит 20 товаров
+     * По умолчанию страница содержит 20 товаров.
      * Список товаров дополнен следующей информацией о нем:
      * - общее количество товаров в продаже;
      * - количество страниц в списке;
      * - номера текущей, предыдущей и следующей страниц.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
-     * Если следующей страницы нет, то проставляется номер первой страницы
+     * Если следующей страницы нет, то проставляется номер первой страницы.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
@@ -189,7 +190,7 @@ public class ServerDbServiceImpl implements ServerDbService {
     //TODO добавить проверку на резервирование покупателем
     /**
      * Удалить товар из списка продаж / убрать с полки.
-     * @param id - id товара
+     * @param id - id товара.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @Override
@@ -210,8 +211,9 @@ public class ServerDbServiceImpl implements ServerDbService {
     }
 
     /**
-     * Переместить единицу товара с полки в корзину покупателя
-     * @param id - id товара
+     * Переместить единицу товара с полки в корзину покупателя.
+     * @param cardId - уникальный номер товара в продаже.
+     * @param userName - имя/логин покупателя.
      *  При наличии товара на полке его количество уменьшается на единицу.
      *  Если товара на полке больше нет, то данная партия товара удаляется из списка.
      *  В корзине сохраняется информация о номере партии товара,
@@ -220,12 +222,18 @@ public class ServerDbServiceImpl implements ServerDbService {
     //TODO доработать ввод количества товара и проверку на валидность
     @Override
     @Transactional
-    public void moveCardToBasket(Long id)  throws ExcessAmountException, NoSuchElementException {
+    public void moveCardToBasket(Long cardId, String userName)  throws ExcessAmountException, NoSuchElementException {
         CardsStorage cardInSale;
+        User user;
         try {
-            cardInSale = cardsRepository.findById(id).orElseThrow();
+            cardInSale = cardsRepository.findById(cardId).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Товар на складе не найден.");
+        }
+        try {
+            user = userRepository.findUserByUsername(userName).orElseThrow();
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Покупатель не найден.");
         }
         if (cardInSale.getAmount() > 0) {
             CardInBasket cardInBasket = new CardInBasket();
@@ -235,7 +243,8 @@ public class ServerDbServiceImpl implements ServerDbService {
             cardInBasket.setPrice(cardInSale.getPrice());
             cardInBasket.setCardsStorageId(cardInSale.getId());
             cardInBasket.setCreated(LocalDate.now());
-            if (cardInSale.getAmount() < 1) cardsRepository.deleteById(id);
+            cardInBasket.setUser(user);
+            if (cardInSale.getAmount() < 1) cardsRepository.deleteById(cardId);
             else cardsRepository.save(cardInSale);
             basketRepository.save(cardInBasket);
         } else throw new ExcessAmountException("Отрицательный баланс товара на складе");
@@ -243,7 +252,7 @@ public class ServerDbServiceImpl implements ServerDbService {
 
 
     /**
-     * Возврат единицы товара из корзины покупателя на полку магазина
+     * Возврат единицы товара из корзины покупателя на полку магазина.
      * @param id id - товара в корзине.
      * Проверяется наличие партии данного товара на полке.
      * Если товар из данной партии в наличии на полке, то его количество увеличивается на количество товара в корзине.
@@ -274,8 +283,9 @@ public class ServerDbServiceImpl implements ServerDbService {
     }
 
     /**
-     * Получить все товары постранично, зарезервированные в корзине.
+     * Получить все товары постранично, зарезервированные покупателем в корзине.
      * @param page - запрашиваемая пользователем страница
+     * @param userName - имя/логин покупателя.
      * @return список товаров в корзине
      * По умолчанию страница содержит 20 товаров
      * Список товаров дополнен следующей информацией о нем:
@@ -289,11 +299,12 @@ public class ServerDbServiceImpl implements ServerDbService {
      */
     @TrackUserAction
     @Override
-    public Basket getPageFromBasket(Integer page) {
+    public Basket getPageFromBasket(Integer page, String userName) {
+        User user = userRepository.findUserByUsername(userName).orElseThrow();
         page = page - 1;
         if (page < 0) page = 0;
         Pageable pageable = PageRequest.of(page, 20);
-        Page<CardInBasket> cardInBasketPage = basketRepository.findAll(pageable);
+        Page<CardInBasket> cardInBasketPage = basketRepository.findAllByUser_id(user.getId(), pageable);
         Basket basket = new Basket();
         BasketInfo basketInfo = new BasketInfo();
         basketInfo.setCount(cardInBasketPage.getTotalElements());
@@ -305,7 +316,7 @@ public class ServerDbServiceImpl implements ServerDbService {
             basketInfo.setNext(cardInBasketPage.getNumber() + 2);
         else basketInfo.setNext(1);
         basketInfo.setCurrent(cardInBasketPage.getNumber() + 1);
-        basketInfo.setTotalPrice(basketRepository.findAll()
+        basketInfo.setTotalPrice(basketRepository.findAllByUser_id(user.getId())
                 .stream()
                 .map(CardInBasket::getPrice)
                 .reduce(BigDecimal::add)
@@ -315,30 +326,36 @@ public class ServerDbServiceImpl implements ServerDbService {
         return basket;
     }
 
+    /**
+     * Получить полный список товаров в корзинах покупателей.
+     * @return список зарезервированного товара.
+     */
     @Override
     public List<CardInBasket> getAllFromBasket() {
         return basketRepository.findAll();
     }
 
     /**
-     * Получить общую сумму товаров в корзине
+     * Получить общую сумму товаров в корзине покупателя.
+     * @param userId - уникальный номер покупателя.
      * @return сумма товаров в корзине
      */
     @Override
-    public BigDecimal getTotalPriceFromBasket() {
-        return basketRepository.findAll().stream()
+    public BigDecimal getTotalPriceFromBasket(Long userId) {
+        return basketRepository.findAllByUser_id(userId).stream()
                 .map(CardInBasket::getPrice)
                 .reduce(BigDecimal::add)
                 .orElse(BigDecimal.valueOf(0));
     }
 
     /**
-     * Удалить все товары из корзины
+     * Удалить все товары из корзины покупателя.
+     * @param userId - уникальный номер покупателя.
      */
     @TrackUserAction
     @Override
-    public void deleteAllFromBasket() {
-        basketRepository.deleteAll();
+    public void deleteAllFromBasket(Long userId) {
+        basketRepository.findAllByUser_id(userId);
     }
 
 

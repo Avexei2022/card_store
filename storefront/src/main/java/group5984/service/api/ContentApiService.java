@@ -3,7 +3,6 @@ package group5984.service.api;
 import group5984.model.basket.Basket;
 import group5984.model.clients.Cards;
 import group5984.model.messeges.Message;
-import group5984.model.users.User;
 
 
 /**
@@ -20,17 +19,19 @@ public interface ContentApiService {
     Cards getAllFromSale(String page);
 
     /**
-     * Получить список товаров в корзине покупателя
+     * Получить список товаров в корзине покупателя.
+     * @param userName имя/логин покупателя.
      * @param page запрашиваемая страница товаров
      * @return список товаров в корзине
      */
-    Basket getAllFromBasket(String page);
+    Basket getPageFromBasket(String userName, String page);
 
     /**
      * Добавить товар в корзину покупателя
      * @param id - id товара
+     * @param userName - имя пользователя.
      */
-    Message addToBasketById(Integer id);
+    Message addToBasketById(Integer id, String userName);
 
     /**
      * Вернуть товар из корзины покупателя на полку
@@ -41,6 +42,6 @@ public interface ContentApiService {
     /**
      * Оплатить товар в корзине
      */
-    Message basketPay();
+    Message basketPay(String userName);
 
 }

@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Конфигуратор
+ * Конфигуратор базовой информации
  * принимает значения из файла настройки application.yaml
  */
 @Component

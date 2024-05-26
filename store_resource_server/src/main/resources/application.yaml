@@ -15,11 +15,11 @@ spring:
     show-sql: true
   config:
     import: configserver:http://localhost:8888
-#  datasource:
-#    url: jdbc:postgresql://localhost:5432/db_trading_floor
-#    username: admin
-#    password: admin
-#    driver-class-name: org.postgresql.Driver
+  datasource:
+    url: jdbc:postgresql://localhost:5432/db_trading_floor
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
 
 #EUREKA
 eureka:
@@ -29,13 +29,19 @@ eureka:
 
 #RESORECE_URL
 url:
+#  Адрес сервиса Rick and Morty
   CHARACTER_API: "https://rickandmortyapi.com/api/character"
+#  Адрес сервера ресурсов банка
   BANK_API: "http://localhost:8085/bank_server"
+#  Логин магазина
+  DEBIT_USER: "store"
 
 #AUTHENTICATE
 auth-data:
+#  Логин и пароль сервиса ресурсов магазина
   username: store_server
   password: $2y$10$W2JuXPbklBdGi.IORhRapuxgSaPEeq3CHwUTWLDCor.bFFdk6OA3m
+#  Логин и пароль для подключения к сервису ресурсов банка
   bankUsername: bank-server
   bankPassword: bank-server
 

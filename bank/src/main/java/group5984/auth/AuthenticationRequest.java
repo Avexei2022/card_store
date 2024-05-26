@@ -18,6 +18,10 @@ public class AuthenticationRequest {
     private String username;
     String password;
 
+    /**
+     * Получить строку в JSON формате.
+     * @return
+     */
     public String getRequest() {
         return "{\"username\": \""
                 + username

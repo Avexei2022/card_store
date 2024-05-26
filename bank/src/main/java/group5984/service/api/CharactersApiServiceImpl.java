@@ -2,7 +2,6 @@ package group5984.service.api;
 
 import group5984.configuration.BasicConfig;
 import group5984.model.messeges.Message;
-import group5984.model.visitors.CharacterResult;
 import group5984.model.visitors.Characters;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -15,7 +14,8 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 
 /**
- * Сервис генерации клиентов банка из состава персонажей Rick and Morty
+ * Сервис взаимодействия с Rest-сервисом ресурсов банка
+ * в части посетителей банка.
  */
 @Service
 @RequiredArgsConstructor
@@ -39,10 +39,10 @@ public class CharactersApiServiceImpl implements CharactersApiService {
     }
 
     /**
-     * Получить страницу со списком персонажей с ресурса Rick and Morty
-     * - они же потенциальные клиенты банка.
+     * Получить страницу со списком посетителей банка.
      * @param page номер страницы.
      * @return Страница со списком персонажей - посетителей банка, желающих открыть счет.
+     * @throws RuntimeException - исключение в случае недоступности ресурса.
      */
     @Override
     public Characters getPageCharacters(String page) throws RuntimeException{
@@ -61,11 +61,9 @@ public class CharactersApiServiceImpl implements CharactersApiService {
     }
 
     /**
-     * Зачислить визитера банка в кандидаты на открытие счета и сохранить его данные в базе данных.
+     * Зачислить посетителя банка в кандидаты на открытие счета.
      * @param id уникальный номер посетителя банка.
-     * Этапы:
-     *  - осуществляется поиск карточки по её id нв сайте Rick and Morty;
-     *  - если карточка найдена, то она передается в сервис работы с базой данных для её сохранения
+     * @return сообщение о результатах сохранения.
      */
     @Override
     public Message saveOneCharacterById(Integer id) {

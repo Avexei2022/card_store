@@ -6,24 +6,17 @@ import group5984.model.clients.Client;
 import group5984.model.clients.ClientsList;
 import group5984.model.messeges.Message;
 import group5984.model.visitors.CharacterResult;
-
 import group5984.model.visitors.Characters;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
-
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
 
 /**
- * Сервис базы данных банка
- * - посетители банка;
- * - клиенты банка, открывшие счет;
+ * Сервиса взаимодействия с Rest-сервисом ресурсов банка.
  */
 @Service
 @RequiredArgsConstructor
@@ -34,21 +27,18 @@ public class BankApiServiceImpl implements BankApiService {
     @Autowired
     private RestTemplate restTemplate;
 
-
-
+    /**
+     * Сохранить посетителя банка, как кандидата в клиенты банка.
+     * @param characterResult данные посетителя.
+     */
     @Override
     public void saveOneVisitor(CharacterResult characterResult) {
-
-    }
-
-    @Override
-    public List<CharacterResult> getAllBankCandidates() {
-        return List.of();
     }
 
     /**
-     * Удалить поетителя банка из списка кандидатов на открытие счета
-     * @param id Id кандидата
+     * Удалить поетителя банка из списка кандидатов на открытие счета.
+     * @param id уникальный номер кандидата в клиенты.
+     * @return сообщение о результатах удаления кандидата из базы данных.
      */
     @Override
     public Message deleteVisitorById(Integer id) {
@@ -69,10 +59,10 @@ public class BankApiServiceImpl implements BankApiService {
     }
 
     /**
-     * Получить страницу со списком персонажей с ресурса Rick and Morty
-     * - они же потенциальные клиенты банка.
+     * Получить страницу списка кандидатов в клиенты банка.
      * @param page номер страницы.
-     * @return Страница со списком персонажей - посетителей банка, желающих открыть счет.
+     * @return страница списка кандидатов в клиенты банка, желающих открыть счет.
+     * @throws RuntimeException Исключение в случае недоступности ресурса.
      */
     @Override
     public Characters getPageCandidates(String page) throws RuntimeException{
@@ -91,11 +81,10 @@ public class BankApiServiceImpl implements BankApiService {
     }
 
     /**
-     * Открыть счет клиенту
-     * @param id - id клиента
-     * Баланс счета устанавливается в 50 у.е.
+     * Открыть счет клиенту банка.
+     * @param id - уникальный номер клиента банка.
+     * @return - сообщение о результате.
      */
-    //TODO доработать тему баланса счета
     @Override
     public Message saveOneClientById(Integer id) {
         String url = basicConfig.getBANK_API() + "/candidates/add_to_client/" + id;
@@ -114,23 +103,11 @@ public class BankApiServiceImpl implements BankApiService {
         }
     }
 
-    @Override
-    public List<CharacterResult> getAllClients() {
-        return List.of();
-    }
-
-
     /**
      * Получить список клиентов банка постранично.
-     * @param page - запрашиваемая пользователем страница
-     * @return список клиентов
-     * По умолчанию страница содержит информацию о 20 клиентах
-     * Список клиентов дополнен следующей информацией о нем:
-     * - общее количество клиентов банка;
-     * - количество страниц;
-     * - номера текущей, предыдущей и следующей страниц.
-     * Если предыдущей страницы нет, то проставляется номер последней страницы.
-     * Если следующей страницы нет, то проставляется номер первой страницы
+     * @param page - запрашиваемая пользователем страница.
+     * @return страница из списка клиентов банка.
+     * @throws RuntimeException исключение в случае недоступности ресурса.
      */
 
     @Override
@@ -150,8 +127,9 @@ public class BankApiServiceImpl implements BankApiService {
     }
 
     /**
-     * Удалить клиента банка - закрыть счет
-     * @param id - id клиента
+     * Удалить клиента банка - закрыть счет.
+     * @param id - уникальный номер клиента банка.
+     * @return - сообщение о результате удаления.
      */
     @Override
     public Message deleteClientById(Integer id) {
@@ -172,8 +150,9 @@ public class BankApiServiceImpl implements BankApiService {
     }
 
     /**
-     * Сохранить данные о клиенте банка
-     * @param client клиент
+     * Сохранить данные о клиенте банка.
+     * @param client клиент банка.
+     * @return сообщение о результате сохранения.
      */
     @Override
     public Message saveClient(Client client) {
@@ -193,7 +172,4 @@ public class BankApiServiceImpl implements BankApiService {
             return message;
         }
     }
-
-
-
 }

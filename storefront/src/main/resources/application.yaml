@@ -22,6 +22,7 @@ url:
 
 #AUTHENTICATE
 auth-data:
+#  Логин и пароль для подключения к сервису ресурсов магазина
   username: store_server
   password: store_server
 

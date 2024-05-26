@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Конфигуратор безопасности
+ * Конфигуратор безопасности.
  */
 @Configuration
 @EnableWebSecurity
@@ -55,8 +55,8 @@ public class WebSecurityConfig {
     /**
      * Правила фильтрации.
      * @param http защищенный http запрос.
-     * @return
-     * @throws Exception
+     * @return цепочка фильтров
+     * @throws - исключение
      */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

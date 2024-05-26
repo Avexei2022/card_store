@@ -49,12 +49,13 @@ public class ContentApiServiceImpl implements ContentApiService {
 
     /**
      * Получить список товаров в корзине покупателя.
+     * @param userName - имя/логин покупателя.
      * @param page запрашиваемая страница товаров.
      * @return список товаров в корзине.
      */
     @Override
-    public Basket getAllFromBasket(String page) {
-        String url = basicConfig.getSERVER_API() + "/basket/page/" + page;
+    public Basket getPageFromBasket(String userName, String page) {
+        String url = basicConfig.getSERVER_API() + "/basket/page/" + page + "/" + userName;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Basket> responseType = Basket.class;
@@ -66,10 +67,11 @@ public class ContentApiServiceImpl implements ContentApiService {
     /**
      * Добавить товар в корзину покупателя.
      * @param id - id товара.
+     * @param userName - имя пользователя.
      */
     @Override
-    public Message addToBasketById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id;
+    public Message addToBasketById(Integer id, String userName) {
+        String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id + "/" + userName;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
@@ -95,10 +97,11 @@ public class ContentApiServiceImpl implements ContentApiService {
 
     /**
      * Оплатить товар в корзине.
+     * @param userName - имя пользователя.
      */
     @Override
-    public Message basketPay() {
-        String url = basicConfig.getSERVER_API() + "/basket/pay";
+    public Message basketPay(String userName) {
+        String url = basicConfig.getSERVER_API() + "/basket/pay/" + userName;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;

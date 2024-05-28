@@ -73,6 +73,13 @@ public interface BankDbService {
     Client findClientById(Long id);
 
     /**
+     * Поиск клиента по имени.
+     * @param name имя клиента.
+     * @return - клиент.
+     */
+    Client findClientByName(String name);
+
+    /**
      * Проведение транзакции между счетами клиентов банка
      * @param transaction Данные транзакции
      */

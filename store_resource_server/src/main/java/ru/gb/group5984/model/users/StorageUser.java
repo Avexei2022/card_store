@@ -9,15 +9,19 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Пользователь веб-сервиса склада магазина.
+ */
 @Entity
-@Table(name="bank_users")
+@Table(name="storage_users")
 @Setter
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class User implements UserDetails {
+public class StorageUser implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")

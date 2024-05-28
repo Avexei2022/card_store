@@ -34,7 +34,7 @@ url:
 #  Адрес сервера ресурсов банка
   BANK_API: "http://localhost:8085/bank_server"
 #  Логин магазина
-  DEBIT_USER: "store"
+  DEBIT_USER: "Rick_Sanchez"
 
 #AUTHENTICATE
 auth-data:

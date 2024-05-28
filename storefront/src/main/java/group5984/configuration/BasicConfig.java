@@ -14,5 +14,6 @@ import org.springframework.web.client.RestTemplate;
 @Setter
 public class BasicConfig {
     private String SERVER_API;
+    private String CHARACTER_API;
     private RestTemplate restTemplate;
 }

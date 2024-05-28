@@ -102,4 +102,6 @@ public interface ServerDbService {
      * @param userId - уникальный номер покупателя.
      */
     void deleteAllFromBasket(Long userId);
+
+    void registerNewUser(CharacterResult characterResult);
 }

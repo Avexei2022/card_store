@@ -32,7 +32,7 @@ public class StorageWebController {
      * Переадресация к странице 1 списка товаров поставщика
      * @return адрес
      */
-    @GetMapping("/")
+    @GetMapping("")
     public String redirectToFirstPage() {
         return "redirect:/storage/characters/page/1";
     }

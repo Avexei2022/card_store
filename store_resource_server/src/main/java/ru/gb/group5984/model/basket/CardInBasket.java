@@ -3,11 +3,10 @@ package ru.gb.group5984.model.basket;
 import jakarta.persistence.*;
 import lombok.Data;
 import ru.gb.group5984.model.characters.CharacterResult;
-import ru.gb.group5984.model.users.User;
+import ru.gb.group5984.model.users.Buyer;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 /**
  * Товар в корзине покупателей, информация о котором хранится в базе данных
@@ -33,5 +32,5 @@ public class CardInBasket {
     private LocalDate created;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
-    private User user;
+    private Buyer user;
 }

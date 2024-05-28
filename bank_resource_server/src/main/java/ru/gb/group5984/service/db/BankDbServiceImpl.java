@@ -212,13 +212,29 @@ public class BankDbServiceImpl implements BankDbService {
     }
 
     /**
-     * Поиск клиента по id / номеру счета
-     * @param id номер счета
-     * @return - клиент
+     * Поиск клиента по id / номеру счета.
+     * @param id номер счета.
+     * @return - клиент.
      */
     @Override
     public Client findClientById(Long id) {
         return clientsRepository.findById(id).orElseThrow();
+    }
+
+    /**
+     * Поиск клиента по имени.
+     * @param name имя клиента.
+     * @return - клиент.
+     */
+    @Override
+    public Client findClientByName(String name) {
+        return clientsRepository.findAll()
+                .stream()
+                .filter(client -> client
+                        .getClientDetail()
+                        .getName()
+                        .equals(name.replaceAll("_", " ")))
+                .findFirst().orElseThrow();
     }
 
     /**
@@ -232,7 +248,7 @@ public class BankDbServiceImpl implements BankDbService {
         Client creditClient = new Client();
         Client debitClient = new Client();
         try {
-            creditClient = findClientById(transaction.getCreditAccount());
+            creditClient = findClientByName(transaction.getCreditName());
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Клиент для списания средств не найден.");
         }
@@ -240,7 +256,7 @@ public class BankDbServiceImpl implements BankDbService {
             throw  new ExcessAmountException("Средств на счете недостаточно");
         }
         try {
-            debitClient = findClientById(transaction.getDebitAccount());
+            debitClient = findClientByName(transaction.getDebitName());
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Клиент для пополнения средств не найден.");
         }

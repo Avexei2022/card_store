@@ -13,6 +13,8 @@ import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.exceptions.ExcessAmountException;
 import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
+import ru.gb.group5984.model.users.Buyer;
+import ru.gb.group5984.model.users.StorageUser;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.db.ServerDbService;
@@ -48,7 +50,6 @@ public class StoreServerRestController {
         Characters allCharacters = characterApiService.getPageCharacters(page);
         return new ResponseEntity<>(allCharacters, HttpStatus.OK);
     }
-
 
     /**
      * Добавить единицу товара на склад - закупить у поставщика.
@@ -179,11 +180,33 @@ public class StoreServerRestController {
      * @param name имя пользователя.
      * @return пользователь.
      */
-    @GetMapping("/user/{name}")
-    public ResponseEntity<User> findUserByName(@PathVariable("name") String name) {
-        User user = userDbService.findUserByUsername(name);
-        log.info(user.toString());
-        return new ResponseEntity<>(user, HttpStatus.OK);
+    @GetMapping("/buyer/{name}")
+    public ResponseEntity<Buyer> findUserByName(@PathVariable("name") String name) {
+        Buyer buyer = userDbService.findBuyerByUsername(name);
+        log.info(buyer.toString());
+        return new ResponseEntity<>(buyer, HttpStatus.OK);
+    }
+
+    /**
+     * Поиск пользователя веб-сервиса склада магазина по имени.
+     * @param name имя пользователя.
+     * @return пользователь.
+     */
+    @GetMapping("/storage_user/{name}")
+    public ResponseEntity<StorageUser> findStorageUserByName(@PathVariable("name") String name) {
+        StorageUser storageUser = userDbService.findStorageUserByUsername(name);
+        log.info(storageUser.toString());
+        return new ResponseEntity<>(storageUser, HttpStatus.OK);
+    }
+
+    /**
+     * Зарегистрировать пользователя.
+     * @param id уникальный номер пользователя.
+     * @return статус ответа.
+     */
+    @GetMapping("/characters/register/{id}")
+    public ResponseEntity<Message> registerNewUser(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(characterApiService.registerNewUser(id), HttpStatus.OK);
     }
 
 }

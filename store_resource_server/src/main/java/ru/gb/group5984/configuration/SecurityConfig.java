@@ -41,7 +41,8 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers(HttpMethod.POST,"/store_server/auth/**")
+                                .requestMatchers(HttpMethod.POST,"/store_server/auth/**"
+                                        , "/store_server/characters/register/**")
                                 .permitAll()
                                 .requestMatchers(HttpMethod.GET,"/actuator/**").permitAll()
                                 .anyRequest()

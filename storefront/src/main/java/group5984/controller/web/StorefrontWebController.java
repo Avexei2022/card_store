@@ -1,8 +1,12 @@
 package group5984.controller.web;
 
 import group5984.model.basket.Basket;
-import group5984.model.clients.Cards;
+import group5984.model.cards.Cards;
+import group5984.model.characters.CharacterInfo;
+import group5984.model.characters.CharacterResult;
+import group5984.model.characters.Characters;
 import group5984.model.messeges.Message;
+import group5984.service.api.CharacterApiService;
 import group5984.service.api.ContentApiService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -11,6 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.util.List;
+
 
 /**
  * Веб контроллер пользовательского сайта магазина
@@ -21,12 +28,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Log
 public class StorefrontWebController {
     private final ContentApiService serviceApi;
+    private final CharacterApiService characterApiService;
 
     /**
      * Перенаправление к методу вызова основной веб-страницы списка товаров в продаже.
      * @return строка вызова
      */
-    @GetMapping("/")
+    @GetMapping("")
     public String redirectToFirstPage() {
         return "redirect:/storefront/cards/page/1";
     }
@@ -106,16 +114,16 @@ public class StorefrontWebController {
     /**
      * Удалить товар из корзины.
      * @param id id товара.
-     * @param page номер текущей страницы для последующего возврата к ней
-     * @return возврат к методу подготовки основной веб-страницы магазина со списком товара
+     * @param page номер текущей страницы для последующего возврата к ней.
+     * @return возврат к корзине покупателя.
      */
     @GetMapping("/basket/delete_from_basket/{id}/{page}/{user_name}")
-    public String deleteFromBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page) {
+    public String deleteFromBasketById(@PathVariable("id") Integer id, @PathVariable("page") String page
+            , @PathVariable("user_name") String userName) {
         serviceApi.deleteFromBasketById(id);
-        return "redirect:/storefront/basket/page/" + page;
+        return "redirect:/storefront/basket/page/" + page + "/" + userName;
     }
 
-    //TODO Поработать над исключениями
     /**
      * Оплатить товар из корзины.
      * @param userName имя/логин покупателя.
@@ -127,5 +135,75 @@ public class StorefrontWebController {
         model.addAttribute("message", message.getMessage());
         return "message";
     }
+
+    /**
+     * Подготовка веб-страницы потенциальных покупателей.
+     * @param page номер страницы в списке персонажей с рессурса Rick and Morty.
+     * @param model Модель веб страницы.
+     * @return готовая страница purchase.html.
+     * В модель страницы загружается следующая информация:
+     *      - количество персонажей;
+     *      - количество страниц в списке персонажей;
+     *      - номера предыдущей, текущей и следующей страниц;
+     *      - список персонажей.
+     */
+    @GetMapping("/characters/page/{page}")
+    public String getCharacters(@PathVariable("page") String page, Model model) {
+        Characters allCharacters = characterApiService.getPageCharacters(page);
+        CharacterInfo characterInfo = getCharacterInfo(allCharacters);
+        List<CharacterResult> characterResultList = allCharacters.getResults();
+        model.addAttribute("characters_size", characterInfo.getCount())
+                .addAttribute("characters_pages", characterInfo.getPages())
+                .addAttribute("prev_page", characterInfo.getPrev())
+                .addAttribute("next_page", characterInfo.getNext())
+                .addAttribute("current_page", page)
+                .addAttribute("characters_list", characterResultList);
+        return "register";
+    }
+
+    /**
+     * Зарегистрировать нового покупателя.
+     * @param id уникальный номер покупателя.
+     * @return страница сообщений о результате регистрации.
+     */
+    @GetMapping("/characters/register/{id}")
+    public String registerNewUser(@PathVariable("id") Integer id, Model model) {
+        Message message = characterApiService.saveOneCharacterById(id);
+        model.addAttribute("message", message.getMessage());
+        return "message";
+    }
+
+    /**
+     * Метод модификации информационной части о странице героев перед её добавлением в модель.
+     * @param allCharacters Информация полученная с рессурса Rick and Morty.
+     * @return Модифицированная информационная часть о странице.
+     * Пояснение: В информационной части прриходят ссылки на предыдущую и следующую странцы,
+     * но для загрузки в модель ссылки не нужны, но нужны номера страниц,
+     * поэтому ссылки меняются на номера страниц.
+     * Если со ссылкой проблема, то она меняется на страницу 1.
+     */
+    private CharacterInfo getCharacterInfo(Characters allCharacters) {
+        CharacterInfo characterInfo = allCharacters.getInfo();
+        if (characterInfo.getPrev() == null
+                || characterInfo.getPrev().isEmpty()
+                || !characterInfo.getPrev().contains("https://rickandmortyapi.com/api/character/?page=")) {
+            characterInfo.setPrev("1");
+        } else {
+            characterInfo.setPrev(characterInfo
+                    .getPrev()
+                    .replace("https://rickandmortyapi.com/api/character/?page=", ""));
+        }
+        if (characterInfo.getNext() == null
+                || characterInfo.getNext().isEmpty()
+                || !characterInfo.getNext().contains("https://rickandmortyapi.com/api/character/?page=")) {
+            characterInfo.setNext("1");
+        } else {
+            characterInfo.setNext(characterInfo
+                    .getNext()
+                    .replace("https://rickandmortyapi.com/api/character/?page=", ""));
+        }
+        return characterInfo;
+    }
+
 
 }

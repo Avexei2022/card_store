@@ -17,18 +17,18 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     /**
-     * Регистрация нового пользователя - нового сервиса
-     * @param request
-     * @return
+     * Регистрация нового покупателя - пользователя веб-ресурса магазина.
+     * @param request данные запроса на регистрацию.
+     * @return аутентификация.
      */
-    @PostMapping("/register")
+    @PostMapping("/buyer_register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
     ) {
         log.info("LOG: AuthenticationController" +
                 ".register.request  =  " + request.toString());
         ResponseEntity<AuthenticationResponse> response = ResponseEntity
-                .ok(authenticationService.register(request));
+                .ok(authenticationService.buyerRegister(request));
         log.info("LOG: AuthenticationController" +
                 ".register.response =  " + response);
         return response;

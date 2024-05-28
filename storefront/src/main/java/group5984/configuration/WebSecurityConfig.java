@@ -62,7 +62,8 @@ public class WebSecurityConfig {
         http
                 .authorizeHttpRequests(
                         auth -> auth
-                                .requestMatchers("/css/**", "/", "/index")
+                                .requestMatchers("/css/**", "/", "/index"
+                                        , "/storefront/characters/**")
                                     .permitAll()
                                 .requestMatchers("/actuator/**").permitAll()
                                 .anyRequest()

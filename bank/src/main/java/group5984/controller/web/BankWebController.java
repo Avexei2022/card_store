@@ -36,7 +36,7 @@ public class BankWebController {
      * Перенаправление к методу подготовки веб-страницы посетителей банка.
      * @return ссылка на первую страницу посетителей банка.
      */
-    @GetMapping("/")
+    @GetMapping("")
     public String redirectToFirstPage() {
         return "redirect:/bank/visitors/page/1";
     }

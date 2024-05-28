@@ -3,7 +3,7 @@ package group5984.service.api;
 import group5984.auth.AuthenticationService;
 import group5984.configuration.BasicConfig;
 import group5984.model.basket.Basket;
-import group5984.model.clients.Cards;
+import group5984.model.cards.Cards;
 import group5984.model.messeges.Message;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -11,8 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.List;
 
 /**
  * Сервис витрины / торгового зала магазина.

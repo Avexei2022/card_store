@@ -1,7 +1,7 @@
 package group5984.service.api;
 
 import group5984.model.basket.Basket;
-import group5984.model.clients.Cards;
+import group5984.model.cards.Cards;
 import group5984.model.messeges.Message;
 
 

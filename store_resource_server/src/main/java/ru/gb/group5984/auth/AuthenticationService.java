@@ -11,8 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.gb.group5984.configuration.BasicConfig;
+import ru.gb.group5984.model.users.Buyer;
 import ru.gb.group5984.model.users.Role;
 import ru.gb.group5984.model.users.User;
+import ru.gb.group5984.repository.BuyerRepository;
 import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.service.auth.JwtService;
 
@@ -24,7 +26,7 @@ import java.util.Objects;
 @Log
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
+    private final BuyerRepository buyerRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -37,21 +39,22 @@ public class AuthenticationService {
     @Autowired
     private HttpHeaders headers;
 
-    //TODO Реализовать
     /**
-     * Регистрация нового сервиса.
+     * Регистрация нового покупателя - пользователя веб-сервиса магазина.
      * @param request запрос на регистрацию.
-     * @return Ответ с результатом регистрации.
+     * @return ответ с результатом регистрации.
      */
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse buyerRegister(RegisterRequest request) {
         log.info("LOG: AuthenticationService.register = " + request.toString());
-        var user = User.builder()
+        var user = Buyer.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.User)
+                .email(request.getEmail())
+                .role(Role.USER)
                 .enabled(true)
+                .isSubscribe(false)
                 .build();
-        userRepository.save(user);
+        buyerRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)
@@ -75,7 +78,7 @@ public class AuthenticationService {
 //        var user = userRepository.findUserByUsername(request.getUsername())
 //                .orElseThrow();
         User user = new User(111L, authConfig.getUsername(), authConfig.getPassword()
-                ,Role.Admin, true, "user@gmail.com", true);
+                ,Role.ADMIN, true, "user@gmail.com", true);
         log.info("LOG: AuthenticationService.authenticate.user = " + user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()

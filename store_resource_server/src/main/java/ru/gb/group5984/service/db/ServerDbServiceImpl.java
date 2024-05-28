@@ -22,11 +22,9 @@ import ru.gb.group5984.model.observer.NewProductEvent;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
+import ru.gb.group5984.model.users.Buyer;
 import ru.gb.group5984.model.users.User;
-import ru.gb.group5984.repository.BasketRepository;
-import ru.gb.group5984.repository.CardsRepository;
-import ru.gb.group5984.repository.CharacterRepository;
-import ru.gb.group5984.repository.UserRepository;
+import ru.gb.group5984.repository.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -50,6 +48,8 @@ public class ServerDbServiceImpl implements ServerDbService {
     private final CardsRepository cardsRepository;
     private final BasketRepository basketRepository;
     private final UserRepository userRepository;
+    private final BuyerRepository buyerRepository;
+    private final StorageUserRepository storageUserRepository;
     @Autowired
     private ApplicationEventPublisher publisher;
 
@@ -224,14 +224,14 @@ public class ServerDbServiceImpl implements ServerDbService {
     @Transactional
     public void moveCardToBasket(Long cardId, String userName)  throws ExcessAmountException, NoSuchElementException {
         CardsStorage cardInSale;
-        User user;
+        Buyer buyer;
         try {
             cardInSale = cardsRepository.findById(cardId).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Товар на складе не найден.");
         }
         try {
-            user = userRepository.findUserByUsername(userName).orElseThrow();
+            buyer = buyerRepository.findUserByUsername(userName).orElseThrow();
         } catch (NoSuchElementException e) {
             throw new NoSuchElementException("Покупатель не найден.");
         }
@@ -243,7 +243,7 @@ public class ServerDbServiceImpl implements ServerDbService {
             cardInBasket.setPrice(cardInSale.getPrice());
             cardInBasket.setCardsStorageId(cardInSale.getId());
             cardInBasket.setCreated(LocalDate.now());
-            cardInBasket.setUser(user);
+            cardInBasket.setUser(buyer);
             if (cardInSale.getAmount() < 1) cardsRepository.deleteById(cardId);
             else cardsRepository.save(cardInSale);
             basketRepository.save(cardInBasket);
@@ -300,11 +300,11 @@ public class ServerDbServiceImpl implements ServerDbService {
     @TrackUserAction
     @Override
     public Basket getPageFromBasket(Integer page, String userName) {
-        User user = userRepository.findUserByUsername(userName).orElseThrow();
+        Buyer buyer = buyerRepository.findUserByUsername(userName).orElseThrow();
         page = page - 1;
         if (page < 0) page = 0;
         Pageable pageable = PageRequest.of(page, 20);
-        Page<CardInBasket> cardInBasketPage = basketRepository.findAllByUser_id(user.getId(), pageable);
+        Page<CardInBasket> cardInBasketPage = basketRepository.findAllByUser_id(buyer.getId(), pageable);
         Basket basket = new Basket();
         BasketInfo basketInfo = new BasketInfo();
         basketInfo.setCount(cardInBasketPage.getTotalElements());
@@ -316,7 +316,7 @@ public class ServerDbServiceImpl implements ServerDbService {
             basketInfo.setNext(cardInBasketPage.getNumber() + 2);
         else basketInfo.setNext(1);
         basketInfo.setCurrent(cardInBasketPage.getNumber() + 1);
-        basketInfo.setTotalPrice(basketRepository.findAllByUser_id(user.getId())
+        basketInfo.setTotalPrice(basketRepository.findAllByUser_id(buyer.getId())
                 .stream()
                 .map(CardInBasket::getPrice)
                 .reduce(BigDecimal::add)
@@ -355,7 +355,12 @@ public class ServerDbServiceImpl implements ServerDbService {
     @TrackUserAction
     @Override
     public void deleteAllFromBasket(Long userId) {
-        basketRepository.findAllByUser_id(userId);
+        basketRepository.deleteAllByUser_id(userId);
+    }
+
+    @Override
+    public void registerNewUser(CharacterResult characterResult) {
+
     }
 
 

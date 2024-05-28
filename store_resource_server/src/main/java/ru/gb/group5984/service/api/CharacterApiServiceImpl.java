@@ -2,8 +2,6 @@ package ru.gb.group5984.service.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
@@ -18,10 +16,9 @@ import ru.gb.group5984.model.basket.CardInBasket;
 import ru.gb.group5984.model.characters.CharacterResult;
 import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.messeges.Message;
-import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.transactions.Transaction;
+import ru.gb.group5984.model.users.Buyer;
 import ru.gb.group5984.model.users.User;
-import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.service.db.ServerDbService;
 import ru.gb.group5984.service.db.UserDbService;
 import ru.gb.group5984.service.integration.FileGateway;
@@ -41,7 +38,8 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     private final BasicConfig basicConfig;
     private final AuthenticationService authenticationService;
     private final FileGateway fileGateway;
-    private final UserRepository userRepository;
+    private final UserDbService userDbService;
+
 
     @Autowired
     private RestTemplate restTemplate;
@@ -89,7 +87,6 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
         if (characterResult != null) serverDbService.saveOneCharacter(characterResult);
     }
 
-    //TODO Доработать. Необходимо добавить конкретных покупателей.
     /**
      * Оплата товара из корзины покупателя через банк.
      * По легенде Номер счета продавца - 1.
@@ -99,8 +96,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     @Transactional
     @TrackUserAction
     public Message basketPay(String userName) {
-        User creditUser = userRepository.findUserByUsername(userName).orElseThrow();
-        User debitUser = userRepository.findUserByUsername(basicConfig.getDEBIT_USER()).orElseThrow();
+        Buyer creditUser = userDbService.findBuyerByUsername(userName);
         BigDecimal totalAmount = serverDbService.getTotalPriceFromBasket(creditUser.getId());
         Message message = new Message();
         if (totalAmount.compareTo(BigDecimal.valueOf(0)) > 0) {
@@ -108,8 +104,8 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
             HttpMethod method = HttpMethod.POST;
             Class<Message> responseType = Message.class;
             var transaction = Transaction.builder()
-                    .creditAccount(creditUser.getId())
-                    .debitAccount(debitUser.getId())
+                    .creditName(userName)
+                    .debitName(basicConfig.getDEBIT_USER())
                     .transferAmount(totalAmount)
                     .build();
             String jsonTransaction = "";
@@ -148,5 +144,33 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
             String fileName = cardInBasket.getCard().getName().concat(".txt");
             fileGateway.writeToFile(fileName, cardInBasket);
         }
+    }
+
+    /**
+     * Регистрация нового пользователя из списка героев сервиса Rick and Morty.
+     * @param id уникальный номер героя.
+     */
+    @Override
+    public Message registerNewUser(Integer id) {
+        String url = basicConfig.getCHARACTER_API() + "/" + id;
+        Message message = new Message();
+        HttpMethod method = HttpMethod.GET;
+        HttpEntity<String> requestEntity = getRequestEntity();
+        Class<CharacterResult> responseType = CharacterResult.class;
+        log.info("URI - " + url);
+        CharacterResult characterResult = new CharacterResult();
+        try {
+            characterResult = restTemplate.exchange(url, method, requestEntity, responseType).getBody();
+        } catch (RuntimeException e) {
+            message.setMessage("Ресурс Rick and Morty временно недоступен. ");
+            return message;
+        }
+
+        if (characterResult != null) {
+            message = userDbService.registerNewBuyer(characterResult);
+        } else {
+            message.setMessage("Персонажа с таким уникальным номером не существует");
+        }
+        return message;
     }
 }

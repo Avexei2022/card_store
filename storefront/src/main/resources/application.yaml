@@ -18,6 +18,7 @@ eureka:
 #RESOURCE_URL
 url:
   SERVER_API: "http://localhost:8084/store_server"
+  CHARACTER_API: "https://rickandmortyapi.com/api/character"
 
 
 #AUTHENTICATE

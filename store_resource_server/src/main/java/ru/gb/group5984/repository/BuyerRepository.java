@@ -1,20 +1,19 @@
 package ru.gb.group5984.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.stereotype.Repository;
-import ru.gb.group5984.model.users.User;
-
+import ru.gb.group5984.model.users.Buyer;
 import java.util.Optional;
 
+
 /**
- * Репозиторий пользователей сервиса ресурсов магазина.
+ * Репозиторий покупателей - пользователей веб-ресурса магазина.
  */
-@Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface BuyerRepository extends JpaRepository<Buyer, Long> {
+
     /**
      * Получить пользователя по имени/логину.
      * @param username имя/логин пользователя.
      * @return пользователь.
      */
-    public Optional<User> findUserByUsername(String username);
+    public Optional<Buyer> findUserByUsername(String username);
 }

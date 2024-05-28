@@ -1,6 +1,5 @@
-package group5984.model.clients;
+package group5984.model.cards;
 
-import group5984.model.cards.Card;
 import lombok.Data;
 
 import java.math.BigDecimal;

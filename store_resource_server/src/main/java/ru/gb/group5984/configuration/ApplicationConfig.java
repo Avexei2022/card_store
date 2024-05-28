@@ -8,7 +8,6 @@ import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.gb.group5984.auth.AuthConfig;
@@ -27,7 +26,7 @@ public class ApplicationConfig {
 //        return username -> userRepository.findUserByUsername(username)
 //                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         return username -> new User(111L, authConfig.getUsername(), authConfig.getPassword()
-                , Role.Admin, true, "user@gmail.com", true);
+                , Role.ADMIN, true, "user@gmail.com", true);
     }
 
     @Bean

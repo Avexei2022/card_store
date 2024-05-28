@@ -20,6 +20,8 @@ import ru.gb.group5984.service.api.BankApiService;
 import ru.gb.group5984.service.db.BankDbService;
 import ru.gb.group5984.service.db.UserDbService;
 
+import java.util.NoSuchElementException;
+
 
 /**
  * REST Контроллер банка
@@ -32,8 +34,8 @@ import ru.gb.group5984.service.db.UserDbService;
 @Log
 public class BankRestController {
 
-    private final BankApiService serviceApi;
-    private final BankDbService serviceDb;
+    private final BankApiService bankApiService;
+    private final BankDbService bankDbService;
     private final UserDbService userDbService;
 
     private final Counter transactionGoodCounter = Metrics.counter("transactionGoodCounter");
@@ -46,29 +48,29 @@ public class BankRestController {
      */
     @GetMapping("/visitors/page/{page}")
     public ResponseEntity<Characters> getVisitors(@PathVariable("page") String page) {
-        Characters allCharacters = serviceApi.getAllCharacters(page);
+        Characters allCharacters = bankApiService.getAllCharacters(page);
         return new ResponseEntity<>(allCharacters, HttpStatus.OK);
     }
 
     /**
      * Добавить посетителя банка в базу данных кандидатов на открытие счета.
      * @param id уникальный номер посетителя банка.
-     * @return Сообщение о результатах.
+     * @return сообщение о результатах.
      */
     @GetMapping("/visitors/add_to_bank/{id}")
     public ResponseEntity<Message> addToBank(@PathVariable("id") Integer id) {
-        Message message = serviceApi.saveOneCharacterById(id);
+        Message message = bankApiService.saveOneCharacterById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     /**
      * Удалить кандидата на открытие счета из базы данных.
      * @param id уникальный номер кандидата.
-     * @return Сообщение о результатах.
+     * @return сообщение о результатах.
      */
     @GetMapping("/candidates/delete_from_bank/{id}")
     public ResponseEntity<Message> deleteCandidateFromBank(@PathVariable("id") Integer id) {
-        Message message = serviceDb.deleteVisitorById(id);
+        Message message = bankDbService.deleteVisitorById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -79,7 +81,7 @@ public class BankRestController {
      */
     @GetMapping("/candidates/page/{page}")
     public ResponseEntity<Characters> getPageCandidates(@PathVariable("page") String page) {
-        Characters characters = serviceDb.getPageBankCandidates(Integer.valueOf(page));
+        Characters characters = bankDbService.getPageBankCandidates(Integer.valueOf(page));
         return new ResponseEntity<>(characters, HttpStatus.OK);
 
     }
@@ -87,23 +89,23 @@ public class BankRestController {
     /**
      * Добавить кандидата в базу данных клиентов банка - открыть счет.
      * @param id уникальный номер кандидата.
-     * @return Сообщение о результатах.
+     * @return сообщение о результатах.
      */
     @GetMapping("/candidates/add_to_client/{id}")
     public ResponseEntity<Message> addCandidateToClient(@PathVariable("id") Integer id) {
-        Message message = serviceDb.saveOneClientById(id);
+        Message message = bankDbService.saveOneClientById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
     /**
-     * Удаление клиента из базы данных банка - закрыть счет
-     * @param id id клиента
-     * @return Сообщение о результатах.
+     * Удалить клиента из базы данных банка - закрыть счет.
+     * @param id уникальный номер клиента
+     * @return сообщение о результатах.
      */
     @TrackUserAction
     @GetMapping("/clients/delete_client/{id}")
     public ResponseEntity<Message> deleteClient(@PathVariable("id") Long id) {
-        Message message = serviceDb.deleteClientById(id);
+        Message message = bankDbService.deleteClientById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -114,7 +116,7 @@ public class BankRestController {
      */
     @GetMapping("/clients/page/{page}")
     public ResponseEntity<ClientsList> getPageCardsInSale(@PathVariable("page") Integer page) {
-        ClientsList clientsList = serviceDb.getPageBankClients(page);
+        ClientsList clientsList = bankDbService.getPageBankClients(page);
         return new ResponseEntity<>(clientsList, HttpStatus.OK);
 
     }
@@ -122,11 +124,11 @@ public class BankRestController {
     /**
      * Обновить данные о клиенте банка.
      * @param client клиент банка.
-     * @return Сообщение о результатах.
+     * @return сообщение о результатах.
      */
     @PostMapping("/clients/update")
     public ResponseEntity<Message> updateClient(Client client) {
-        Message message = serviceDb.saveClient(client);
+        Message message = bankDbService.saveClient(client);
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -141,9 +143,9 @@ public class BankRestController {
         log.info("ТЕСТ ТРАНЗАКЦИИ " + transaction);
         Message message = new Message();
         try {
-            serviceDb.transaction(transaction);
+            bankDbService.transaction(transaction);
             message.setMessage("OK");
-        } catch (ExcessAmountException e) {
+        } catch (ExcessAmountException | NoSuchElementException e) {
             message.setMessage(e.getMessage());
         }
         transactionGoodCounter.increment();

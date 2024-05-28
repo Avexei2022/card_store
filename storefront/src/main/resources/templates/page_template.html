@@ -35,8 +35,8 @@
             ></path>
           </svg>
         </a>
-        <ul class="header_nav_ul" sec:authorize="isAuthenticated()">
-          <li class="header_nav_ul_li">
+        <ul class="header_nav_ul">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
               th:href="@{/storefront/cards/page/1}"
@@ -62,6 +62,15 @@
               style="text-decoration: none"
               >Оплатить</a
             >
+          </li>
+          <li class="header_nav_ul_li_buy" sec:authorize="!isAuthenticated()">
+            <a
+                    class="header_nav_ul_li_a_buy"
+                    th:href="@{/storefront/characters/page/1}"
+                    style="text-decoration: none"
+            >
+              <span class="header_nav_ul_li_a_buy_span" title="LogIn">Регистрация</span>
+            </a>
           </li>
           <li class="header_nav_ul_li_buy" sec:authorize="!isAuthenticated()">
             <a

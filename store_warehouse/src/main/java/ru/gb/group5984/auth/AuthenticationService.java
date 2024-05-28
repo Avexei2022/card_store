@@ -44,7 +44,7 @@ public class AuthenticationService {
      * @return пользователь.
      */
     public User getUserByUserName(String name) {
-        String url = basicConfig.getSERVER_API() + "/user/" + name;
+        String url = basicConfig.getSERVER_API() + "/storage_user/" + name;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<User> responseType = User.class;

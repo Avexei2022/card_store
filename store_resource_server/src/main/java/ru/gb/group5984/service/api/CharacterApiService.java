@@ -27,4 +27,6 @@ public interface CharacterApiService {
      * @param userName имя/логин покупателя.
      */
     Message basketPay(String userName);
+
+    Message registerNewUser(Integer id);
 }

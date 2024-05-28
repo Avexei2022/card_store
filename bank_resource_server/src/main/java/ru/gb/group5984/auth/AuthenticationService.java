@@ -23,12 +23,13 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
     private final AuthConfig authConfig;
 
+
     public AuthenticationResponse register(RegisterRequest request) {
         log.info("LOG: AuthenticationService.register = " + request.toString());
         var user = User.builder()
                 .username(request.getUsername())
                 .password(passwordEncoder.encode(request.getPassword()))
-                .role(Role.User)
+                .role(Role.BANK)
                 .enabled(true)
                 .build();
         repository.save(user);
@@ -48,7 +49,7 @@ public class AuthenticationService {
 //        var user = userRepository.findUserByUsername(request.getUsername())
 //                .orElseThrow();
         User user = new User(111L, authConfig.getBankUsername(), authConfig.getBankPassword()
-                ,Role.Admin, true);
+                ,Role.BANK, true, "", false);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
                 .token(jwtToken)

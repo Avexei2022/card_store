@@ -1,5 +1,9 @@
 package ru.gb.group5984.service.db;
 
+import ru.gb.group5984.model.characters.CharacterResult;
+import ru.gb.group5984.model.messeges.Message;
+import ru.gb.group5984.model.users.Buyer;
+import ru.gb.group5984.model.users.StorageUser;
 import ru.gb.group5984.model.users.User;
 
 import java.util.List;
@@ -17,4 +21,20 @@ public interface UserDbService {
     User findUserByUsername(String username);
 
     List<User> findAllUser();
+
+    Message registerNewBuyer(CharacterResult characterResult);
+
+    /**
+     * Поиск пользователя веб-сервиса склада магазина по имени/логину
+     * @param username - имя/логин пользователя.
+     * @return - пользователь.
+     */
+    StorageUser findStorageUserByUsername(String username);
+
+    /**
+     * Поиск покупателя - пользователя веб-сервиса магазина по имени/логину
+     * @param username - имя/логин пользователя.
+     * @return - пользователь.
+     */
+    Buyer findBuyerByUsername(String username);
 }

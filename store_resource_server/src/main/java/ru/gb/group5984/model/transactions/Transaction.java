@@ -9,15 +9,15 @@ import java.math.BigDecimal;
 
 /**
  * Данные о транзакции оплаты товаров:
- *  - счет покупателя;
- *  - счет продавца;
+ *  - уникальное имя покупателя;
+ *  - уникальное имя продавца;
  *  - сумма перевода.
  */
 @Data
 @Builder
 public class Transaction {
-    private Long creditAccount;
-    private Long debitAccount;
+    private String creditName;
+    private String debitName;
     private BigDecimal transferAmount;
 
 

@@ -1,4 +1,4 @@
-package group5984.model.clients;
+package group5984.model.cards;
 
 import lombok.Data;
 

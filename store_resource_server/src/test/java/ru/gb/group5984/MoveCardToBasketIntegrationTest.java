@@ -87,7 +87,7 @@ public class MoveCardToBasketIntegrationTest {
      */
     private User createUser() {
         return new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
-                        , Role.User, true, "user@gmail.com", true);
+                        , Role.USER, true, "user@gmail.com", true);
     }
 
     /**

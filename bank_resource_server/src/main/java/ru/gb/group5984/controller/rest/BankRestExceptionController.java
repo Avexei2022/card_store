@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
  */
 @RestController
 public class BankRestExceptionController {
+
     /**
      * Исключение при недостатке средств на счете клиента.
      * @param e объект исключения.

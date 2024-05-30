@@ -10,22 +10,35 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Основной класс микросервиса Витрина / торговый зал магазина
+ * Основной класс веб-сервиса магазина
  * Зарегистрирован на сервере Eureka
  */
 @SpringBootApplication
 @EnableDiscoveryClient
 @ConfigurationPropertiesScan
 public class StorefrontApp {
+
+    /**
+     * Точка входа.
+     * @param args аргументы.
+     */
     public static void main(String[] args) {
         SpringApplication.run(StorefrontApp.class, args);
     }
 
+    /**
+     * Синхронный клиент REST.
+     * @return новый экземпляр.
+     */
     @Bean
     public RestTemplate template(){
         return new RestTemplate();
     }
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     * @return новый экземпляр.
+     */
     @Bean
     public HttpHeaders headers()
     {

@@ -11,12 +11,17 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
+ * Сервис проверки подлинности учетных данных пользователя.
  * Используется DaoAuthenticationProvider для получения имени пользователя, пароля
  * и других атрибутов для аутентификации с использованием имени пользователя и пароля.
  */
 @Service
 @Log
 public class UserDetailsServiceImpl implements UserDetailsService {
+
+    /**
+     * Сервис аутентификации.
+     */
     @Autowired
     private AuthenticationService authenticationService;
 

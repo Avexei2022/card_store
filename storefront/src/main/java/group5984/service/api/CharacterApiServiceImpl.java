@@ -24,18 +24,32 @@ import java.util.List;
 @RequiredArgsConstructor
 @Log
 public class CharacterApiServiceImpl  implements CharacterApiService{
+
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
+
+    /**
+     * Сервис аутентификации.
+     */
     private final AuthenticationService authenticationService;
 
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     */
     @Autowired
     private HttpHeaders headers;
 
     /**
      * Подготовка объекта HTTP-запроса.
-     * @return
+     * @return тело запроса.
      */
     private HttpEntity<String> getRequestEntity() {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));

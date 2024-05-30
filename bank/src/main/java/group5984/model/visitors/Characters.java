@@ -6,10 +6,17 @@ import java.util.List;
 
 /**
  * Страница со списком кандидатов в клиенты банка.
- * Содержит информационную часть о странице и список кандидатов.
  */
 @Data
 public class Characters {
-    CharacterInfo info;
-    List<CharacterResult> results;
+
+    /**
+     * Информационная часть страницы кандидатов в клиенты банка.
+     */
+    private CharacterInfo info;
+
+    /**
+     * Страница из списка кандидатов в клиенты банка.
+     */
+    private List<CharacterResult> results;
 }

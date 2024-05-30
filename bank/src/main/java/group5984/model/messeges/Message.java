@@ -7,5 +7,9 @@ import lombok.Data;
  */
 @Data
 public class Message {
+
+    /**
+     * Строка сообщения.
+     */
     private String message;
 }

@@ -11,13 +11,49 @@ import java.util.Date;
 
 @Data
 public class CharacterResult {
+
+    /**
+     * Уникальный номер товара.
+     */
     private Integer id;
+
+    /**
+     * Наименование товара.
+     */
     private String name;
+
+    /**
+     * Статус товара.
+     */
     private String status;
+
+    /**
+     * Особенности товара.
+     */
     private String species;
+
+    /**
+     * Тип товара.
+     */
     private String type;
+
+    /**
+     * Принадлежность товара.
+     */
     private String gender;
+
+    /**
+     * Изображение товара.
+     */
     private String image;
+
+    /**
+     * Ссылка на товар.
+     */
     private String url;
+
+    /**
+     * Дата производство товара.
+     */
     private Date created;
 }

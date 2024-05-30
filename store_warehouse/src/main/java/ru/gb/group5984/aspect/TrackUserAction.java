@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Аннотация для регистрации действий пользователя
+ * Аннотация для регистрации действий пользователя.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)

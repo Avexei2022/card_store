@@ -10,7 +10,7 @@ import org.springframework.web.client.RestTemplate;
 
 //TODO Разделить на два микросервиса
 /**
- * Основной класс микросервиса Склад магазина.
+ * Основной класс веб-сервиса склада магазина.
  * Зарегистрирован на сервере Eureka
  */
 @SpringBootApplication
@@ -18,15 +18,28 @@ import org.springframework.web.client.RestTemplate;
 @ConfigurationPropertiesScan
 
 public class WarehouseApp {
+
+    /**
+     * Точка входа.
+     * @param args аргументы.
+     */
     public static void main(String[] args) {
         SpringApplication.run(WarehouseApp.class, args);
     }
 
+    /**
+     * Синхронный клиент REST.
+     * @return новый экземпляр.
+     */
     @Bean
     public RestTemplate template(){
         return new RestTemplate();
     }
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     * @return новый экземпляр.
+     */
     @Bean
     public HttpHeaders headers()
     {

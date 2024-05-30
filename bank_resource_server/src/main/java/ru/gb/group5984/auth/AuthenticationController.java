@@ -5,14 +5,25 @@ import lombok.extern.java.Log;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
+/**
+ * REST-контроллер аутентификации.
+ */
 @RestController
 @RequestMapping("/bank_server/auth")
 @RequiredArgsConstructor
 @Log
 public class AuthenticationController {
+
+    /**
+     * Сервис аутентификации.
+     */
     private final AuthenticationService service;
 
+    /**
+     * Регистрация нового пользователя.
+     * @param request запрос на регистрацию.
+     * @return токен.
+     */
     @GetMapping("/register")
     public ResponseEntity<AuthenticationResponse> register(
             @RequestBody RegisterRequest request
@@ -25,6 +36,11 @@ public class AuthenticationController {
         return response;
     }
 
+    /**
+     * Аутентификация пользователя.
+     * @param request запрос на аутентификацию.
+     * @return токен.
+     */
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(
             @RequestBody AuthenticationRequest request

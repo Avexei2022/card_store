@@ -24,7 +24,7 @@ import java.util.NoSuchElementException;
 
 
 /**
- * REST Контроллер банка
+ * REST Контроллер банка.
  * Проверка свагером http://localhost:8085/swagger-ui/index.html
  */
 
@@ -34,10 +34,24 @@ import java.util.NoSuchElementException;
 @Log
 public class BankRestController {
 
+    /**
+     * Сервис взаимодействия с API сторонних ресурсов.
+     */
     private final BankApiService bankApiService;
+
+    /**
+     * Сервис взаимодействия с базой данных.
+     */
     private final BankDbService bankDbService;
+
+    /**
+     * Сервис взаимодействия с базой данных банка.
+     */
     private final UserDbService userDbService;
 
+    /**
+     * Метрика - счетчик транзакций.
+     */
     private final Counter transactionGoodCounter = Metrics.counter("transactionGoodCounter");
 
     /**

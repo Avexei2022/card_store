@@ -9,6 +9,14 @@ import java.time.LocalDateTime;
  */
 @Data
 public class ExceptionBody {
+
+    /**
+     * Текст сообщения.
+     */
     private String message;
+
+    /**
+     * Дата и время ошибки.
+     */
     private LocalDateTime dateTime;
 }

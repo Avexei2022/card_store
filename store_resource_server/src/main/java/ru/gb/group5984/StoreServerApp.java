@@ -10,21 +10,34 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Точка входа для сервера ресурсов магазина.
+ * Основной класс сервера ресурсов магазина.
  */
 @SpringBootApplication(exclude = {SecurityAutoConfiguration.class})
 @EnableDiscoveryClient
 @ConfigurationPropertiesScan
 public class StoreServerApp {
+
+    /**
+     * Точка входа.
+     * @param args аргументы.
+     */
     public static void main(String[] args) {
         SpringApplication.run(StoreServerApp.class, args);
     }
 
+    /**
+     * Синхронный клиент REST.
+     * @return новый экземпляр.
+     */
     @Bean
     public RestTemplate template(){
         return new RestTemplate();
     }
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     * @return новый экземпляр.
+     */
     @Bean
     public HttpHeaders headers()
     {

@@ -16,6 +16,13 @@ import java.util.Arrays;
 public class UserActionAspect {
 
 
+    /**
+     * Логирование действий пользователя при вызове метода,
+     * помеченного аннотацией TrackUserAction.
+     * @param proceedingJoinPoint точка начала процедуры.
+     * @return  аспект.
+     * @throws Throwable исключение.
+     */
     @Around("@annotation(TrackUserAction)")
     public Object userActionLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();

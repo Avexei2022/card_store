@@ -6,7 +6,7 @@ import group5984.model.messeges.Message;
 
 /**
  * Интерфейс сервиса получения данных с сайта Rick and Morty.
- * Персонажи являются потенциальными покупателями
+ * Персонажи являются потенциальными покупателями,
  * готовыми зарегистрироваться в магазине.
  */
 public interface CharacterApiService {
@@ -21,6 +21,7 @@ public interface CharacterApiService {
     /**
      * Зарегистрироваться в качестве покупателя.
      * @param id уникальный номер покупателя.
+     * @return сообщение о результате.
      */
     Message saveOneCharacterById(Integer id);
 

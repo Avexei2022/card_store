@@ -1,0 +1,15 @@
+ru.gb.group5984
+ru.gb.group5984.aspect
+ru.gb.group5984.auth
+ru.gb.group5984.configuration
+ru.gb.group5984.controller.rest
+ru.gb.group5984.model.clients
+ru.gb.group5984.model.exceptions
+ru.gb.group5984.model.messeges
+ru.gb.group5984.model.transactions
+ru.gb.group5984.model.users
+ru.gb.group5984.model.visitors
+ru.gb.group5984.repository
+ru.gb.group5984.service
+ru.gb.group5984.service.api
+ru.gb.group5984.service.db

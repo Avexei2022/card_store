@@ -17,9 +17,21 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 public class NewProductListener implements ApplicationListener<NewProductEvent> {
+
+    /**
+     * Сервис пользователей.
+     */
     private final UserDbService userDbService;
+
+    /**
+     * Интерфейс интеграции.
+     */
     private final FileGateway fileGateway;
 
+    /**
+     * Уведомить пользователей подписчиков о поступлении нового товара в продажу.
+     * @param event событие - поступление нового товара в продажу.
+     */
     @Override
     public void onApplicationEvent(NewProductEvent event) {
         CardsStorage cardsStorage = event.getCardsStorage();
@@ -31,6 +43,10 @@ public class NewProductListener implements ApplicationListener<NewProductEvent> 
                 });
     }
 
+    /**
+     * Возвращает, поддерживает ли этот прослушиватель асинхронное выполнение.
+     * @return да/нет.
+     */
     @Override
     public boolean supportsAsyncExecution() {
         return ApplicationListener.super.supportsAsyncExecution();

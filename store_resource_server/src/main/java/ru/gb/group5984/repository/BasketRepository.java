@@ -9,7 +9,7 @@ import ru.gb.group5984.model.basket.CardInBasket;
 import java.util.List;
 
 /**
- * Репозиторий зарезервированных товаров - корзина покупателей
+ * Репозиторий зарезервированных товаров - корзина покупателей.
  */
 @Repository
 public interface BasketRepository extends JpaRepository<CardInBasket, Long> {

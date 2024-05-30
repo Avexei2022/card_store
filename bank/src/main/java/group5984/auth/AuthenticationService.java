@@ -19,12 +19,26 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Log
 public class AuthenticationService {
+
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
+
+    /**
+     * Конфигуратор аутентификации.
+     */
     private final AuthConfig authConfig;
 
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     */
     @Autowired
     private HttpHeaders headers;
 

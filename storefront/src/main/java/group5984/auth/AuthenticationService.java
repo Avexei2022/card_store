@@ -12,21 +12,39 @@ import org.springframework.web.client.RestTemplate;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Сервис аутентификации.
+ */
 @Service
 @RequiredArgsConstructor
 @Log
 public class AuthenticationService {
+
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
+
+    /**
+     * Конфигуратор аутентификации.
+     */
     private final AuthConfig authConfig;
+
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     */
     @Autowired
     private HttpHeaders headers;
 
     /**
      * Подготовка объекта HTTP-запроса.
-     * @return
+     * @return заготовка запроса с заголовком.
      */
     public HttpEntity<String> getRequestEntity() {
         String token = getToken(authConfig.getUsername(), authConfig.getPassword());
@@ -54,6 +72,12 @@ public class AuthenticationService {
         return user;
     }
 
+    /**
+     * Получить токен.
+     * @param username логин.
+     * @param password пароль.
+     * @return токен.
+     */
     private String getToken(String username, String password) {
         String url = basicConfig.getSERVER_API() + "/auth/authenticate";
         HttpMethod method = HttpMethod.POST;

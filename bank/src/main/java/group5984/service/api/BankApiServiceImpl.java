@@ -16,14 +16,26 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Сервиса взаимодействия с Rest-сервисом ресурсов банка.
+ * Сервиса взаимодействия с API сервиса ресурсов банка.
  */
 @Service
 @RequiredArgsConstructor
 @Log
 public class BankApiServiceImpl implements BankApiService {
+
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
+
+    /**
+     * Сервис аутентификации.
+     */
     private final AuthenticationService authenticationService;
+
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 

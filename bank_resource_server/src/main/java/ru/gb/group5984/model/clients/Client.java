@@ -15,13 +15,25 @@ import java.math.BigDecimal;
 @Data
 @Table(name = "clientOfBank")
 public class Client {
+
+    /**
+     * Уникальный номер клиента.
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account")
     private Long id;
+
+    /**
+     * Данные клиента.
+     */
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_detail")
     private CharacterResult clientDetail;
+
+    /**
+     * Баланс счета в банке.
+     */
     @Column(name = "balance")
     private BigDecimal balance;
 

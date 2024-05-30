@@ -7,20 +7,26 @@ import lombok.NoArgsConstructor;
 
 
 /**
- * Класс запроса аутентификации.
+ * Запроса аутентификации.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationRequest {
-
+    /**
+     * Логин.
+     */
     private String username;
-    String password;
+
+    /**
+     * Пароль.
+     */
+    private String password;
 
     /**
      * Получить строку в JSON формате.
-     * @return
+     * @return строка запроса.
      */
     public String getRequest() {
         return "{\"username\": \""

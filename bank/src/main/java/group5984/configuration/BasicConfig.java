@@ -12,7 +12,7 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Конфигуратор базовой информации
+ * Конфигуратор базовых настроек
  * принимает значения из файла настройки application.yaml
  */
 @Component
@@ -22,9 +22,21 @@ import org.springframework.web.client.RestTemplate;
 @Getter
 @Setter
 public class BasicConfig {
+
+    /**
+     * Адрес сервиса ресурсов банка.
+     */
     private String BANK_API;
+
+    /**
+     * Синхронный клиент REST.
+     */
     private RestTemplate restTemplate;
 
+    /**
+     * Аспект для регистрации действий пользователей и вывода их в консоль.
+     * @return новый экземпляр.
+     */
     @Bean
     public UserActionAspect loginAspect() {
         return new UserActionAspect();

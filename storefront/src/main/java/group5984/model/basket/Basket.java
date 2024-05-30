@@ -9,6 +9,14 @@ import java.util.List;
  */
 @Data
 public class Basket {
+
+    /**
+     * Информационная часть страницы списка товаров.
+     */
     BasketInfo info;
+
+    /**
+     * Список товаров.
+     */
     List<CardInBasket> cardInBasketList;
 }

@@ -16,16 +16,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+/**
+ * Сервис токенов
+ */
 @Service
 @Log
 public class JwtService {
 
-    private static final String SECRET_KEY = "6A576D5A7134743777217A25432A462D4A614E645267556B5870327235753878";
+    /**
+     * Секретный ключ подписи.
+     */
+    private static final String SECRET_KEY = "cnUuZ2IuZ3JvdXA1OTg0";
+
+    /**
+     * Извлечь имя пользователя из токена.
+     * @param token токен.
+     * @return имя пользователя.
+     */
     public String extractUsername(String token) {
         log.info("LOG: JwtService.extractUsername(String token).token = " + token);
         return extractClaim(token,Claims::getSubject);
     }
 
+    /**
+     * Извлечь данные из токена
+     * @param token токен
+     * @param claimsResolver функция извлечения данных
+     * @param <T> тип данных
+     * @return данные
+     */
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         log.info("LOG: JwtService.extractClaim.token = " + token);
         final Claims claims = extractAllClaims(token);
@@ -33,11 +52,22 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
+    /**
+     * Получить токен.
+     * @param userDetails данные пользователя
+     * @return токен
+     */
     public String generateToken(UserDetails userDetails) {
         log.info("LOG: JwtService.generateToken.userDetails = " + userDetails);
         return generateToken(new HashMap<>(), userDetails);
     }
 
+    /**
+     * Генератор токена.
+     * @param extraClaims дополнительные данные.
+     * @param userDetails данные пользователя.
+     * @return токен.
+     */
     public String generateToken(
             Map<String, Object> extraClaims,
             UserDetails userDetails
@@ -55,6 +85,12 @@ public class JwtService {
         return token;
     }
 
+    /**
+     * Проверить токен на действительность.
+     * @param token токен.
+     * @param userDetails данные пользователя.
+     * @return true, если токен действителен.
+     */
     public boolean isTokenValid(String token, UserDetails userDetails) {
         log.info("LOG: JwtService.isTokenValid.userDetails = " + userDetails + " token = " + token);
         final String username = extractUsername(token);
@@ -64,6 +100,11 @@ public class JwtService {
         return isValid;
     }
 
+    /**
+     * Проверить токен на истечение срока действия.
+     * @param token токен
+     * @return true, если токен просрочен.
+     */
     private boolean isTokenExpired(String token) {
         log.info("LOG: JwtService.isTokenExpired.token = " + token);
         boolean isExpired = extractExpiration(token).before(new Date());
@@ -71,6 +112,11 @@ public class JwtService {
         return isExpired;
     }
 
+    /**
+     * Извлечь дату истечения срока действия токена.
+     * @param token токен.
+     * @return дата истечения.
+     */
     private Date extractExpiration(String token) {
         log.info("LOG: JwtService.extractExpiration.token = " + token);
         Date date = extractClaim(token, Claims::getExpiration);
@@ -78,6 +124,11 @@ public class JwtService {
         return date;
     }
 
+    /**
+     * Извлечь все данные из токена.
+     * @param token токен.
+     * @return данные.
+     */
     private Claims extractAllClaims(String token) {
         log.info("LOG: JwtService.extractAllClaims.token = " + token);
         Claims claims = Jwts
@@ -90,6 +141,10 @@ public class JwtService {
         return claims;
     }
 
+    /**
+     * Получить ключ для подписи токена.
+     * @return ключ.
+     */
     private Key getSigningKey() {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         log.info("LOG: JwtService.getSigningKey.keyBytes = " + Arrays.toString(keyBytes));

@@ -15,27 +15,59 @@ import ru.gb.group5984.model.users.Buyer;
 import ru.gb.group5984.model.users.Role;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.BuyerRepository;
-import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.service.auth.JwtService;
 
 import java.util.List;
 import java.util.Objects;
 
+
+/**
+ * Сервис аутентификации.
+ */
 @Service
 @RequiredArgsConstructor
 @Log
 public class AuthenticationService {
 
+    /**
+     * Репозиторий покупателей - пользователей веб-ресурса магазина.
+     */
     private final BuyerRepository buyerRepository;
+
+    /**
+     * Кодировщик паролей.
+     */
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Сервис токенов.
+     */
     private final JwtService jwtService;
+
+    /**
+     * Обработчик запросов на аутентификацию.
+     */
     private final AuthenticationManager authenticationManager;
+
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
+
+    /**
+     * Конфигуратор аутентификации.
+     */
     private final AuthConfig authConfig;
 
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     */
     @Autowired
     private HttpHeaders headers;
 
@@ -63,6 +95,8 @@ public class AuthenticationService {
 
     /**
      * Аутентификация сервиса.
+     * Создан единственный пользователь/владелец сервиса, логин и пароль которого
+     * устанавливается в файле application.yaml.
      * @param request запрос.
      * @return ответ с результатом.
      */
@@ -74,9 +108,6 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-        // Закомментированный код предназначен на случай регистрации сервисов в базе данных.
-//        var user = userRepository.findUserByUsername(request.getUsername())
-//                .orElseThrow();
         User user = new User(111L, authConfig.getUsername(), authConfig.getPassword()
                 ,Role.ADMIN, true, "user@gmail.com", true);
         log.info("LOG: AuthenticationService.authenticate.user = " + user);
@@ -88,7 +119,7 @@ public class AuthenticationService {
 
     /**
      * Подготовка объекта HTTP-запроса.
-     * @return
+     * @return заголовок
      */
     public HttpHeaders getHeaders() {
         String token = getToken(authConfig.getBankUsername(), authConfig.getBankPassword());

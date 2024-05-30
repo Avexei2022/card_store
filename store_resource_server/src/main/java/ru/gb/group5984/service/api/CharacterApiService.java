@@ -5,14 +5,14 @@ import ru.gb.group5984.model.characters.Characters;
 import ru.gb.group5984.model.messeges.Message;
 
 /**
- * Интерфейс сервиса получения данных с сайта Rick and Morty
+ * Интерфейс сервиса получения данных с сайта Rick and Morty.
  */
 public interface CharacterApiService {
 
     /**
-     * Получить с сайта Rick and Morty страницу со списком героев
+     * Получить с сайта Rick and Morty страницу со списком героев.
      * @param page номер страницы.
-     * @return Страница со списком героев
+     * @return Страница со списком героев.
      */
     Characters getPageCharacters(String page);
 
@@ -28,5 +28,10 @@ public interface CharacterApiService {
      */
     Message basketPay(String userName);
 
+    /**
+     * Зарегистрировать нового пользователя.
+     * @param id уникальный номер персонажа.
+     * @return сообщение о результате регистрации.
+     */
     Message registerNewUser(Integer id);
 }

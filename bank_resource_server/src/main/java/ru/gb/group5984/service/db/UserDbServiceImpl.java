@@ -20,7 +20,7 @@ public class UserDbServiceImpl implements UserDbService{
     private final UserRepository userRepository;
 
     /**
-     * Поиск пользователя по имени
+     * Поиск пользователя по имени.
      * @param username - имя пользователя.
      * @return - пользователь.
      */

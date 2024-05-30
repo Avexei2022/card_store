@@ -8,7 +8,7 @@ import ru.gb.group5984.model.users.User;
 public interface UserDbService {
 
     /**
-     * Поиск пользователя по имени
+     * Поиск пользователя по имени.
      * @param username - имя пользователя.
      * @return - пользователь.
      */

@@ -12,14 +12,14 @@ import java.math.BigDecimal;
 import java.util.List;
 
 /**
- * Интерфейс сервиса склада магазина
+ * Интерфейс сервиса склада магазина.
  */
 public interface ServerDbService {
 
     /**
      * Сохранение единицы товара, закупленного у поставщика,
      * в базе данных товаров на складе.
-     * @param characterResult Единица товара
+     * @param characterResult Единица товара.
      */
     void saveOneCharacter(CharacterResult characterResult);
 
@@ -32,14 +32,14 @@ public interface ServerDbService {
     Characters getPageCharactersFromStorage(Integer page);
 
     /**
-     * Удалить единицу товара из базы данных товаров на складе
-     * @param id Id Товара
+     * Удалить единицу товара из базы данных товаров на складе.
+     * @param id уникальный номер товара.
      */
     Message deleteFromStorageById(Integer id);
 
     /**
      * Выствить товар на продажу.
-     * @param id - id товара.
+     * @param id уникальный номер товара.
      */
     void saveOneCardById(Integer id);
 
@@ -53,7 +53,7 @@ public interface ServerDbService {
 
     /**
      * Удалить товар из списка продаж / убрать с полки.
-     * @param id - id товара.
+     * @param id уникальный номер товара.
      */
     void deleteCardFromSaleById(Long id);
 
@@ -72,7 +72,7 @@ public interface ServerDbService {
 
     /**
      * Возврат единицы товара из корзины покупателя на полку магазина.
-     * @param id id - товара в корзине.
+     * @param id уникальный номер товара.
      */
     void returnCardFromBasketToSale(Long id);
 
@@ -103,5 +103,9 @@ public interface ServerDbService {
      */
     void deleteAllFromBasket(Long userId);
 
+    /**
+     * Регистрация нового пользователя.
+     * @param characterResult пользователь.
+     */
     void registerNewUser(CharacterResult characterResult);
 }

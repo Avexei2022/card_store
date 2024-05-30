@@ -17,13 +17,31 @@ import ru.gb.group5984.service.JwtService;
 
 import java.io.IOException;
 
-
+/**
+ * Фильтр аутентификации, выполняемый один раз для каждого запроса.
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+
+    /**
+     * Сервис токенов.
+     */
     private final JwtService jwtService;
+
+    /**
+     * Сервис данных о пользователе.
+     */
     private final UserDetailsService userDetailsService;
 
+    /**
+     * Гарантированный вызов только один раз для каждого запроса в рамках одного потока запросов.
+     * @param request запрос.
+     * @param response ответ.
+     * @param filterChain цепочка фильтров.
+     * @throws ServletException Общее исключение сервлета.
+     * @throws IOException исключение ввода/вывода.
+     */
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,

@@ -9,8 +9,24 @@ import java.math.BigDecimal;
  */
 @Data
 public class CardsStorage {
+
+    /**
+     * Уникальный номер товара.
+     */
     private Long id;
+
+    /**
+     * Данные о товаре.
+     */
     private Card card;
+
+    /**
+     * Количество товара.
+     */
     private Integer amount;
+
+    /**
+     * Цена единицы товара.
+     */
     private BigDecimal price;
 }

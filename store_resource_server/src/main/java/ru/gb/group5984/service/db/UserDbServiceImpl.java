@@ -29,9 +29,24 @@ import java.util.List;
 @Getter
 public class UserDbServiceImpl implements UserDbService{
 
+    /**
+     * Репозиторий пользователей сервиса ресурсов магазина.
+     */
     private final UserRepository userRepository;
+
+    /**
+     * Репозиторий пользователей веб-сервиса склада магазина.
+     */
     private final StorageUserRepository storageUserRepository;
+
+    /**
+     * Репозиторий покупателей - пользователей веб-сервиса магазина.
+     */
     private final BuyerRepository buyerRepository;
+
+    /**
+     * Сервис аутентификации.
+     */
     private final AuthenticationService authenticationService;
 
     /**
@@ -42,12 +57,6 @@ public class UserDbServiceImpl implements UserDbService{
     @Override
     public User findUserByUsername(String username) {
         return userRepository.findUserByUsername(username).orElseThrow();
-        // Данный блок используется в случае отключение основного репозитория при переходе на Н2
-//        return switch (username) {
-//            case "admin" -> userList.get(0);
-//            case "user" -> userList.get(1);
-//            default -> throw new UsernameNotFoundException("Пользователь не найден");
-//        };
     }
 
     /**
@@ -85,7 +94,7 @@ public class UserDbServiceImpl implements UserDbService{
     }
 
     /**
-     * Поиск пользователя веб-сервиса склада магазина по имени/логину
+     * Поиск пользователя веб-сервиса склада магазина по имени/логину.
      * @param username - имя/логин пользователя.
      * @return - пользователь.
      */
@@ -103,7 +112,7 @@ public class UserDbServiceImpl implements UserDbService{
     }
 
     /**
-     * Поиск покупателя - пользователя веб-сервиса магазина по имени/логину
+     * Поиск покупателя - пользователя веб-сервиса магазина по имени/логину.
      * @param username - имя/логин пользователя.
      * @return - пользователь.
      */
@@ -118,7 +127,7 @@ public class UserDbServiceImpl implements UserDbService{
     }
 
 //    /**
-//     * Временная замена репозиторию.
+//     * Временная замена репозитория в случае необходимости тестов.
 //     * @return список пользователей.
 //     */
 //    private List<User> createUsers() {

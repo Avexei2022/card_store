@@ -10,23 +10,34 @@ import org.springframework.web.client.RestTemplate;
 
 
 /**
- * Основной класс микросервиса Банка.
- * Зарегистрирован на сервере Eureka
+ * Основной класс веб-сервиса Банка.
  */
 @SpringBootApplication
 @EnableDiscoveryClient
 @ConfigurationPropertiesScan
-
 public class BankApp {
+
+    /**
+     * Точка входа.
+     * @param args аргументы.
+     */
     public static void main(String[] args) {
         SpringApplication.run(BankApp.class, args);
     }
 
+    /**
+     * Синхронный клиент REST.
+     * @return новый экземпляр.
+     */
     @Bean
     public RestTemplate template(){
         return new RestTemplate();
     }
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     * @return новый экземпляр.
+     */
     @Bean
     public HttpHeaders headers()
     {

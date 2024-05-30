@@ -8,9 +8,29 @@ import lombok.Data;
  */
 @Data
 public class CardsInfo {
+
+    /**
+     * Общее количество товаров в продаже.
+     */
     private Long count;
+
+    /**
+     * Количество страниц в общем списке товаров.
+     */
     private Integer pages;
+
+    /**
+     * Номер следующей страницы.
+     */
     private Integer next;
+
+    /**
+     * Номер текущей страницы.
+     */
     private Integer current;
+
+    /**
+     * Номер предыдущей страницы.
+     */
     private Integer prev;
 }

@@ -21,11 +21,31 @@ import ru.gb.group5984.aspect.UserActionAspect;
 @Getter
 @Setter
 public class BasicConfig {
+
+    /**
+     * Адрес сервиса ресурсов Rick and Morty.
+     */
     private String CHARACTER_API;
+
+    /**
+     * Адрес сервиса ресурсов банка.
+     */
     private String BANK_API;
+
+    /**
+     * Имя/логин владельца магазина, имеющего счет в банке.
+     */
     private String DEBIT_USER;
+
+    /**
+     * Синхронный клиент REST.
+     */
     private RestTemplate restTemplate;
 
+    /**
+     * Аспект для регистрации действий пользователей и вывода их в консоль.
+     * @return новый экземпляр.
+     */
     @Bean
     public UserActionAspect loginAspect() {
         return new UserActionAspect();

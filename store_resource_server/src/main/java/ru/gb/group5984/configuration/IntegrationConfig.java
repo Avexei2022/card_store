@@ -59,6 +59,10 @@ public class IntegrationConfig {
                 cardInBasket.getCreated();
     }
 
+    /**
+     * Преобразователь данных.
+     * @return выходные данные.
+     */
     @Bean
     @Transformer(inputChannel = "messageInputChannel", outputChannel = "fileWriterChannel")
     public GenericTransformer<CardsStorage, String> notifyUser() {

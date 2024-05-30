@@ -13,19 +13,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Сервис витрины / торгового зала магазина.
- * Готовит запросы на склад и получает от него соответствующие ответы.
+ * Сервис взаимодействия с API сервиса ресурсов магазина.
  */
 @Service
 @RequiredArgsConstructor
 @Log
 public class ContentApiServiceImpl implements ContentApiService {
 
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Сервис аутентификации пользователей.
+     */
     private final AuthenticationService authenticationService;
 
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
 
 
@@ -35,7 +43,7 @@ public class ContentApiServiceImpl implements ContentApiService {
      * @return Список товаров на полке.
      */
     @Override
-    public Cards getAllFromSale(String page) {
+    public Cards getPageFromSale(String page) {
         String url = basicConfig.getSERVER_API() + "/sale/page/" + page;
         HttpMethod method = HttpMethod.GET;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
@@ -64,8 +72,9 @@ public class ContentApiServiceImpl implements ContentApiService {
 
     /**
      * Добавить товар в корзину покупателя.
-     * @param id - id товара.
+     * @param id - уникальный номер товара.
      * @param userName - имя пользователя.
+     * @return сообщение о результате.
      */
     @Override
     public Message addToBasketById(Integer id, String userName) {
@@ -80,7 +89,7 @@ public class ContentApiServiceImpl implements ContentApiService {
 
     /**
      * Вернуть товар из корзины покупателя на полку.
-     * @param id - id товара.
+     * @param id - уникальный номер товара.
      */
     @Override
     public void deleteFromBasketById(Integer id) {
@@ -96,6 +105,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     /**
      * Оплатить товар в корзине.
      * @param userName - имя пользователя.
+     * @return сообщение о результате.
      */
     @Override
     public Message basketPay(String userName) {

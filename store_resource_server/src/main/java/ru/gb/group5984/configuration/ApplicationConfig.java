@@ -15,12 +15,24 @@ import ru.gb.group5984.model.users.Role;
 import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.UserRepository;
 
+/**
+ * Конфигуратор приложения.
+ */
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-    private final UserRepository userRepository;
+
+    /**
+     * Конфигуратор аутентификации.
+     */
     private final AuthConfig authConfig;
 
+    /**
+     * Сервис пользовательских данных.
+     * Создан единственный пользователь, логин и пароль которого
+     * устанавливаются в конфигурационном файле application.yaml
+     * @return данные пользователя.
+     */
     @Bean
     public UserDetailsService userDetailsService() {
 //        return username -> userRepository.findUserByUsername(username)
@@ -29,6 +41,10 @@ public class ApplicationConfig {
                 , Role.ADMIN, true, "user@gmail.com", true);
     }
 
+    /**
+     * Обработчик аутентификации.
+     * @return обработчик.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
@@ -38,11 +54,21 @@ public class ApplicationConfig {
         return authProvider;
     }
 
+    /**
+     * Кодировщик пароля.
+     * @return экземпляр кодировщика.
+     */
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    /**
+     * Менеджер аутентификации.
+     * @param config конфигурация проверки подлинности.
+     * @return экземпляр менеджера аутентификации.
+     * @throws Exception исключение.
+     */
     @Bean
     public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
         return config.getAuthenticationManager();

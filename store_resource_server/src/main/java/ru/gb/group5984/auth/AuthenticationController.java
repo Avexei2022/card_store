@@ -7,13 +7,17 @@ import org.springframework.http.ResponseEntity;
 
 
 /**
- * Контроллер регистрации и аутентификации
+ * REST-контроллер регистрации и аутентификации
  */
 @RestController
 @RequestMapping("/store_server/auth")
 @RequiredArgsConstructor
 @Log
 public class AuthenticationController {
+
+    /**
+     * Сервис аутентификации.
+     */
     private final AuthenticationService authenticationService;
 
     /**
@@ -36,8 +40,8 @@ public class AuthenticationController {
 
     /**
      * Аутентификация пользователя - сервиса
-     * @param request
-     * @return
+     * @param request запрос на аутентификацию.
+     * @return токен.
      */
     @PostMapping("/authenticate")
     public ResponseEntity<AuthenticationResponse> authenticate(

@@ -5,7 +5,7 @@ import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.visitors.Characters;
 
 /**
- * Интерфейс REST сервиса банка
+ * Интерфейс REST сервиса банка.
  */
 public interface BankApiService {
 

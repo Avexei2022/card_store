@@ -8,8 +8,24 @@ import lombok.Data;
  */
 @Data
 public class CharacterInfo {
+
+    /**
+     * Количество товара на складе невыставленного на продажу.
+     */
     private Integer count;
+
+    /**
+     * Количество страниц в списке товаров.
+     */
     private Integer pages;
+
+    /**
+     * Номер следующей страницы.
+     */
     private String next;
+
+    /**
+     * Номер предыдущей страницы.
+     */
     private String prev;
 }

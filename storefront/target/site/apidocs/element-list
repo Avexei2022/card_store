@@ -1,0 +1,12 @@
+group5984
+group5984.aspect
+group5984.auth
+group5984.configuration
+group5984.controller.web
+group5984.model.basket
+group5984.model.cards
+group5984.model.characters
+group5984.model.messeges
+group5984.model.users
+group5984.service
+group5984.service.api

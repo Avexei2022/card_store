@@ -10,14 +10,17 @@ import java.util.List;
 
 
 /**
+ * Аутентификационные данные пользователя веб-сервиса банка.
  * Реализация UserDetails.
- * Аутентификационные данные пользователя.
  * DaoAuthenticationProvider проверяет UserDetails, а затем возвращает аутентификацию.
  */
 @Data
 @AllArgsConstructor
 public class ThisUserDetails implements UserDetails{
 
+    /**
+     * Пользователь.
+     */
     private User user;
 
     /**
@@ -49,7 +52,7 @@ public class ThisUserDetails implements UserDetails{
     }
 
     /**
-     * Истек срок действия аккаунта или нет.
+     * Истек срок действия учетной записи или нет.
      * @return true - не истек, false - истек.
      */
     @Override
@@ -58,7 +61,7 @@ public class ThisUserDetails implements UserDetails{
     }
 
     /**
-     * Заблокирован аккаунт или нет.
+     * Заблокирована учетная запись или нет.
      * @return true - не заблокирован, false - заблокирован.
      */
     @Override

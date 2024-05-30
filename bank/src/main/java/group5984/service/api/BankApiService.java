@@ -22,14 +22,22 @@ public interface BankApiService {
     /**
      * Удалить поетителя банка из списка кандидатов на открытие счета.
      * @param id уникальный номер кандидата.
+     * @return сообщение о результатах удаления кандидата на открытие счета.
      */
     Message deleteVisitorById(Integer id);
 
+    /**
+     * Получить страницу из списка кандидатов.
+     * @param page номер страницы.
+     * @return страница списка кандидатов.
+     * @throws RuntimeException исключение в процессе получения списка.
+     */
     Characters getPageCandidates(String page) throws RuntimeException;
 
     /**
      * Открыть счет клиенту.
      * @param id - уникальный номер кандидата банка.
+     * @return сообщение о результате сохранения клиента.
      */
     Message saveOneClientById(Integer id);
 
@@ -44,12 +52,14 @@ public interface BankApiService {
     /**
      * Удалить клиента банка - закрыть счет.
      * @param id - уникальный номер клиента.
+     * @return сообщение о результате удаления клиента.
      */
     Message deleteClientById(Integer id);
 
     /**
      * Сохранить данные о клиенте банка.
      * @param client клиент.
+     * @return сообщение о результате сохранения данных клиента.
      */
     Message saveClient(Client client);
 

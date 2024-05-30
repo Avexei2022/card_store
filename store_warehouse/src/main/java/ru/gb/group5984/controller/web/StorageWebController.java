@@ -18,14 +18,22 @@ import java.util.List;
 
 
 /**
- * Веб контроллер склада магазина
+ * Веб-контроллер склада магазина.
  */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/storage")
 @Log
 public class StorageWebController {
+
+    /**
+     * Сервис взаимодействия с API Rick and Morty/
+     */
     private final CharacterApiService characterApiService;
+
+    /**
+     * Сервис взаимодействия с API сервиса ресурсов магазина.
+     */
     private final ServerApiService serverApiService;
 
     /**
@@ -38,16 +46,17 @@ public class StorageWebController {
     }
 
     /**
-     * Подготовка веб-страницы для закупки товаров на склад магазина
-     * @param page номер страницы в списке товаров с рессурса поставщика - Rick and Morty
-     * @param model Модель веб страницы
-     * @return готовая страница purchase.html
+     * Подготовка веб-страницы для закупки товаров на склад магазина.
      * В модель страницы загружается следующая информация:
-     *      - информация о странице;
-     *      - список товаров поставщика;
-     *      - номер текущей страницы из списка товаров;
      *      - количество товара, закупленного на склад;
-     *      - список товаров на складе.
+     *      - количество страниц в списке;
+     *      - номер предыдущей страницы;
+     *      - номер следующей страницы;
+     *      - номер текущей страницы;
+     *      - список товаров.
+     * @param page номер страницы в списке товаров с рессурса поставщика - Rick and Morty.
+     * @param model Модель веб страницы.
+     * @return страница закупки товаров на склад - purchase.html.
      */
     @GetMapping("/characters/page/{page}")
     public String getCharacters(@PathVariable("page") String page, Model model) {
@@ -65,9 +74,9 @@ public class StorageWebController {
 
     /**
      * Добавить единицу товара на склад - закупить у поставщика.
-     * @param id номер товара
-     * @param page номер текущей страницы для возврата к ней
-     * @return возврат ссылки на соответствующую страницу
+     * @param id уникальный номер товара.
+     * @param page номер текущей страницы для возврата к ней.
+     * @return возврат ссылки на соответствующую страницу.
       */
     @GetMapping("/characters/add_to_storage/{id}/{page}")
     public String addToStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
@@ -77,9 +86,10 @@ public class StorageWebController {
 
     /**
      * Удалить единицу товара со склада.
-     * @param id id товара
-     * @param page номер страницы на которой пользователь производил действия удаления
-     * @return возврат к этой же странице
+     * @param id уникальный номер товара.
+     * @param page номер страницы на которой пользователь производил действия удаления.
+     * @param model модель веб-страницы
+     * @return возврат к этой же странице или переход к странице сообщений message.html
      */
     @TrackUserAction
     @GetMapping("/characters/delete_from_storage/{id}/{page}")
@@ -94,12 +104,12 @@ public class StorageWebController {
     }
 
     /**
-     * Метод модификации информационной части о странице героев перед её добавлением в модель
-     * @param allCharacters Информация полученная с рессурса Rick and Morty
-     * @return Модифицированная информационная часть о странице
+     * Метод модификации информационной части о странице героев перед её добавлением в модель.
      * Пояснение: В информационной части прриходят ссылки на предыдущую и следующую странцы,
      * но для загрузки в модель ссылки не нужны, но нужны номера страниц. Поэтому ссылки меняются на номера страниц.
      * Если со ссылкой проблема, то она меняется на страницу 1.
+     * @param allCharacters Информация полученная с рессурса Rick and Morty.
+     * @return Модифицированная информационная часть о странице.
      */
     private CharacterInfo getCharacterInfo(Characters allCharacters) {
         CharacterInfo characterInfo = allCharacters.getInfo();
@@ -128,7 +138,7 @@ public class StorageWebController {
      * Получить страницу из списка товаров, хранящихся на складе.
      * @param page номер страницы
      * @param model модель веб-страницы
-     * @return веб-страница storage.html
+     * @return веб-страница товаров на складе storage.html
      */
     @GetMapping("/storage/page/{page}")
     public String getAllCardsInStorage(@PathVariable("page") String page, Model model) {
@@ -147,10 +157,10 @@ public class StorageWebController {
     }
 
     /**
-     * Переместить единицу товара со склада на полку продаж
-     * @param id номер товара
-     * @param page номер текущей страницы для возврата к ней
-     * @return возврат ссылки на соответствующую страницу
+     * Переместить единицу товара со склада на полку продаж.
+     * @param id уникальный номер товара.
+     * @param page номер текущей страницы для возврата к ней.
+     * @return возврат ссылки на соответствующую страницу.
      */
     @GetMapping("/storage/add_to_sale/{id}/{page}")
     public String addToSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
@@ -160,9 +170,9 @@ public class StorageWebController {
 
     /**
      * Удалить товар из списка продаж - убрать с витрины.
-     * @param id номер товара
-     * @param page номер страницы на которой пользователь производил действия удаления
-     * @return возврат к этой же странице
+     * @param id уникальный номер товара.
+     * @param page номер страницы на которой пользователь производил действия удаления.
+     * @return возврат к этой же странице.
      */
     @GetMapping("/storage/delete_from_sale/{id}/{page}")
     public String deleteFromSale(@PathVariable("id") Integer id, @PathVariable("page") String page) {
@@ -172,9 +182,9 @@ public class StorageWebController {
 
     /**
      * Получить страницу из списка товаров, выставленных на продажу.
-     * @param page номер страницы
-     * @param model заготовка веб-страницы
-     * @return веб-страница sale.html
+     * @param page номер страницы.
+     * @param model заготовка веб-страницы.
+     * @return веб-страница товаров в продаже sale.html.
      */
     @GetMapping("/sale/page/{page}")
     public String getAllCardsInSale(@PathVariable("page") Integer page, Model model) {

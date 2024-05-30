@@ -10,8 +10,20 @@ import java.math.BigDecimal;
  */
 @Data
 public class Client {
+
+    /**
+     * Уникальный номер клиента.
+     */
     private Long id;
+
+    /**
+     * Данные клиента.
+     */
     private CharacterResult clientDetail;
+
+    /**
+     * Баланс счета в банке.
+     */
     private BigDecimal balance;
 
 }

@@ -6,10 +6,17 @@ import java.util.List;
 
 /**
  * Страница со списком товаров, находящихся в корзине покупателей.
- * Содержит информационную часть о странице и список товаров.
  */
 @Data
 public class Basket {
-    BasketInfo info;
-    List<CardInBasket> cardInBasketList;
+
+    /**
+     * Информационная часть страницы списка товаров.
+     */
+    private BasketInfo info;
+
+    /**
+     * Список товаров.
+     */
+    private List<CardInBasket> cardInBasketList;
 }

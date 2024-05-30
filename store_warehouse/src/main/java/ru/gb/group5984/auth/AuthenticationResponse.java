@@ -13,5 +13,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationResponse {
+
+    /**
+     * JWT - токен.
+     */
     private String token;
 }

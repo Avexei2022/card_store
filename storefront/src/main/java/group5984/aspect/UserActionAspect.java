@@ -9,13 +9,19 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 
 /**
- * Аспект для регистрации действий пользователей и вывода их в консоль
+ * Аспект для регистрации действий пользователей и вывода их в консоль.
  */
 @Aspect
 @Component
 public class UserActionAspect {
 
-
+    /**
+     * Логирование действий пользователя при вызове метода,
+     * помеченного аннотацией TrackUserAction.
+     * @param proceedingJoinPoint точка начала процедуры.
+     * @return  аспект.
+     * @throws Throwable исключение.
+     */
     @Around("@annotation(TrackUserAction)")
     public Object userActionLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();

@@ -15,14 +15,23 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-
+/**
+ * Конфигуратор безопасности.
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 @Log
 public class SecurityConfig {
 
+    /**
+     * Фильтр аутентификации.
+     */
     private final JwtAuthenticationFilter jwtAuthFilter;
+
+    /**
+     * Поставщик проверки подлинности имени пользователя и пароля.
+     */
     private final AuthenticationProvider authenticationProvider;
 
 
@@ -31,8 +40,8 @@ public class SecurityConfig {
     /**
      * Правила фильтрации.
      * @param http защищенный http запрос.
-     * @return
-     * @throws Exception
+     * @return цепочка фильтров.
+     * @throws Exception общие исключения.
      */
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

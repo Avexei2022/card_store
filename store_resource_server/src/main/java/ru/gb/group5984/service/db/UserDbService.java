@@ -20,8 +20,17 @@ public interface UserDbService {
      */
     User findUserByUsername(String username);
 
+    /**
+     * Поиск всех пользователей.
+     * @return список пользователей.
+     */
     List<User> findAllUser();
 
+    /**
+     * Регистрация нового покупателя.
+     * @param characterResult - покупатель.
+     * @return сообщение о результате регистрации.
+     */
     Message registerNewBuyer(CharacterResult characterResult);
 
     /**

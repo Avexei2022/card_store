@@ -28,28 +28,53 @@ import java.util.List;
 
 
 /**
- * Сервис получения данных с сайта Rick and Morty
+ * Сервис взаимодействия с API ресурса Rick and Morty
  */
 @Service
 @RequiredArgsConstructor
 @Log
 public class CharacterApiServiceImpl  implements CharacterApiService{
+
+    /**
+     * Сервис работы с базой данных.
+     */
     private final ServerDbService serverDbService;
+
+    /**
+     * Конфигуратор базовых настроек.
+     */
     private final BasicConfig basicConfig;
+
+    /**
+     * Сервис аутентификации.
+     */
     private final AuthenticationService authenticationService;
+
+    /**
+     * Интеграция уведомлений.
+     */
     private final FileGateway fileGateway;
+
+    /**
+     * Сервис работы с базой данных пользователей.
+     */
     private final UserDbService userDbService;
 
-
+    /**
+     * Синхронный клиент REST.
+     */
     @Autowired
     private RestTemplate restTemplate;
 
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     */
     @Autowired
     private HttpHeaders headers;
 
     /**
      * Подготовка объекта HTTP-запроса.
-     * @return
+     * @return тело запроса.
      */
     private HttpEntity<String> getRequestEntity() {
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
@@ -89,8 +114,8 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
 
     /**
      * Оплата товара из корзины покупателя через банк.
-     * По легенде Номер счета продавца - 1.
      * @param userName имя/логин покупателя.
+     * @return сообщение о результате оплаты товара.
      */
     @Override
     @Transactional
@@ -149,6 +174,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     /**
      * Регистрация нового пользователя из списка героев сервиса Rick and Morty.
      * @param id уникальный номер героя.
+     * @return сообщение о результате регистрации.
      */
     @Override
     public Message registerNewUser(Integer id) {

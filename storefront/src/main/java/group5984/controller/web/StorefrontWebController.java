@@ -20,19 +20,27 @@ import java.util.List;
 
 
 /**
- * Веб контроллер пользовательского сайта магазина
+ * Веб-контроллер пользовательского сайта магазина.
  */
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/storefront")
 @Log
 public class StorefrontWebController {
+
+    /**
+     * Сервис взаимодействия с API сервиса ресурсов магазина.
+     */
     private final ContentApiService serviceApi;
+
+    /**
+     * Сервис взаимодействия с API Rick and Morty/
+     */
     private final CharacterApiService characterApiService;
 
     /**
      * Перенаправление к методу вызова основной веб-страницы списка товаров в продаже.
-     * @return строка вызова
+     * @return строка вызова.
      */
     @GetMapping("")
     public String redirectToFirstPage() {
@@ -40,20 +48,20 @@ public class StorefrontWebController {
     }
 
     /**
-     * Подготовка веб-страницы списка товаров в продаже
+     * Подготовка веб-страницы списка товаров в продаже с загруженной в нее информацией:
+     * - количество товара, выставленного на продажу;
+     * - количество страниц для загрузки товара;
+     * - номер текущей страницы;
+     * - номер предыдущей страницы;
+     * - номер следующей страницы
+     * - список товара;
      * @param page номер страницы в списке товаров, выставленных на продажу
      * @param model Модель веб-страницы
-     * @return готовая страница purchase.html с загруженной в нее информацией:
-     *      - количество товара, выставленного на продажу;
-     *      - количество страниц для загрузки товара;
-     *      - номер текущей страницы;
-     *      - номер предыдущей страницы;
-     *      - номер следующей страницы
-     *      - список товара;
+     * @return страница товаров в продаже purchase.html
      */
     @GetMapping("/cards/page/{page}")
     public String getPageCardsStorage(@PathVariable("page") String page, Model model) {
-        Cards cards = serviceApi.getAllFromSale(page);
+        Cards cards = serviceApi.getPageFromSale(page);
         model.addAttribute("sale_size", cards.getInfo().getCount())
                 .addAttribute("amount_pages", cards.getInfo().getPages())
                 .addAttribute("current_page", cards.getInfo().getCurrent())
@@ -115,6 +123,7 @@ public class StorefrontWebController {
      * Удалить товар из корзины.
      * @param id id товара.
      * @param page номер текущей страницы для последующего возврата к ней.
+     * @param userName имя пользователя.
      * @return возврат к корзине покупателя.
      */
     @GetMapping("/basket/delete_from_basket/{id}/{page}/{user_name}")
@@ -127,7 +136,8 @@ public class StorefrontWebController {
     /**
      * Оплатить товар из корзины.
      * @param userName имя/логин покупателя.
-     * @return переход к веб-странице покупок
+     * @param model модель страницы.
+     * @return переход к веб-странице сообщений message.html
      */
     @GetMapping("/basket/pay/{user_name}")
     public String basketPay(@PathVariable("user_name") String userName, Model model) {
@@ -138,14 +148,14 @@ public class StorefrontWebController {
 
     /**
      * Подготовка веб-страницы потенциальных покупателей.
-     * @param page номер страницы в списке персонажей с рессурса Rick and Morty.
-     * @param model Модель веб страницы.
-     * @return готовая страница purchase.html.
      * В модель страницы загружается следующая информация:
      *      - количество персонажей;
      *      - количество страниц в списке персонажей;
      *      - номера предыдущей, текущей и следующей страниц;
      *      - список персонажей.
+     * @param page номер страницы в списке персонажей с рессурса Rick and Morty.
+     * @param model Модель веб страницы.
+     * @return готовая страница регистрации register.html.
      */
     @GetMapping("/characters/page/{page}")
     public String getCharacters(@PathVariable("page") String page, Model model) {
@@ -164,6 +174,7 @@ public class StorefrontWebController {
     /**
      * Зарегистрировать нового покупателя.
      * @param id уникальный номер покупателя.
+     * @param model Модель веб страницы.
      * @return страница сообщений о результате регистрации.
      */
     @GetMapping("/characters/register/{id}")
@@ -175,12 +186,12 @@ public class StorefrontWebController {
 
     /**
      * Метод модификации информационной части о странице героев перед её добавлением в модель.
-     * @param allCharacters Информация полученная с рессурса Rick and Morty.
-     * @return Модифицированная информационная часть о странице.
      * Пояснение: В информационной части прриходят ссылки на предыдущую и следующую странцы,
      * но для загрузки в модель ссылки не нужны, но нужны номера страниц,
      * поэтому ссылки меняются на номера страниц.
      * Если со ссылкой проблема, то она меняется на страницу 1.
+     * @param allCharacters Информация полученная с рессурса Rick and Morty.
+     * @return Модифицированная информационная часть о странице.
      */
     private CharacterInfo getCharacterInfo(Characters allCharacters) {
         CharacterInfo characterInfo = allCharacters.getInfo();

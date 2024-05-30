@@ -15,7 +15,6 @@ import ru.gb.group5984.model.messeges.Message;
 import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.users.Buyer;
 import ru.gb.group5984.model.users.StorageUser;
-import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.service.api.CharacterApiService;
 import ru.gb.group5984.service.db.ServerDbService;
 import ru.gb.group5984.service.db.UserDbService;
@@ -53,7 +52,7 @@ public class StoreServerRestController {
 
     /**
      * Добавить единицу товара на склад - закупить у поставщика.
-     * @param id номер товара.
+     * @param id уникальный номер товара.
      * @return статус ответа.
      */
     @GetMapping("/characters/add_to_storage/{id}")
@@ -65,7 +64,7 @@ public class StoreServerRestController {
 
     /**
      * Удалить единицу товара со склада.
-     * @param id id товара.
+     * @param id уникальный номер товара.
      * @return статус ответа.
      */
     @TrackUserAction
@@ -88,7 +87,7 @@ public class StoreServerRestController {
 
     /**
      * Переместить единицу товара со склада на полку продаж.
-     * @param id номер товара.
+     * @param id уникальный номер товара.
      * @return статус ответа.
      */
     @GetMapping("/storage/add_to_sale/{id}")
@@ -99,7 +98,7 @@ public class StoreServerRestController {
 
     /**
      * Удалить товар из списка продаж - убрать с витрины.
-     * @param id номер товара.
+     * @param id уникальный номер товара.
      * @return статус ответа.
      */
     @TrackUserAction
@@ -125,7 +124,7 @@ public class StoreServerRestController {
      * Добавить товар в корзину.
      * @param cardId - уникальный номер товара в продаже
      * @param userName - имя покупателя
-     * @return
+     * @return статус ответа.
      */
     @GetMapping("/basket/add_to_basket/{card_id}/{user_name}")
     public ResponseEntity<Message> addToBasket(@PathVariable("card_id") Long cardId
@@ -176,7 +175,7 @@ public class StoreServerRestController {
     }
 
     /**
-     * Поиск пользователя по имени.
+     * Поиск пользователя веб-ресурса по имени.
      * @param name имя пользователя.
      * @return пользователь.
      */

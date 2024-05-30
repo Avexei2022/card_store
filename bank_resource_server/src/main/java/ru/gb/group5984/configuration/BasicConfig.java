@@ -22,9 +22,21 @@ import ru.gb.group5984.aspect.UserActionAspect;
 @Getter
 @Setter
 public class BasicConfig {
+
+    /**
+     * Синхронный клиент REST.
+     */
     private RestTemplate restTemplate;
+
+    /**
+     * Адрес сервиса ресурсов Rick and Morty.
+     */
     private String CLIENT_API;
 
+    /**
+     * Аспект для регистрации действий пользователей и вывода их в консоль.
+     * @return новый экземпляр.
+     */
     @Bean
     public UserActionAspect loginAspect() {
         return new UserActionAspect();

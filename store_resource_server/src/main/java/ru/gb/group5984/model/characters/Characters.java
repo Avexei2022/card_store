@@ -10,6 +10,14 @@ import java.util.List;
  */
 @Data
 public class Characters {
+
+    /**
+     * Информационная часть страницы.
+     */
     CharacterInfo info;
+
+    /**
+     * Список товаров.
+     */
     List<CharacterResult> results;
 }

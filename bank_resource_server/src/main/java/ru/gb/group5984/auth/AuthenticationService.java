@@ -12,18 +12,45 @@ import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.UserRepository;
 import ru.gb.group5984.service.JwtService;
 
+
+/**
+ * Сервис аутентификации.
+ */
 @Service
 @RequiredArgsConstructor
 @Log
 public class AuthenticationService {
 
+    /**
+     * Репозиторий пользователей ресурса.
+     */
     private final UserRepository repository;
+
+    /**
+     * Кодировщик паролей.
+     */
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * Сервис токенов.
+     */
     private final JwtService jwtService;
+
+    /**
+     * Обработчик запросов на аутентификацию.
+     */
     private final AuthenticationManager authenticationManager;
+
+    /**
+     * Конфигуратор аутентификации.
+     */
     private final AuthConfig authConfig;
 
-
+    /**
+     * Регистрация нового пользователя сервиса ресурсов банка.
+     * @param request запрос на регистрацию.
+     * @return токен.
+     */
     public AuthenticationResponse register(RegisterRequest request) {
         log.info("LOG: AuthenticationService.register = " + request.toString());
         var user = User.builder()
@@ -39,6 +66,13 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Аутентификация пользователя сервиса ресурсов банка.
+     * Создан единственный пользователь/владелец сервиса, логин и пароль которого
+     * устанавливается в файле application.yaml.
+     * @param request запрос на аутентификацию.
+     * @return токен
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -46,8 +80,6 @@ public class AuthenticationService {
                         request.getPassword()
                 )
         );
-//        var user = userRepository.findUserByUsername(request.getUsername())
-//                .orElseThrow();
         User user = new User(111L, authConfig.getBankUsername(), authConfig.getBankPassword()
                 ,Role.BANK, true, "", false);
         var jwtToken = jwtService.generateToken(user);

@@ -20,6 +20,7 @@ public interface CharactersApiService {
     /**
      * Зачислить посетителя банка в кандидаты на открытие счета.
      * @param id уникальный номер персонажа - посетителя банка.
+     * @return сообщение о результате сохранения кандидата в базе данных.
      */
     Message saveOneCharacterById(Integer id);
 

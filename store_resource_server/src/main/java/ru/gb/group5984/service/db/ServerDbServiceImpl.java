@@ -23,40 +23,60 @@ import ru.gb.group5984.model.storage.Cards;
 import ru.gb.group5984.model.storage.CardsInfo;
 import ru.gb.group5984.model.storage.CardsStorage;
 import ru.gb.group5984.model.users.Buyer;
-import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.repository.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.NoSuchElementException;
 
 
 /**
  * Сервис склада магазина.
- * Работает с базой данных:
- * - товары на складе;
- * - товары в продаже;
- * - товары в корзине покупателя (зарезервированные)
  */
 @Service
 @RequiredArgsConstructor
 @Log
 public class ServerDbServiceImpl implements ServerDbService {
+    /**
+     * Репозиторий товаров на складе.
+     */
     private final CharacterRepository characterRepository;
+
+    /**
+     * Репозиторий товаров в продаже.
+     */
     private final CardsRepository cardsRepository;
+
+    /**
+     * Репозиторий товаров в корзинах покупателей.
+     */
     private final BasketRepository basketRepository;
+
+    /**
+     * Репозиторий пользователей сервиса ресурсов магазина.
+     */
     private final UserRepository userRepository;
+
+    /**
+     * Репозиторий покупателей - пользователей веб-сервиса магазина.
+     */
     private final BuyerRepository buyerRepository;
+
+    /**
+     * Репозиторий пользователей веб-сервиса склада магазина.
+     */
     private final StorageUserRepository storageUserRepository;
+
+    /**
+     * Уведомитель о событиях.
+     */
     @Autowired
     private ApplicationEventPublisher publisher;
 
     /**
-     * Сохранение единицы товара, закупленного у поставщика,
+     * Сохранить единицу товара, закупленного у поставщика,
      * в базе данных товаров на складе.
-     * @param characterResult Единица товара
+     * @param characterResult Единица товара.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
      */
     @TrackUserAction
@@ -67,8 +87,6 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     /**
      * Получить все товары постранично, хранящиеся на складе.
-     * @param page - номер страницы.
-     * @return список товаров на складе.
      * По умолчанию страница содержит 20 товаров.
      * Список товаров дополнен следующей информацией о нем:
      * - общее количество товаров на складе;
@@ -77,6 +95,8 @@ public class ServerDbServiceImpl implements ServerDbService {
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param page - номер страницы.
+     * @return список товаров на складе.
      */
     @TrackUserAction
     @Override
@@ -102,8 +122,8 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     /**
      * Удалить единицу товара из базы данных товаров на складе.
-     * @param id Id Товара.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param id Id Товара.
      */
     @Override
     @TrackUserAction
@@ -133,9 +153,9 @@ public class ServerDbServiceImpl implements ServerDbService {
     //TODO Реализовать ввод данных от пользователя
     /**
      * Выствить товар на продажу.
-     * @param id - id товара.
      * Устанавливается количество товара и стоимость единицы товара
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param id - id товара.
      */
     @Override
     @TrackUserAction
@@ -153,8 +173,6 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     /**
      * Получить все товары постранично, выставленные на продажу.
-     * @param page - номер страницы.
-     * @return список товаров в продаже.
      * По умолчанию страница содержит 20 товаров.
      * Список товаров дополнен следующей информацией о нем:
      * - общее количество товаров в продаже;
@@ -163,6 +181,8 @@ public class ServerDbServiceImpl implements ServerDbService {
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param page - номер страницы.
+     * @return список товаров в продаже.
      */
     @TrackUserAction
     @Override
@@ -190,8 +210,8 @@ public class ServerDbServiceImpl implements ServerDbService {
     //TODO добавить проверку на резервирование покупателем
     /**
      * Удалить товар из списка продаж / убрать с полки.
-     * @param id - id товара.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param id уникальный номер товара.
      */
     @Override
     @TrackUserAction
@@ -200,9 +220,9 @@ public class ServerDbServiceImpl implements ServerDbService {
     }
 
     /**
-     * Закупка единицы товара у поставщика и сохранение на складе магазина
-     * @param cardsStorage единица товара
+     * Закупка единицы товара у поставщика и сохранение на складе магазина.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param cardsStorage единица товара
      */
     @TrackUserAction
     @Override
@@ -212,12 +232,12 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     /**
      * Переместить единицу товара с полки в корзину покупателя.
-     * @param cardId - уникальный номер товара в продаже.
-     * @param userName - имя/логин покупателя.
      *  При наличии товара на полке его количество уменьшается на единицу.
      *  Если товара на полке больше нет, то данная партия товара удаляется из списка.
      *  В корзине сохраняется информация о номере партии товара,
      *  а также дата и время перемещения товара в корзину.
+     * @param cardId - уникальный номер товара в продаже.
+     * @param userName - имя/логин покупателя.
      */
     //TODO доработать ввод количества товара и проверку на валидность
     @Override
@@ -253,19 +273,18 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     /**
      * Возврат единицы товара из корзины покупателя на полку магазина.
-     * @param id id - товара в корзине.
      * Проверяется наличие партии данного товара на полке.
      * Если товар из данной партии в наличии на полке, то его количество увеличивается на количество товара в корзине.
      * Если товар из данной партии на полке отсутствует,
      * то восстанавливается партия товара на полке в количестве товара из корзины.
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param id уникальный номер товара в корзине.
      */
     @Override
     @TrackUserAction
     @Transactional
     public void returnCardFromBasketToSale(Long id) {
         CardInBasket cardInBasket = basketRepository.findById(id).orElseThrow();
-        log.info("TEST" + cardInBasket.toString());
         Long cardsStorageId = cardInBasket.getCardsStorageId();
         if (cardsRepository.existsById(cardsStorageId)) {
             CardsStorage cardsStorage = cardsRepository.findById(cardsStorageId).orElseThrow();
@@ -284,9 +303,6 @@ public class ServerDbServiceImpl implements ServerDbService {
 
     /**
      * Получить все товары постранично, зарезервированные покупателем в корзине.
-     * @param page - запрашиваемая пользователем страница
-     * @param userName - имя/логин покупателя.
-     * @return список товаров в корзине
      * По умолчанию страница содержит 20 товаров
      * Список товаров дополнен следующей информацией о нем:
      * - общее количество товаров в корзине;
@@ -296,6 +312,9 @@ public class ServerDbServiceImpl implements ServerDbService {
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
      * Если следующей страницы нет, то проставляется номер первой страницы
      * При вызове метода в консоль выводится наименование метода, его аргументы и время исполнения.
+     * @param page - запрашиваемая пользователем страница
+     * @param userName - имя/логин покупателя.
+     * @return список товаров в корзине
      */
     @TrackUserAction
     @Override
@@ -338,7 +357,7 @@ public class ServerDbServiceImpl implements ServerDbService {
     /**
      * Получить общую сумму товаров в корзине покупателя.
      * @param userId - уникальный номер покупателя.
-     * @return сумма товаров в корзине
+     * @return сумма товаров в корзине.
      */
     @Override
     public BigDecimal getTotalPriceFromBasket(Long userId) {
@@ -358,6 +377,10 @@ public class ServerDbServiceImpl implements ServerDbService {
         basketRepository.deleteAllByUser_id(userId);
     }
 
+    /**
+     * Регистрация нового пользователя.
+     * @param characterResult пользователь.
+     */
     @Override
     public void registerNewUser(CharacterResult characterResult) {
 

@@ -14,13 +14,49 @@ import java.util.Date;
 @Setter
 @Getter
 public class Card {
+
+    /**
+     * Уникальный номер.
+     */
     private Integer id;
+
+    /**
+     * Имя.
+     */
     private String name;
+
+    /**
+     * Статус.
+     */
     private String status;
+
+    /**
+     * Особенности.
+     */
     private String species;
+
+    /**
+     * Тип.
+     */
     private String type;
+
+    /**
+     * Пол.
+     */
     private String gender;
+
+    /**
+     * Изображение.
+     */
     private String image;
+
+    /**
+     * Ссылка на страницу персонажа.
+     */
     private String url;
+
+    /**
+     * Дата создания.
+     */
     private Date created;
 }

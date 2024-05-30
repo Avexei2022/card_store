@@ -6,12 +6,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Класс ответа аутентификации.
+ * Ответ аутентификации.
  */
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AuthenticationResponse {
+
+    /**
+     * Токен.
+     */
     private String token;
 }

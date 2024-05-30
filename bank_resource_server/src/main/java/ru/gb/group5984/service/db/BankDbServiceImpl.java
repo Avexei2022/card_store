@@ -39,7 +39,7 @@ public class BankDbServiceImpl implements BankDbService {
 
     /**
      * Сохранение данных посетителя банка - кандидата перед открытием счета.
-     * @param characterResult Данные посетителя.
+     * @param characterResult данные посетителя.
      */
     @Override
     public void saveOneVisitor(CharacterResult characterResult) throws RuntimeException{
@@ -52,6 +52,7 @@ public class BankDbServiceImpl implements BankDbService {
 
     /**
      * Получить полный список посетителей банка - кандидатов на открытие счета.
+     * @param page номер страницы в списке кандидатов.
      * @return список кандидатов.
      */
     @Override
@@ -76,8 +77,9 @@ public class BankDbServiceImpl implements BankDbService {
     }
 
     /**
-     * Удалить посетителя банка из списка кандидатов на открытие счета.
+     * Удалить поетителя банка из списка кандидатов на открытие счета
      * @param id уникальный номер кандидата.
+     * @return сообщение о результате удаления.
      */
     @Override
     public Message deleteVisitorById(Integer id){
@@ -101,8 +103,8 @@ public class BankDbServiceImpl implements BankDbService {
 
     /**
      * Открыть счет клиенту.
-     * @param id - уникальный номер клиента.
-     * Баланс счета устанавливается в 50 у.е.
+     * @param id уникальный номер кандидата.
+     * @return сообщение о результате сохранения.
      */
     //TODO доработать тему баланса счета
     @Override
@@ -119,7 +121,7 @@ public class BankDbServiceImpl implements BankDbService {
         if (characterResult != null) {
             Client client = new Client();
             client.setClientDetail(characterResult);
-            client.setBalance(BigDecimal.valueOf(50000.00));
+            client.setBalance(BigDecimal.valueOf(50.00));
             try {
                 clientsRepository.save(client);
             } catch (RuntimeException e) {
@@ -132,8 +134,8 @@ public class BankDbServiceImpl implements BankDbService {
     }
 
     /**
-     * Получить список клиентов банка
-     * @return список клиентов
+     * Получить список клиентов банка.
+     * @return список клиентов.
      */
     @Override
     public List<CharacterResult> getAllClients() {
@@ -143,15 +145,15 @@ public class BankDbServiceImpl implements BankDbService {
 
     /**
      * Получить список клиентов банка постранично.
-     * @param page - запрашиваемая пользователем страница
-     * @return список клиентов
-     * По умолчанию страница содержит информацию о 20 клиентах
+     * По умолчанию страница содержит информацию о 20 клиентах.
      * Список клиентов дополнен следующей информацией о нем:
      * - общее количество клиентов банка;
      * - количество страниц;
      * - номера текущей, предыдущей и следующей страниц.
      * Если предыдущей страницы нет, то проставляется номер последней страницы.
-     * Если следующей страницы нет, то проставляется номер первой страницы
+     * Если следующей страницы нет, то проставляется номер первой страницы.
+     * @param page - запрашиваемая пользователем страница.
+     * @return список клиентов.
      */
 
     @Override
@@ -196,8 +198,9 @@ public class BankDbServiceImpl implements BankDbService {
     }
 
     /**
-     * Сохранить данные о клиенте банка
-     * @param client клиент
+     * Сохранить данные о клиенте банка.
+     * @param client клиент.
+     * @return сообщение о результате сохранения.
      */
     @Override
     public Message saveClient(Client client) {
@@ -238,8 +241,8 @@ public class BankDbServiceImpl implements BankDbService {
     }
 
     /**
-     * Проведение транзакции между счетами клиентов банка
-     * @param transaction Данные транзакции
+     * Проведение транзакции между счетами клиентов банка.
+     * @param transaction Данные транзакции.
      */
     @Override
     @Transactional

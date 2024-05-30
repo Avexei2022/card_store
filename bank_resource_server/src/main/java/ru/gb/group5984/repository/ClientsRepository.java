@@ -6,7 +6,7 @@ import org.springframework.stereotype.Repository;
 import ru.gb.group5984.model.clients.Client;
 
 /**
- * Репозиторий клиентов банка
+ * Репозиторий клиентов банка.
  */
 @Repository
 public interface ClientsRepository extends JpaRepository<Client, Long> {

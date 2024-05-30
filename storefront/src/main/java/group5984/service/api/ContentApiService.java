@@ -6,8 +6,7 @@ import group5984.model.messeges.Message;
 
 
 /**
- * Интерфейс сервиса витрины / торгового зала магазина.
- * Готовит запросы на склад и получает от него соответствующие ответы
+ * Интерфейс сервиса взаимодействия с API сервиса ресурсов магазина.
  */
 public interface ContentApiService {
 
@@ -16,7 +15,7 @@ public interface ContentApiService {
      * @param page запрашиваемая страница товаров.
      * @return Список товаров на полке.
      */
-    Cards getAllFromSale(String page);
+    Cards getPageFromSale(String page);
 
     /**
      * Получить список товаров в корзине покупателя.
@@ -27,20 +26,23 @@ public interface ContentApiService {
     Basket getPageFromBasket(String userName, String page);
 
     /**
-     * Добавить товар в корзину покупателя
-     * @param id - id товара
+     * Добавить товар в корзину покупателя.
+     * @param id - уникальный номер товара.
      * @param userName - имя пользователя.
+     * @return сообщение о результате.
      */
     Message addToBasketById(Integer id, String userName);
 
     /**
      * Вернуть товар из корзины покупателя на полку
-     * @param id - id товара
+     * @param id - уникальный номер товара.
      */
     void deleteFromBasketById(Integer id);
 
     /**
-     * Оплатить товар в корзине
+     * Оплатить товар в корзине.
+     * @param userName имя пользователя.
+     * @return сообщение о результате.
      */
     Message basketPay(String userName);
 

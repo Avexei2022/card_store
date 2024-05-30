@@ -7,6 +7,7 @@ import java.util.Optional;
 
 /**
  * Репозиторий покупателей - пользователей веб-ресурса магазина.
+ *
  */
 public interface BuyerRepository extends JpaRepository<Buyer, Long> {
 

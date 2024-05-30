@@ -31,8 +31,8 @@ public class WebSecurityConfig{
     }
 
     /**
-     * Кодировщик паролей
-     * @return кодировщик
+     * Кодировщик паролей.
+     * @return кодировщик.
      */
     @Bean
     public BCryptPasswordEncoder passwordEncoder() {
@@ -57,8 +57,8 @@ public class WebSecurityConfig{
     /**
      * Правила фильтрации.
      * @param http защищенный http запрос.
-     * @return
-     * @throws Exception
+     * @return цепочка фильтров.
+     * @throws Exception общие исключения.
      */
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

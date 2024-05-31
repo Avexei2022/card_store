@@ -14,6 +14,11 @@ import org.springframework.cloud.netflix.eureka.server.EnableEurekaServer;
 @SpringBootApplication
 @EnableEurekaServer
 public class EurekaServerApp {
+
+    /**
+     * Точка входа.
+     * @param args аргументы.
+     */
     public static void main(String[] args) {
         SpringApplication.run(EurekaServerApp.class, args);
     }

@@ -34,7 +34,15 @@ import java.util.NoSuchElementException;
 @RequiredArgsConstructor
 @Log
 public class BankDbServiceImpl implements BankDbService {
+
+    /**
+     * Репозиторий кандидатов в клиенты банка.
+     */
     private final VisitorRepository visitorRepository;
+
+    /**
+     * Репозиторий клиентов.
+     */
     private final ClientsRepository clientsRepository;
 
     /**

@@ -24,5 +24,4 @@ public interface CharactersApiService {
      */
     Message saveOneCharacterById(Integer id);
 
-
 }

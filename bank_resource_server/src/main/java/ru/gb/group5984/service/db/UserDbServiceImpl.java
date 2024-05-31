@@ -17,6 +17,10 @@ import ru.gb.group5984.repository.UserRepository;
 @RequiredArgsConstructor
 @Getter
 public class UserDbServiceImpl implements UserDbService{
+
+    /**
+     * Репозиторий пользователей данного ресурса.
+     */
     private final UserRepository userRepository;
 
     /**

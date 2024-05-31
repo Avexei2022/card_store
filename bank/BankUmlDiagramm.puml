@@ -1,0 +1,251 @@
+@startuml
+
+class WebSecurityConfig {
+@Bean UserDetailsService userDetailsService()
+@Bean BCryptPasswordEncoder passwordEncoder()
+@Bean DaoAuthenticationProvider authenticationProvider()
+@Bean SecurityFilterChain securityFilterChain(HttpSecurity http)
+}
+
+interface UserDetailsService {}
+
+WebSecurityConfig <|- UserDetailsService
+
+class User {
+Long id
+String username
+String password
+String role
+boolean enabled
+boolean credentialsNonExpired
+boolean accountNonExpired
+boolean accountNonLocked
+ArrayList<Map<String, String>> authorities
+}
+
+class ThisUserDetails implements UserDetails{
+private User user
+Collection<? extends GrantedAuthority> getAuthorities()
+String getPassword()
+String getUsername()
+boolean isAccountNonExpired()
+boolean isAccountNonLocked()
+boolean isCredentialsNonExpired()
+boolean isEnabled()
+}
+
+interface UserDetails {}
+
+User -|> ThisUserDetails
+
+
+
+class UserDetailsServiceImpl implements UserDetailsService{
+AuthenticationService authenticationService
+UserDetails loadUserByUsername(String username)
+}
+
+UserDetailsServiceImpl <|- AuthenticationService
+UserDetailsServiceImpl <|-- UserDetails
+
+class BankApp {
+main(String[] args)
+@Bean RestTemplate template()
+@Bean HttpHeaders headers()
+}
+
+
+class AuthenticationRequest {
+String username
+String password
+String getRequest()
+}
+
+class AuthenticationResponse {
+String token
+}
+
+class AuthenticationService {
+BasicConfig basicConfig
+AuthConfig authConfig
+RestTemplate restTemplate
+HttpHeaders headers
+HttpEntity<String> getRequestEntity()
+User getUserByUserName(String name)
+String getToken(String username, String password)
+}
+
+AuthenticationService <|- BasicConfig
+AuthenticationRequest --|> AuthenticationService
+AuthenticationResponse --|> AuthenticationService
+
+BankApp --|> AuthenticationService
+AuthenticationService <|-- AuthConfig
+
+class AuthConfig {
+String bankUsername
+String bankPassword
+}
+
+interface TrackUserAction {
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+}
+
+class UserActionAspect {
+@Around("@annotation(TrackUserAction)")
+Object userActionLog(ProceedingJoinPoint proceedingJoinPoint)
+}
+
+UserActionAspect <|-- BasicConfig
+UserActionAspect -|> TrackUserAction
+
+class BasicConfig {
+String BANK_API
+RestTemplate restTemplate
+@Bean UserActionAspect loginAspect()
+}
+
+BasicConfig <|-- BankApp
+
+
+interface BankApiService{
+void saveOneVisitor(CharacterResult characterResult)
+Message deleteVisitorById(Integer id)
+Characters getPageCandidates(String page)
+Message saveOneClientById(Integer id)
+ClientsList getPageBankClients(Integer page)
+Message deleteClientById(Integer id)
+Message saveClient(Client client)
+}
+
+class BankApiServiceImpl implements BankApiService{
+BasicConfig basicConfig
+AuthenticationService authenticationService
+RestTemplate restTemplate
+void saveOneVisitor(CharacterResult characterResult)
+Message deleteVisitorById(Integer id)
+Characters getPageCandidates(String page)
+Message saveOneClientById(Integer id)
+ClientsList getPageBankClients(Integer page)
+Message deleteClientById(Integer id)
+Message saveClient(Client client)
+}
+
+BasicConfig -|> BankApiServiceImpl
+AuthenticationService -|> BankApiServiceImpl
+BankApp --|> BankApiServiceImpl
+BankApiServiceImpl <|- ClientsList
+BankApiServiceImpl <|- Characters
+
+class BankWebController{
+CharactersApiService charactersApiService
+BankApiService bankApiService
+String redirectToFirstPage()
+String getVisitors(@PathVariable("page") String page
+            , Model model)
+String addToBank(@PathVariable("id") Integer id
+            , @PathVariable("page") String page
+            , Model model)
+String deleteCandidateFromBank(@PathVariable("id") Integer id
+            , @PathVariable("page") String page
+            , Model model)
+String getPageCandidates(@PathVariable("page") String page
+            , Model model)
+String addCandidateToClient(@PathVariable("id") Integer id
+              , @PathVariable("page") String page
+              , Model model)
+String deleteClient(@PathVariable("id") Integer id
+            , @PathVariable("page") String page
+            , Model model)
+String getAllCardsInSale(@PathVariable("page") Integer page
+            , Model model)
+String updateClient(Client client,
+            Model model)
+}
+
+BankWebController <|-- BankApiService
+CharactersApiService -|> BankWebController
+TrackUserAction -|> BankWebController
+
+interface CharactersApiService {
+Characters getPageCharacters(String page)
+Message saveOneCharacterById(Integer id)
+}
+
+class CharactersApiServiceImpl implements CharactersApiService {
+BasicConfig basicConfig
+RestTemplate restTemplate
+HttpHeaders headers
+HttpEntity<String> getRequestEntity()
+Characters getPageCharacters(String page)
+Message saveOneCharacterById(Integer id)
+}
+
+BasicConfig --|> CharactersApiServiceImpl
+BankApp -|> CharactersApiServiceImpl
+CharactersApiServiceImpl <|- Characters
+
+
+class ClientsList {
+ClientsListInfo info
+List<Client> clientList
+}
+
+ClientsList <|- ClientsListInfo
+ClientsList <|- Client
+
+class Client {
+Long id
+CharacterResult clientDetail
+BigDecimal balance
+}
+
+Client <|- CharacterResult
+
+class ClientsListInfo{
+Long count
+Integer pages
+Integer next
+Integer current
+Integer prev
+}
+
+class Message {
+String message
+}
+
+Message -|> BankWebController
+Message --|> BankApiServiceImpl
+Message --|> CharactersApiServiceImpl
+
+class CharacterResult{
+Integer id
+String name
+String status
+String species
+String type
+String gender
+String image
+String url
+Date created
+}
+
+class Characters {
+CharacterInfo info
+List<CharacterResult> results
+}
+
+Characters <|- CharacterResult
+
+Characters <|- CharacterInfo
+
+class CharacterInfo{
+Integer count
+Integer pages
+String next
+String prev
+}
+
+
+@enduml

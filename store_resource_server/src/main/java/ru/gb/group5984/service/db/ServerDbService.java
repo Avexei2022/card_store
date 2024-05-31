@@ -34,6 +34,7 @@ public interface ServerDbService {
     /**
      * Удалить единицу товара из базы данных товаров на складе.
      * @param id уникальный номер товара.
+     * @return сообщение о результате удаления товара.
      */
     Message deleteFromStorageById(Integer id);
 

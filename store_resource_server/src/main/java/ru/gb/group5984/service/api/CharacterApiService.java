@@ -25,6 +25,7 @@ public interface CharacterApiService {
     /**
      * Оплата товара из корзины покупателя через банк.
      * @param userName имя/логин покупателя.
+     * @return сообщение о результате платежа.
      */
     Message basketPay(String userName);
 

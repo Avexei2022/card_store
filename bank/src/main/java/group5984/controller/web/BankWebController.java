@@ -1,5 +1,6 @@
 package group5984.controller.web;
 
+import group5984.aspect.TrackUserAction;
 import group5984.model.clients.Client;
 import group5984.model.clients.ClientsList;
 import group5984.model.clients.ClientsListInfo;
@@ -75,7 +76,6 @@ public class BankWebController {
             model.addAttribute("message", e.getMessage());
             return "message";
         }
-
     }
 
     /**
@@ -152,6 +152,7 @@ public class BankWebController {
      * @return возврат ссылки на соответствующую страницу кандидатов банка
      * или переход к станице сообщений message.html.
      */
+    @TrackUserAction
     @GetMapping("/candidates/add_to_client/{id}/{page}")
     public String addCandidateToClient(@PathVariable("id") Integer id
             , @PathVariable("page") String page, Model model) {

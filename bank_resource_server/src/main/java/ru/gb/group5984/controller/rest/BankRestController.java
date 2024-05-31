@@ -27,7 +27,6 @@ import java.util.NoSuchElementException;
  * REST Контроллер банка.
  * Проверка свагером http://localhost:8085/swagger-ui/index.html
  */
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/bank_server")

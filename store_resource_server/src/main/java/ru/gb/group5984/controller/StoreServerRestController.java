@@ -32,11 +32,32 @@ import java.util.NoSuchElementException;
 @RequestMapping("/store_server")
 @Log
 public class StoreServerRestController {
+
+    /**
+     *
+     *  Сервис склада магазина.
+     *
+     */
     private final ServerDbService serverDbService;
+
+    /**
+     * Сервис пользователей.
+     */
     private final UserDbService userDbService;
+
+    /**
+     * Сервис взаимодействия с API ресурса Rick and Morty
+     */
     private final CharacterApiService characterApiService;
 
+    /**
+     * Метрика: счетчик товаров добавленных на склад.
+     */
     private final Counter addCardToStorageCounter = Metrics.counter("add_card_to_storage_ count");
+
+    /**
+     * Метрика: счетчик товаров добавленных в корзины покупателей.
+     */
     private final Counter addCardToBasketCounter = Metrics.counter("add_card_to_basket_count");
 
     /**

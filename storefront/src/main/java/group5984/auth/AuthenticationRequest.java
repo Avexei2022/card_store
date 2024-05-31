@@ -26,7 +26,8 @@ public class AuthenticationRequest {
     String password;
 
     /**
-     * @return Строка/тело запроса в формате JSON.
+     * Получить тело запроса в формате JSON.
+     * @return Строка/тело запроса.
      */
     public String getRequest() {
         return "{\"username\": \""

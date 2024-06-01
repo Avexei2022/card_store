@@ -1,0 +1,522 @@
+@startuml
++interface TrackUserAction {
+}
+
+TrackUserAction .> UserActionAspect
+
++class UserActionAspect {
++Object userActionLog(
+ProceedingJoinPoint proceedingJoinPoint)
+}
+
++class AuthConfig {
+-String username;
+-String password;
+-String bankUsername;
+-String bankPassword;
+}
+
++class AuthenticationController {
+-AuthenticationService authenticationService;
++ResponseEntity<AuthenticationResponse> register(
+            @RequestBody RegisterRequest request)
+ +ResponseEntity<AuthenticationResponse> authenticate(
+            @RequestBody AuthenticationRequest request)
+}
+
+AuthenticationController --> AuthenticationService
+
++class AuthenticationRequest {
+-String username;
+-String password;
++String getRequest()
+}
+
++class AuthenticationResponse {
+-String token;
+}
+
++class AuthenticationService {
+-final BuyerRepository buyerRepository;
+-final PasswordEncoder passwordEncoder;
+-final JwtService jwtService;
+-final AuthenticationManager authenticationManager;
+-final BasicConfig basicConfig;
+-final AuthConfig authConfig;
+-RestTemplate restTemplate;
+-HttpHeaders headers;
++AuthenticationResponse buyerRegister(RegisterRequest request)
++AuthenticationResponse authenticate(AuthenticationRequest request)
++HttpHeaders getHeaders()
+-String getToken(String username, String password)
+}
+
+AuthenticationService --> BuyerRepository
+ApplicationConfig <-- AuthenticationService
+JwtService <-- AuthenticationService
+BasicConfig <-- AuthenticationService
+AuthConfig <-- AuthenticationService
+StoreServerApp <-- AuthenticationService
+AuthenticationResponse <. AuthenticationService
+AuthenticationRequest <. AuthenticationService
+RegisterRequest <. AuthenticationService
+
++class RegisterRequest {
+-String username;
+-String password;
+-String email;
+}
+
+
+
++class ApplicationConfig {
+-final AuthConfig authConfig;
++ @Bean UserDetailsService userDetailsService()
++ @Bean AuthenticationProvider authenticationProvider()
++ @Bean PasswordEncoder passwordEncoder()
++ @Bean AuthenticationManager authenticationManager(
+AuthenticationConfiguration config)
+}
+
+AuthConfig <- ApplicationConfig
+
++class BasicConfig {
+-String CHARACTER_API;
+-String BANK_API;
+-String DEBIT_USER;
+- RestTemplate restTemplate;
++@Bean UserActionAspect loginAspect()
+}
+
+BasicConfig -> StoreServerApp
+
+
++class IntegrationConfig {
++@Bean MessageChannel messageInputChannel()
++ @Bean MessageChannel fileWriterChannel()
++@Bean @Transformer GenericTransformer<CardInBasket, String> messageTransformer()
++@Bean @Transformer GenericTransformer<CardsStorage, String> notifyUser()
++@Bean @ServiceActivator FileWritingMessageHandler fileMessageHandler()
+}
+
+IntegrationConfig <.ServerDbServiceImpl
+
++class JwtAuthenticationFilter {
+-final JwtService jwtService;
+-final UserDetailsService userDetailsService;
+#void doFilterInternal()
+}
+
+JwtAuthenticationFilter -|> OncePerRequestFilter
+
+class OncePerRequestFilter {}
+
++class SecurityConfig {
+-final JwtAuthenticationFilter jwtAuthFilter;
+-final AuthenticationProvider authenticationProvider;
++@Bean SecurityFilterChain securityFilterChain(HttpSecurity http)
+}
+
+ApplicationConfig <-- SecurityConfig
+SecurityConfig --> JwtAuthenticationFilter
+
++class StorageRestExceptionController {
++ExceptionBody excessAmount(ExcessAmountException e)
++ExceptionBody resourceNotFound(ResourceNotFoundException e)
+}
+
+StorageRestExceptionController ..> ExceptionBody
+ExcessAmountException <.. StorageRestExceptionController
+ResourceNotFoundException <.. StorageRestExceptionController
+
+
++class StoreServerRestController {
+-final ServerDbService serverDbService;
+-final UserDbService userDbService;
+-final CharacterApiService characterApiService;
+-final Counter addCardToStorageCounter = Metrics.counter;
+-final Counter addCardToBasketCounter = Metrics.counter;
++ResponseEntity<Characters> getCharactersPage (@PathVariable("page") String page)
++ResponseEntity<Void> addToStorage(@PathVariable("id") Integer id)
++ResponseEntity<Message> deleteFromStorageById(@PathVariable("id") Integer id)
++ResponseEntity<Characters> getPageCharactersFromStorage(@PathVariable("page") String page)
++ResponseEntity<Void> addToSale(@PathVariable("id") Integer id)
++ResponseEntity<Void> deleteFromSale(@PathVariable("id") Long id)
++ResponseEntity<Cards> getPageCardsInSale(@PathVariable("page")
++ResponseEntity<Message> addToBasket(@PathVariable("card_id") Long cardId
+            , @PathVariable("user_name") String userName)
++ResponseEntity<Basket> getAllFromBasket(
+@PathVariable("page") Integer page
+,@PathVariable("user_name") String userName)
++ResponseEntity<Void> deleteFromBasket(@PathVariable("id") Long id)
++ResponseEntity<Message> basketPay(@PathVariable("user_name") String userName)
++ResponseEntity<Buyer> findUserByName(@PathVariable("name") String name)
++ResponseEntity<StorageUser> findStorageUserByName(@PathVariable("name") String name)
++ResponseEntity<Message> registerNewUser(@PathVariable("id") Integer id)
+}
+
+ServerDbService <-- StoreServerRestController
+UserDbService <-- StoreServerRestController
+CharacterApiService <-- StoreServerRestController
+StoreServerRestController .> TrackUserAction
+
++class Basket {
+-BasketInfo info;
+-List<CardInBasket> cardInBasketList;
+}
+
+Basket -> BasketInfo
+
+
++class BasketInfo {
+-Long count;
+-Integer pages;
+-Integer next;
+-Integer current;
+-Integer prev;
+-BigDecimal totalPrice;
+}
+
++class CardInBasket {
+-Long id;
+-CharacterResult card;
+-Integer amount;
+-BigDecimal price;
+-Long cardsStorageId;
+-LocalDate created;
+-Buyer user;
+}
+
+CardInBasket <- Basket
+
++class CharacterInfo {
+-Integer count;
+-Integer pages;
+-String next;
+-String prev;
+}
+
++class CharacterResult {
+-Integer id;
+-String name;
+-String status;
+-String species;
+-String type;
+-String gender;
+-String image;
+-String url;
+-Date created;
+}
+
+CharacterResult <- Characters
+
++class Characters {
+-CharacterInfo info;
+- List<CharacterResult> results;
+}
+
+Characters --> CharacterInfo
+
+
+
++class Message {
+-String message;
+}
+
++class NewProductEvent{
+-final CardsStorage cardsStorage;
++NewProductEvent(Object source, CardsStorage cardsStorage)
+}
+
+CardsStorage <-- NewProductEvent
+NewProductEvent -|> ApplicationEvent
+
+class ApplicationEvent {}
+
++class Cards {
+-CardsInfo info;
+-List<CardsStorage> cardsStorageList;
+}
+
++class CardsInfo {
+-Long count;
+-Integer pages;
+-Integer next;
+-Integer current;
+-Integer prev;
+}
+
++class CardsStorage {
+-Long id;
+-CharacterResult card;
+-Integer amount;
+- BigDecimal price;
+}
+
+CardsStorage <- Cards
+Cards -> CardsInfo
+
++class Transaction {
+-String creditName;
+- String debitName;
+- BigDecimal transferAmount;
+}
+
++class Buyer implements UserDetails {
+-Long id;
+-String username;
+-String password;
+-Role role;
+-Boolean enabled;
+- String email;
+-Boolean isSubscribe;
++Collection<? extends GrantedAuthority> getAuthorities()
++boolean isAccountNonExpired()
++boolean isAccountNonLocked()
++boolean isCredentialsNonExpired()
++boolean isEnabled()
+}
+
++enum Role {
+    USER,
+    ADMIN,
+    BANK
+}
+
+StorageUser --> Role
+Buyer --> Role
+User --> Role
+
++class StorageUser implements UserDetails {
+-Long id;
+-String username;
+-String password;
+-Role role;
+-Boolean enabled;
+- String email;
+-Boolean isSubscribe;
++Collection<? extends GrantedAuthority> getAuthorities()
++boolean isAccountNonExpired()
++ boolean isAccountNonLocked()
++ boolean isCredentialsNonExpired()
++boolean isEnabled()
+}
+
++class User implements UserDetails {
+-Long id;
+-String username;
+-String password;
+-Role role;
+-Boolean enabled;
+-String email;
+-Boolean isSubscribe;
++Collection<? extends GrantedAuthority> getAuthorities()
++boolean isAccountNonExpired()
++boolean isAccountNonLocked()
++boolean isCredentialsNonExpired()
++boolean isEnabled()
+}
+
++interface BasketRepository extends JpaRepository<CardInBasket, Long> {
++Page<CardInBasket> findAllByUser_id(
+Long userId, Pageable pageable);
++List<CardInBasket> findAllByUser_id(Long userId);
++void deleteAllByUser_id(Long userId);
+}
+
++interface BuyerRepository extends JpaRepository<Buyer, Long> {
++Optional<Buyer> findUserByUsername(String username);
+}
+
++interface CardsRepository extends JpaRepository<CardsStorage, Long> {
+}
+
++interface CharacterRepository extends JpaRepository<CharacterResult, Integer> {
+}
+
++interface StorageUserRepository extends JpaRepository<StorageUser, Long> {
++Optional<StorageUser> findUserByUsername(String username);
+}
+
++interface UserRepository extends JpaRepository<User, Long> {
++ Optional<User> findUserByUsername(String username);
+}
+
++interface CharacterApiService {
++Characters getPageCharacters(String page);
++void saveOneCharacterById(Integer id);
++Message basketPay(String userName);
++Message registerNewUser(Integer id);
+}
+
++class CharacterApiServiceImpl{
+-final ServerDbService serverDbService;
+-final BasicConfig basicConfig;
+-final AuthenticationService authenticationService;
+-final FileGateway fileGateway;
+- final UserDbService userDbService;
+- RestTemplate restTemplate;
+-HttpHeaders headers;
+-HttpEntity<String> getRequestEntity()
++Characters getPageCharacters(String page)
++void saveOneCharacterById(Integer id)
++Message basketPay(String userName)
+-void integrationMessage()
++Message registerNewUser(Integer id)
+}
+
+CharacterApiServiceImpl ..|> CharacterApiService
+ServerDbService <- CharacterApiServiceImpl
+AuthenticationService <-- CharacterApiServiceImpl
+CharacterApiServiceImpl --> UserDbService
+BasicConfig <-- CharacterApiServiceImpl
+StoreServerApp <-- CharacterApiServiceImpl
+CharacterApiServiceImpl -> FileGateway
+CharacterApiServiceImpl .> Transaction
+
+Message <. CharacterApiServiceImpl
+
++class JwtService {
+-static final String SECRET_KEY = ;
++String extractUsername(String token)
++<T> T extractClaim(String token, Function<Claims, T> claimsResolver)
++String generateToken(
++String generateToken(
+            Map<String, Object> extraClaims,
+            UserDetails userDetails)
+-boolean isTokenValid(String token, UserDetails userDetails)
+-boolean isTokenExpired(String token)
+-Date extractExpiration(String token)
+-Claims extractAllClaims(String token)
+-Key getSigningKey()
+}
+JwtService .> UserDetails
+
++interface ServerDbService {
++void saveOneCharacter(CharacterResult characterResult);
++Characters getPageCharactersFromStorage(Integer page);
++Message deleteFromStorageById(Integer id);
++void saveOneCardById(Integer id);
++Cards getPageCardsStorageFromSale(Integer page);
++void deleteCardFromSaleById(Long id);
++void saveCardStorage(CardsStorage cardsStorage);
++void moveCardToBasket(Long cardId, String userName);
++void returnCardFromBasketToSale(Long id);
++Basket getPageFromBasket(Integer page, String userName);
++List<CardInBasket> getAllFromBasket();
++BigDecimal getTotalPriceFromBasket(Long userId);
++void deleteAllFromBasket(Long userId);
++void registerNewUser(CharacterResult characterResult);
+}
+
+ServerDbServiceImpl ..|> ServerDbService
+ServerDbServiceImpl ..> CharacterResult
+ServerDbServiceImpl ..> Characters
+ServerDbServiceImpl ....> Cards
+ServerDbServiceImpl ....> CardsStorage
+ServerDbServiceImpl ...> Basket
+ServerDbServiceImpl ...> CardInBasket
+ServerDbServiceImpl .> StorageRestExceptionController
+ServerDbServiceImpl .> Message
+
++class ServerDbServiceImpl {
+-final CharacterRepository characterRepository;
+-final CardsRepository cardsRepository;
+-final BasketRepository basketRepository;
+-final UserRepository userRepository;
+-final BuyerRepository buyerRepository;
+-final StorageUserRepository storageUserRepository;
+-ApplicationEventPublisher publisher;
++void saveOneCharacter(CharacterResult characterResult)
++Characters getPageCharactersFromStorage(Integer page)
++Message deleteFromStorageById(Integer id)
++void saveOneCardById(Integer id)
++Cards getPageCardsStorageFromSale(Integer page)
++void deleteCardFromSaleById(Long id)
++void saveCardStorage(CardsStorage cardsStorage)
++void moveCardToBasket(Long cardId, String userName)
++void returnCardFromBasketToSale(Long id)
++Basket getPageFromBasket(Integer page, String userName)
++List<CardInBasket> getAllFromBasket()
++BigDecimal getTotalPriceFromBasket(Long userId)
++void deleteAllFromBasket(Long userId)
++void registerNewUser(CharacterResult characterResult)
+}
+
+CharacterRepository <-- ServerDbServiceImpl
+CardsRepository <-- ServerDbServiceImpl
+BasketRepository <-- ServerDbServiceImpl
+UserRepository <-- ServerDbServiceImpl
+BuyerRepository <-- ServerDbServiceImpl
+StorageUserRepository <-- ServerDbServiceImpl
+
++interface UserDbService {
++User findUserByUsername(String username);
++List<User> findAllUser();
++Message registerNewBuyer(CharacterResult characterResult);
++StorageUser findStorageUserByUsername(String username);
++Buyer findBuyerByUsername(String username);
+}
+
++class UserDbServiceImpl{
+-final UserRepository userRepository;
+-final StorageUserRepository storageUserRepository;
+-final BuyerRepository buyerRepository;
+-final AuthenticationService authenticationService;
++User findUserByUsername(String username)
++List<User> findAllUser()
++Message registerNewBuyer(CharacterResult characterResult)
++StorageUser findStorageUserByUsername(String username)
++Buyer findBuyerByUsername(String username)
+}
+
+UserDbServiceImpl ..|> UserDbService
+UserRepository <-- UserDbServiceImpl
+StorageUserRepository <-- UserDbServiceImpl
+BuyerRepository <-- UserDbServiceImpl
+AuthenticationService <-- UserDbServiceImpl
+UserDbServiceImpl .> User
+UserDbServiceImpl .> Buyer
+UserDbServiceImpl .> StorageUser
+UserDbServiceImpl ..> Message
+
+
++interface FileGateway {
++void  writeToFile(@Header(FileHeaders.FILENAME) String filename, Object object);
+}
+
++class NewProductListener {
+-final UserDbService userDbService;
+-final FileGateway fileGateway;
++void onApplicationEvent(NewProductEvent event)
++boolean supportsAsyncExecution()
+}
+
+UserDbService <-- NewProductListener
+NewProductListener ..|> ApplicationListener
+FileGateway <-- NewProductListener
+ApplicationEvent <- ApplicationListener
+
+interface ApplicationListener {}
+
++class StoreServerApp {
++static void main(String[] args)
++@Bean RestTemplate template()
++@Bean HttpHeaders headers()
+}
+
++class ExceptionBody {
+- String message;
+-LocalDateTime dateTime;
+}
+
++class ExcessAmountException extends RuntimeException{
++ExcessAmountException(String message)
+}
+
++class ResourceNotFoundException  extends RuntimeException{
++ResourceNotFoundException(String message)
+}
+
+
+@enduml

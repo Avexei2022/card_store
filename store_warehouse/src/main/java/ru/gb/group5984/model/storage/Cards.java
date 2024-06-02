@@ -14,10 +14,10 @@ public class Cards {
     /**
      * Информационная часть о странице.
      */
-    CardsInfo info;
+    private CardsInfo info;
 
     /**
      * Список товаров.
      */
-    List<CardsStorage> cardsStorageList;
+    private List<CardsStorage> cardsStorageList;
 }

@@ -13,10 +13,10 @@ public class Basket {
     /**
      * Информационная часть страницы списка товаров.
      */
-    BasketInfo info;
+    private BasketInfo info;
 
     /**
      * Список товаров.
      */
-    List<CardInBasket> cardInBasketList;
+    private List<CardInBasket> cardInBasketList;
 }

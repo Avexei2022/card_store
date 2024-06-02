@@ -14,10 +14,10 @@ public class Characters {
     /**
      * Информационная часть страницы.
      */
-    CharacterInfo info;
+    private CharacterInfo info;
 
     /**
      * Список товаров.
      */
-    List<CharacterResult> results;
+    private List<CharacterResult> results;
 }

@@ -13,10 +13,10 @@ public class Characters {
     /**
      * Информационная часть страницы.
      */
-    CharacterInfo info;
+    private CharacterInfo info;
 
     /**
      * Страница персонажей.
      */
-    List<CharacterResult> results;
+    private List<CharacterResult> results;
 }

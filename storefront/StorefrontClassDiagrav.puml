@@ -1,0 +1,291 @@
+@startuml
+
+class StorefrontApp {
++static void main(String[] args)
++@Bean RestTemplate template()
++@Bean HttpHeaders headers()
+}
+
++interface TrackUserAction {
+}
+
+TrackUserAction ..> StorefrontWebController
+TrackUserAction .> ContentApiServiceImpl
+
++class UserActionAspect {
++Object userActionLog(
+ProceedingJoinPoint proceedingJoinPoint)
+}
+
+BasicConfig <.. UserActionAspect
+UserActionAspect ..> TrackUserAction
+
++class AuthConfig {
+-String username;
+-String password;
+}
+
++class AuthenticationRequest {
+-String username;
+-String password;
++String getRequest()
+}
+
++class AuthenticationResponse {
+-String token;
+}
+
++class AuthenticationService {
+-final BasicConfig basicConfig;
+-final AuthConfig authConfig;
+-RestTemplate restTemplate;
+-HttpHeaders headers;
++HttpEntity<String> getRequestEntity()
++User getUserByUserName(String name)
++String getToken(String username, String password)
+}
+
+BasicConfig <-- AuthenticationService
+AuthConfig <-- AuthenticationService
+StorefrontApp <-- AuthenticationService
+AuthenticationService .> AuthenticationResponse
+AuthenticationService .> AuthenticationRequest
+AuthenticationService .> User
+
+
+
++class BasicConfig {
+-String SERVER_API;
+-String CHARACTER_API;
+-RestTemplate restTemplate;
++@Bean UserActionAspect loginAspect()
+}
+
++class WebSecurityConfig {
++@Bean UserDetailsService userDetailsService()
++ @Bean BCryptPasswordEncoder passwordEncoder()
++@Bean DaoAuthenticationProvider authenticationProvider()
++@Bean SecurityFilterChain securityFilterChain(HttpSecurity http)
+}
+
++class StorefrontWebController {
+-final ContentApiService serviceApi;
+-final CharacterApiService characterApiService;
++String redirectToFirstPage()
++String getPageCardsStorage(@PathVariable("page")
++String addToBasketById(@PathVariable("id") Integer id
+   , @PathVariable("user_name") String userName
+   , @PathVariable("page") String page, Model model)
++String getPageFromBasket(@PathVariable("page") String page
+   , @PathVariable("user_name") String userName, Model model)
++String deleteFromBasketById(@PathVariable("id") Integer id
+        , @PathVariable("page") String page
+           , @PathVariable("user_name") String userName)
++String basketPay(@PathVariable("user_name") String userName
+        , Model model)
++String getCharacters(@PathVariable("page") String page
+        , Model model)
++String registerNewUser(@PathVariable("id") Integer id
+        , Model model)
+-CharacterInfo getCharacterInfo(Characters allCharacters)
+}
+
+ContentApiService <-- StorefrontWebController
+CharacterApiService <-- StorefrontWebController
+
++class Basket {
+-BasketInfo info;
+-List<CardInBasket> cardInBasketList;
+}
+
+Basket --> BasketInfo
+Basket ---> CardInBasket
+
++class BasketInfo {
+-Long count;
+-Integer pages;
+-Integer next;
+-Integer current;
+-Integer prev;
+-BigDecimal totalPrice;
+}
+
++class CardInBasket {
+-Long id;
+-Card card;
+-Integer amount;
+-BigDecimal price;
+-Long cardsStorageId;
+-Date created;
+}
+
+Card <. CardInBasket
+
++class Card {
+-Integer id;
+-String name;
+-String status;
+-String species;
+-String type;
+-String gender;
+-String image;
+-String url;
+-Date created;
+}
+
++class Cards {
+-CardsInfo info;
+-List<CardsStorage> cardsStorageList;
+}
+
+Cards --> CardsInfo
+Cards ---> CardsStorage
+
++class CardsInfo {
+-Long count;
+-Integer pages;
+-Integer next;
+-Integer current;
+-Integer prev;
+}
+
++class CardsStorage {
+-Long id;
+-Card card;
+-Integer amount;
+-BigDecimal price;
+}
+
+CardsStorage .> Card
+
++class CharacterInfo {
+-Integer count;
+-Integer pages;
+-String next;
+-String prev;
+}
+
++class CharacterResult {
+-Integer id;
+-String name;
+-String status;
+-String species;
+-String type;
+-String gender;
+-String image;
+-String url;
+-Date created;
+}
+
++class Characters {
+-CharacterInfo info;
+-List<CharacterResult> results;
+}
+
+Characters --> CharacterInfo
+Characters ---> CharacterResult
+
++class Message {
+-String message;
+}
+
+Message <. ContentApiServiceImpl
+Message <. CharacterApiServiceImpl
+
++class ThisUserDetails {
+-User user;
++Collection<? extends GrantedAuthority> getAuthorities()
++String getPassword()
++String getUsername()
++boolean isAccountNonExpired()
++boolean isAccountNonLocked()
++boolean isCredentialsNonExpired()
++boolean isEnabled()
+}
+
+UserDetails <|... ThisUserDetails
+ThisUserDetails --> User
+
++interface UserDetails {
+}
+
+UserDetailsService .> UserDetails
+
++class User {
+-Long id;
+-String username;
+-String password;
+-String role;
+-boolean enabled;
+-boolean credentialsNonExpired;
+-boolean accountNonExpired;
+-boolean accountNonLocked;
+-ArrayList<Map<String, String>> authorities;
+}
+
++interface CharacterApiService {
++Characters getPageCharacters(String page);
++Message saveOneCharacterById(Integer id);
+}
+
++class CharacterApiServiceImpl{
+-final BasicConfig basicConfig;
+-final AuthenticationService authenticationService;
+-RestTemplate restTemplate;
+-HttpHeaders headers;
+-HttpEntity<String> getRequestEntity()
++Characters getPageCharacters(String page)
++Message saveOneCharacterById(Integer id)
+}
+
+CharacterApiServiceImpl ..|> CharacterApiService
+BasicConfig <-- CharacterApiServiceImpl
+AuthenticationService <-- CharacterApiServiceImpl
+StorefrontApp <-- CharacterApiServiceImpl
+CharacterApiServiceImpl .> Characters
+
++interface CharacterApiService {
+}
+
++interface ContentApiService {
++Cards getPageFromSale(String page);
++Basket getPageFromBasket(String userName, String page);
++Message addToBasketById(Integer id, String userName);
++void deleteFromBasketById(Integer id);
++Message basketPay(String userName);
+}
+
++class ContentApiServiceImpl {
+-RestTemplate restTemplate;
+-final BasicConfig basicConfig;
++Cards getPageFromSale(String page)
++Basket getPageFromBasket(String userName, String page)
++Message addToBasketById(Integer id, String userName)
++void deleteFromBasketById(Integer id)
++Message basketPay(String userName)
+}
+
+ContentApiServiceImpl ..|> ContentApiService
+StorefrontApp <-- ContentApiServiceImpl
+BasicConfig <-- ContentApiServiceImpl
+Cards <. ContentApiServiceImpl
+Basket <. ContentApiServiceImpl
+
++interface ContentApiService {
+}
+
++class UserDetailsServiceImpl {
+-AuthenticationService authenticationService;
++UserDetails loadUserByUsername(String username) throws UsernameNotFoundException
+}
+
+AuthenticationService <- UserDetailsServiceImpl
+UserDetailsService <|.. UserDetailsServiceImpl
+
++interface UserDetailsService {
+}
+
+WebSecurityConfig <- UserDetailsService
+
+
+@enduml

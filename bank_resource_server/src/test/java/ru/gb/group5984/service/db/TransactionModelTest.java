@@ -12,9 +12,7 @@ import ru.gb.group5984.model.visitors.CharacterResult;
 import ru.gb.group5984.repository.ClientsRepository;
 
 import java.math.BigDecimal;
-import java.util.Date;
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -41,17 +39,20 @@ public class TransactionModelTest {
         //Блок предусловия
         Client credit = createCreditAccount(BigDecimal.valueOf(50));
         Client debit = createDebitAccount(BigDecimal.valueOf(50));
+        List<Client> clientList = new ArrayList<>();
+        clientList.add(credit);
+        clientList.add(debit);
 
         Transaction transaction = new Transaction();
-        transaction.setCreditAccount(1L);
-        transaction.setDebitAccount(2L);
+        transaction.setCreditName("credit");
+        transaction.setDebitName("debit");
         transaction.setTransferAmount(BigDecimal.valueOf(20));
 
         Client creditNew = createCreditAccount(BigDecimal.valueOf(30));
         Client debitNew = createDebitAccount(BigDecimal.valueOf(70));
 
-        given(clientsRepository.findById(1L)).willReturn(Optional.of(credit));
-        given(clientsRepository.findById(2L)).willReturn(Optional.of(debit));
+        given(clientsRepository.findAll()).willReturn(clientList);
+
 
         //Блок действия
         bankDbService.transaction(transaction);
@@ -69,17 +70,18 @@ public class TransactionModelTest {
     public void transactionAccountNotFoundTest() {
         //Блок предусловия
         Client credit = createCreditAccount(BigDecimal.valueOf(50));
+        List<Client> clientList = new ArrayList<>();
+        clientList.add(credit);
 
         Transaction transaction = new Transaction();
-        transaction.setCreditAccount(1L);
-        transaction.setDebitAccount(2L);
+        transaction.setCreditName("credit");
+        transaction.setDebitName("debit");
         transaction.setTransferAmount(BigDecimal.valueOf(20));
 
         Client creditNew = createCreditAccount(BigDecimal.valueOf(30));
 
 
-        given(clientsRepository.findById(1L)).willReturn(Optional.of(credit));
-        given(clientsRepository.findById(2L)).willReturn(Optional.empty());
+        given(clientsRepository.findAll()).willReturn(clientList);
 
         //Блок действия
         assertThrows(NoSuchElementException.class, () -> bankDbService.transaction(transaction));
@@ -95,12 +97,17 @@ public class TransactionModelTest {
     public void transactionAmountExceptionTest() {
         //Блок предусловия
         Client credit = createCreditAccount(BigDecimal.valueOf(50));
+        Client debit = createDebitAccount(BigDecimal.valueOf(50));
+        List<Client> clientList = new ArrayList<>();
+        clientList.add(credit);
+        clientList.add(debit);
+
         Transaction transaction = new Transaction();
-        transaction.setCreditAccount(1L);
-        transaction.setDebitAccount(2L);
+        transaction.setCreditName("credit");
+        transaction.setDebitName("debit");
         transaction.setTransferAmount(BigDecimal.valueOf(100));
 
-        given(clientsRepository.findById(1L)).willReturn(Optional.of(credit));
+        given(clientsRepository.findAll()).willReturn(clientList);
 
         //Блок действия
         assertThrows(ExcessAmountException.class, () -> bankDbService.transaction(transaction));
@@ -142,13 +149,13 @@ public class TransactionModelTest {
     private Client createDebitAccount(BigDecimal amount) {
         CharacterResult debitDetail = new CharacterResult();
         debitDetail.setId(2);
-        debitDetail.setName("credit");
-        debitDetail.setStatus("credit_status");
-        debitDetail.setSpecies("credit_species");
-        debitDetail.setType("credit_type");
-        debitDetail.setGender("mail");
-        debitDetail.setImage("credit_img");
-        debitDetail.setUrl("credit_url");
+        debitDetail.setName("debit");
+        debitDetail.setStatus("debit_status");
+        debitDetail.setSpecies("debit_species");
+        debitDetail.setType("debit_type");
+        debitDetail.setGender("debit_mail");
+        debitDetail.setImage("debit_img");
+        debitDetail.setUrl("debit_url");
         debitDetail.setCreated(date);
 
         Client debit = new Client();

@@ -69,6 +69,15 @@ public class UserDbServiceImpl implements UserDbService{
     }
 
     /**
+     * Поиск всех покупателей.
+     * @return список покупателей.
+     */
+    @Override
+    public List<Buyer> findAllBuyer() {
+        return buyerRepository.findAll();
+    }
+
+    /**
      * Зарегистрировать нового покупателя - пользователя веб-сервиса магазина.
      * @param characterResult - персонаж с ресурса Rick and Morty
      */

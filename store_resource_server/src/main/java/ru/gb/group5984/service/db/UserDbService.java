@@ -27,6 +27,12 @@ public interface UserDbService {
     List<User> findAllUser();
 
     /**
+     * Поиск всех покупателей.
+     * @return список покупателей.
+     */
+    List<Buyer> findAllBuyer();
+
+    /**
      * Регистрация нового покупателя.
      * @param characterResult - покупатель.
      * @return сообщение о результате регистрации.

@@ -26,7 +26,7 @@ public class JwtService {
     /**
      * Секретный ключ подписи.
      */
-    private static final String SECRET_KEY = "cnUuZ2IuZ3JvdXA1OTg0";
+    private static final String SECRET_KEY = "cnUuZ2IuZ3JvdXA1OTg0LnN0dWRlbnQuZ3JhZHVhdGlvblByb2plY3Q=";
 
     /**
      * Извлечь имя пользователя из токена.

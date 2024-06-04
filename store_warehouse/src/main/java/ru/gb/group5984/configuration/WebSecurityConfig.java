@@ -18,7 +18,6 @@ import ru.gb.group5984.service.UserDetailsServiceImpl;
 @Slf4j
 @Configuration
 @EnableWebSecurity
-@Log
 public class WebSecurityConfig{
 
     /**

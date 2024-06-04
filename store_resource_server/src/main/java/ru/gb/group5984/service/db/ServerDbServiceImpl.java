@@ -266,6 +266,7 @@ public class ServerDbServiceImpl implements ServerDbService {
             cardInBasket.setUser(buyer);
             if (cardInSale.getAmount() < 1) cardsRepository.deleteById(cardId);
             else cardsRepository.save(cardInSale);
+            log.info("LOG: ServerDbServiceImpl.moveCardToBasket.cardInBasket = " + cardInBasket);
             basketRepository.save(cardInBasket);
         } else throw new ExcessAmountException("Отрицательный баланс товара на складе");
     }

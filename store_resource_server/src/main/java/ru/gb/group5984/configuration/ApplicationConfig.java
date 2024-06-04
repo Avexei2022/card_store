@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import ru.gb.group5984.auth.AuthConfig;
 import ru.gb.group5984.model.users.Role;
 import ru.gb.group5984.model.users.User;
-import ru.gb.group5984.repository.UserRepository;
+
 
 /**
  * Конфигуратор приложения.

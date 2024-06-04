@@ -10,8 +10,9 @@ import ru.gb.group5984.model.visitors.CharacterResult;
 import ru.gb.group5984.repository.ClientsRepository;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Date;
-import java.util.Optional;
+import java.util.List;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -37,17 +38,20 @@ public class TransactionIntegrationTest {
         //Блок предусловия
         Client credit = createCreditAccount(BigDecimal.valueOf(50));
         Client debit = createDebitAccount(BigDecimal.valueOf(50));
+        List<Client> clientList = new ArrayList<>();
+        clientList.add(credit);
+        clientList.add(debit);
 
         Transaction transaction = new Transaction();
-        transaction.setCreditAccount(1L);
-        transaction.setDebitAccount(2L);
+        transaction.setCreditName("credit");
+        transaction.setDebitName("debit");
         transaction.setTransferAmount(BigDecimal.valueOf(20));
 
         Client creditNew = createCreditAccount(BigDecimal.valueOf(30));
         Client debitNew = createDebitAccount(BigDecimal.valueOf(70));
 
-        when(clientsRepository.findById(1L)).thenReturn(Optional.of(credit));
-        when(clientsRepository.findById(2L)).thenReturn(Optional.of(debit));
+        when(clientsRepository.findAll()).thenReturn(clientList);
+
 
         //Блок действия
         bankDbService.transaction(transaction);
@@ -70,7 +74,7 @@ public class TransactionIntegrationTest {
         creditDetail.setStatus("credit_status");
         creditDetail.setSpecies("credit_species");
         creditDetail.setType("credit_type");
-        creditDetail.setGender("mail");
+        creditDetail.setGender("credit_mail");
         creditDetail.setImage("credit_img");
         creditDetail.setUrl("credit_url");
         creditDetail.setCreated(date);
@@ -91,13 +95,13 @@ public class TransactionIntegrationTest {
     private Client createDebitAccount(BigDecimal amount) {
         CharacterResult debitDetail = new CharacterResult();
         debitDetail.setId(2);
-        debitDetail.setName("credit");
-        debitDetail.setStatus("credit_status");
-        debitDetail.setSpecies("credit_species");
-        debitDetail.setType("credit_type");
-        debitDetail.setGender("mail");
-        debitDetail.setImage("credit_img");
-        debitDetail.setUrl("credit_url");
+        debitDetail.setName("debit");
+        debitDetail.setStatus("debit_status");
+        debitDetail.setSpecies("debit_species");
+        debitDetail.setType("debit_type");
+        debitDetail.setGender("debit_mail");
+        debitDetail.setImage("debit_img");
+        debitDetail.setUrl("debit_url");
         debitDetail.setCreated(date);
 
         Client debit = new Client();

@@ -16,5 +16,4 @@ public interface FileGateway {
      * @param object уведомление.
      */
     void  writeToFile(@Header(FileHeaders.FILENAME) String filename, Object object);
-
 }

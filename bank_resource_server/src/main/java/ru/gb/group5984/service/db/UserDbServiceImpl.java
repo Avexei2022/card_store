@@ -30,14 +30,21 @@ public class UserDbServiceImpl implements UserDbService{
      */
     @Override
     public User findUserByUsername(String username) {
+        try {
+            if (userRepository.count() == 0L) {
+                userRepository.save(createUser());
+            }
+
+        } catch (RuntimeException e) {
+            userRepository.save(createUser());
+        }
         return userRepository.findUserByUsername(username).orElseThrow();
 
-//        return switch (username) {
-//            case "admin" -> new User(1L, "admin", "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
-//                    , Role.Admin, true);
-//            case "user" -> new User(2L, "user", "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
-//                    , Role.User, true);
-//            default -> throw new UsernameNotFoundException("Пользователь не найден");
-//        };
+    }
+
+    private User createUser() {
+        return new User(0L,"bank"
+                , "$2a$10$C4M2moeOYc4MJ/mJCwOP/.GPgAb6641BAT1GqBw/qxVCzXk0X0dfm"
+                , Role.ADMIN, true, "bank@mail.com", false);
     }
 }

@@ -110,13 +110,16 @@ public class UserDbServiceImpl implements UserDbService{
     @Override
     public StorageUser findStorageUserByUsername(String username) {
         log.info("Log: UserDbServiceImpl.findStorageUserByUsername.username = " + username);
-        log.info("Log: UserDbServiceImpl.findStorageUserByUsername.storageUserRepository.count() = "
-                + storageUserRepository.count());
-        if (storageUserRepository.count()<1) {
-            storageUserRepository.save(new StorageUser(0L,"admin"
-                    , "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
-                    , Role.ADMIN, true, "admin@mail.com", false));
+
+        try {
+            if (storageUserRepository.count() == 0L) {
+                storageUserRepository.save(createStorageUser());
+            }
+
+        } catch (RuntimeException e) {
+            storageUserRepository.save(createStorageUser());
         }
+
         return storageUserRepository.findUserByUsername(username).orElseThrow();
     }
 
@@ -127,12 +130,26 @@ public class UserDbServiceImpl implements UserDbService{
      */
     @Override
     public Buyer findBuyerByUsername(String username) {
-        if (buyerRepository.count()<1) {
-            buyerRepository.save(new Buyer(0L,"user"
-                    , "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
-                    , Role.USER, true, "user@mail.com", false));
+        try {
+            if (buyerRepository.count() == 0L) {
+                buyerRepository.save(createBuyer());
+            }
+        } catch (RuntimeException e) {
+            buyerRepository.save(createBuyer());
         }
         return buyerRepository.findUserByUsername(username).orElseThrow();
+    }
+
+    private StorageUser createStorageUser() {
+        return new StorageUser(0L,"admin"
+                , "$2a$10$tRhzQK0FTSTzjy7T4uQsZegrrtA8vlWILG75ohkh09rGcK5jCr6YC"
+                , Role.ADMIN, true, "admin@mail.com", false);
+    }
+
+    private Buyer createBuyer() {
+        return new Buyer(0L,"user"
+                , "$2a$10$OO6WBhYkkQSa7RLmzA9VyeOH2CzUB2yO6bLJFNEjERBAg.P6Gk2Rq"
+                , Role.USER, true, "user@mail.com", false);
     }
 
 //    /**

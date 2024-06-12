@@ -21,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class StorageUser implements UserDetails {
-
     /**
      * Уникальный номер.
      */
@@ -29,43 +28,36 @@ public class StorageUser implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-
     /**
      * Имя/логин.
      */
     @Column(name = "username")
     private String username;
-
     /**
      * Пароль.
      */
     @Column(name="password")
     private String password;
-
     /**
      * Полномочия - роль.
      */
     @Column(name="role")
     private Role role;
-
     /**
      * Действующий или нет.
      */
     @Column(name = "enabled")
     private Boolean enabled;
-
     /**
      * Адрес электронной почты.
      */
     @Column(name = "email")
     private String email;
-
     /**
      * Подписчик или нет.
      */
     @Column(name = "subscribe")
     private Boolean isSubscribe;
-
     /**
      * Получить список полномочия пользователя.
      * @return список полномочий.
@@ -74,7 +66,6 @@ public class StorageUser implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
     /**
      * Истек срок действия аккаунта или нет.
      * @return true - не истек, false - истек.
@@ -83,7 +74,6 @@ public class StorageUser implements UserDetails {
     public boolean isAccountNonExpired() {
         return true;
     }
-
     /**
      * Заблокирован аккаунт или нет.
      * @return true - не заблокирован, false - заблокирован.
@@ -92,7 +82,6 @@ public class StorageUser implements UserDetails {
     public boolean isAccountNonLocked() {
         return true;
     }
-
     /**
      * Истек срок действия полномочий или нет.
      * @return true - не истек, false - истек.
@@ -101,7 +90,6 @@ public class StorageUser implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     /**
      * Действующий пользователь или нет.
      * @return true - действующий, false - недействующий.

@@ -34,9 +34,6 @@ public class SecurityConfig {
      */
     private final AuthenticationProvider authenticationProvider;
 
-
-
-
     /**
      * Правила фильтрации.
      * @param http защищенный http запрос.

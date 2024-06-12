@@ -21,56 +21,47 @@ import java.util.Date;
 @Setter
 @Getter
 public class CharacterResult {
-
     /**
      * Уникальный номер кандидата.
      */
     @Id
     @Column(name = "id")
     private Integer id;
-
     /**
      * Имя кандидата.
      */
     @Column(name = "name")
     private String name;
-
     /**
      * Статус кандидата.
      */
     @Column(name = "status")
     private String status;
-
     /**
      * Особенности кандидата.
      */
     @Column(name="species")
     private String species;
-
     /**
      * Тип кандидата.
      */
     @Column(name="type")
     private String type;
-
     /**
      * Пол кандидата.
      */
     @Column(name="gender")
     private String gender;
-
     /**
      * Фото кандидата.
      */
     @Column(name="image")
     private String image;
-
     /**
      * Ссылка на страницу кандидата.
      */
     @Column(name="url")
     private String url;
-
     /**
      * Дата создания.
      */

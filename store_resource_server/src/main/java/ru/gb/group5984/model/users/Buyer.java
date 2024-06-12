@@ -21,7 +21,6 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class Buyer implements UserDetails {
-
     /**
      * Уникальный номер покупателя.
      */
@@ -29,43 +28,36 @@ public class Buyer implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
     private Long id;
-
     /**
      * Имя/логин покупателя.
      */
     @Column(name = "username")
     private String username;
-
     /**
      * Пароль покупателя.
      */
     @Column(name="password")
     private String password;
-
     /**
      * Полномочия покупателя.
      */
     @Column(name="role")
     private Role role;
-
     /**
      * Действительна учетная запись или нет.
      */
     @Column(name = "enabled")
     private Boolean enabled;
-
     /**
      * Адрес электронной почты.
      */
     @Column(name = "email")
     private String email;
-
     /**
      * Является подписчиком или нет.
      */
     @Column(name = "subscribe")
     private Boolean isSubscribe;
-
     /**
      * Получить список полномочий.
      * @return список полномочий.
@@ -74,7 +66,6 @@ public class Buyer implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));
     }
-
     /**
      * Проверить срок действия учетной записи.
      * @return да/нет.
@@ -83,7 +74,6 @@ public class Buyer implements UserDetails {
     public boolean isAccountNonExpired() {
         return true;
     }
-
     /**
      * Проверить отсутствие блокировки учетной записи.
      * @return да/нет.
@@ -92,7 +82,6 @@ public class Buyer implements UserDetails {
     public boolean isAccountNonLocked() {
         return true;
     }
-
     /**
      * Проверить срок действия данных учетной записи.
      * @return да/нет.
@@ -101,7 +90,6 @@ public class Buyer implements UserDetails {
     public boolean isCredentialsNonExpired() {
         return true;
     }
-
     /**
      * Проверить действительность учетной записи
      * @return да/нет.

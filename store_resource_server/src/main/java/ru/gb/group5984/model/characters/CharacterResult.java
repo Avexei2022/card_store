@@ -11,7 +11,8 @@ import lombok.Setter;
 import java.util.Date;
 
 /**
- * Товар, находящийся на складе, но не выставленный на продажу,
+ * Товар, находящийся на складе
+ * , но не выставленный на продажу,
  * информация о котором хранится в базе данных.
  */
 @Entity
@@ -26,49 +27,41 @@ public class CharacterResult {
     @Id
     @Column(name = "id")
     private Integer id;
-
     /**
      * Наименование товара.
      */
     @Column(name = "name")
     private String name;
-
     /**
      * Статус товара.
      */
     @Column(name = "status")
     private String status;
-
     /**
      * Особенности товара.
      */
     @Column(name="species")
     private String species;
-
     /**
      * Тип товара.
      */
     @Column(name="type")
     private String type;
-
     /**
      * Принадлежность товара.
      */
     @Column(name="gender")
     private String gender;
-
     /**
      * Изображение товара.
      */
     @Column(name="image")
     private String image;
-
     /**
      * Ссылка на товар.
      */
     @Column(name="url")
     private String url;
-
     /**
      * Дата производство товара.
      */

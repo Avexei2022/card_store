@@ -36,7 +36,7 @@
           </svg>
         </a>
         <ul class="header_nav_ul">
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
               th:href="@{/bank/visitors/page/1}"
@@ -45,7 +45,7 @@
               >Посетители</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
               th:href="@{/bank/candidates/page/1}"
@@ -54,7 +54,7 @@
               >Кандидаты</a
             >
           </li>
-          <li class="header_nav_ul_li">
+          <li class="header_nav_ul_li" sec:authorize="isAuthenticated()">
             <a
               class="header_nav_ul_li_a"
               th:href="@{/bank/clients/page/1}"

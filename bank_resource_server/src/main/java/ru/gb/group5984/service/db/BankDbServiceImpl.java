@@ -129,7 +129,7 @@ public class BankDbServiceImpl implements BankDbService {
         if (characterResult != null) {
             Client client = new Client();
             client.setClientDetail(characterResult);
-            client.setBalance(BigDecimal.valueOf(50.00));
+            client.setBalance(BigDecimal.valueOf(1001.00));
             try {
                 clientsRepository.save(client);
             } catch (RuntimeException e) {

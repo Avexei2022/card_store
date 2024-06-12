@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import ru.gb.group5984.model.observer.NewProductEvent;
 import ru.gb.group5984.model.storage.CardsStorage;
 import ru.gb.group5984.model.users.Buyer;
-import ru.gb.group5984.model.users.User;
 import ru.gb.group5984.service.db.UserDbService;
 import ru.gb.group5984.service.integration.FileGateway;
 
@@ -45,7 +44,7 @@ public class NewProductListener implements ApplicationListener<NewProductEvent> 
     }
 
     /**
-     * Возвращает, поддерживает ли этот прослушиватель асинхронное выполнение.
+     * Поддерживает этот прослушиватель асинхронное выполнение или нет.
      * @return да/нет.
      */
     @Override

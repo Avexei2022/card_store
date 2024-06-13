@@ -10,8 +10,6 @@
 7. api_gateway..ApiGatewayApp;  
 8. EurekaServer..EurekaServerApp.
 
-Все сервисы имеют документацию, расположенную target/site/apidocs/index.html  
-Первые 5 сервисов имеют диаграмму классов.
 
 # Порядок запуска  
 1. Установить PostgreSQL на порту:5432  

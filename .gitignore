@@ -1,4 +1,4 @@
-target/
+target
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
@@ -38,3 +38,8 @@ build/
 ### Mac OS ###
 .DS_Store
 .gitignore
+/store_resource_server/target/site/
+/store_warehouse/target/
+/storefront/target/
+/bank_resource_server/target/
+/bank/target/

@@ -1,4 +1,6 @@
 # Интернет-магазин CardStore
+## на базе микросервисной архитектуры с использованием Spring Framework  
+### Стек: Spring Boot, Spring Cloud, Spring Web MVC, Spring Data JPA, Spring Security, Spring Integration, Spring AOP, PostgreSQL, Thymeleaf, Docker, Lombok, Maven, GSON, Netflix Eureka, Jackson, JJWT, Prometheus, Micrometer, Grafana, HTML, CSS, WireShark.
 
 ## Сервисы:  
 1. store_resource_server..StoreServerApp - сервис ресурсов магазина;  

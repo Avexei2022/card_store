@@ -21,7 +21,7 @@
 5. Запустить сервер Eureka и GateWay  
 6. Запустить все остальные сервисы  
 7. Зайти в банк на порт 8081 или через GateWay на порту 8765/bank  
-![Начальная страница] https://drive.google.com/file/d/1hx_WERaDS9MlTZlK4y6nK1ED8fStLETA/view?usp=drive_link 
+![Начальная страница](https://drive.google.com/file/d/1hx_WERaDS9MlTZlK4y6nK1ED8fStLETA/view?usp=drive_link) 
 
 8. В банке авторизоваться с логином bank и паролем bank 
 9. В банке добавить кандидатов, затем перевести их в клиенты (Здесь и далее - клики по карточкам)  
@@ -35,11 +35,11 @@
 17. Далее закупать товар и оплачивать его, если конечно открыт счет в банке.
 
 # Ссылки  
-1. Полное описание проекта: https://drive.google.com/file/d/1e7FoFYp3YGuEZ0-s7DPb6noMkWPOVL_Q/view?usp=drive_link
+1. [Полное описание проекта](https://drive.google.com/file/d/1e7FoFYp3YGuEZ0-s7DPb6noMkWPOVL_Q/view?usp=drive_link)
 2. Диаграммы классов:
-   - сервис ресурсов магазин: https://drive.google.com/file/d/1jURqDFh80Fh0lrKHB6NNRHmc31Re41qN/view?usp=drive_link  
-   - веб-сервис склада магазина: https://drive.google.com/file/d/1d7X-54NRjyXNeMDuGC5A93oo1ylwRlk7/view?usp=drive_link  
-   - веб-сервис магазина: https://drive.google.com/file/d/1jte1UOmYdhyzjmUY4FqQtA_kCkAN0dfi/view?usp=drive_link  
-   - сервис ресурсов банка: https://drive.google.com/file/d/1cpLWTDvQFdyNK0AyTIdxJrgPl67AajL-/view?usp=drive_link  
-   - веб-сервер банка: https://drive.google.com/file/d/1b3wJMeqix1aFLiDWX71tdXSikr6EjNmq/view?usp=drive_link
+   - [сервис ресурсов магазин](https://drive.google.com/file/d/1jURqDFh80Fh0lrKHB6NNRHmc31Re41qN/view?usp=drive_link)  
+   - [веб-сервис склада магазина](https://drive.google.com/file/d/1d7X-54NRjyXNeMDuGC5A93oo1ylwRlk7/view?usp=drive_link)  
+   - [веб-сервис магазина](https://drive.google.com/file/d/1jte1UOmYdhyzjmUY4FqQtA_kCkAN0dfi/view?usp=drive_link)  
+   - [сервис ресурсов банка](https://drive.google.com/file/d/1cpLWTDvQFdyNK0AyTIdxJrgPl67AajL-/view?usp=drive_link)  
+   - [веб-сервер банка](https://drive.google.com/file/d/1b3wJMeqix1aFLiDWX71tdXSikr6EjNmq/view?usp=drive_link)
      

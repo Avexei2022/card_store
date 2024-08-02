@@ -21,7 +21,7 @@
 5. Запустить сервер Eureka и GateWay  
 6. Запустить все остальные сервисы  
 7. Зайти в банк на порт 8081 или через GateWay на порту 8765/bank  
-![Начольная страница](https://drive.google.com/file/d/1hx_WERaDS9MlTZlK4y6nK1ED8fStLETA/view?usp=drive_link)  
+![Начальная страница] https://drive.google.com/file/d/1hx_WERaDS9MlTZlK4y6nK1ED8fStLETA/view?usp=drive_link 
 
 8. В банке авторизоваться с логином bank и паролем bank 
 9. В банке добавить кандидатов, затем перевести их в клиенты (Здесь и далее - клики по карточкам)  

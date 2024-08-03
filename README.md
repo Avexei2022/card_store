@@ -44,7 +44,7 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 1. Зайти в банк на порт 8081 или через GateWay на порту 8765/bank  
 
 
-   ![Начальная страница Банка](https://drive.google.com/thumbnail?id=1hx_WERaDS9MlTZlK4y6nK1ED8fStLETA&sz=s600)  
+   ![Начальная страница Банка](https://drive.google.com/thumbnail?id=1hx_WERaDS9MlTZlK4y6nK1ED8fStLETA&sz=s800)  
   
   
 2. При нажатии на кнопку LOGIN откроется окно авторизации, в котором авторизоваться с логином bank и паролем bank 
@@ -53,11 +53,11 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 3. В банке добавить кандидатов, затем перевести их в клиенты (Здесь и далее - клики по карточкам)  
 
 
-   ![Посетители банка Банка](https://drive.google.com/thumbnail?id=1qMYQMrwopRYQP7S_z9-CUAn_JCDgyhPj&sz=s600)  
+   ![Посетители банка Банка](https://drive.google.com/thumbnail?id=1qMYQMrwopRYQP7S_z9-CUAn_JCDgyhPj&sz=s800)  
 
-   ![Кандидаты в клиенты Банка](https://drive.google.com/thumbnail?id=1JkdOunCA-hQmypdHcjCvd8NsM9-9knN3&sz=s600)  
+   ![Кандидаты в клиенты Банка](https://drive.google.com/thumbnail?id=1JkdOunCA-hQmypdHcjCvd8NsM9-9knN3&sz=s800)  
 
-   ![Клиенты Банка](https://drive.google.com/thumbnail?id=10Few37rJ0FSBM0wr1grc6qEGWFRlxCP2&sz=s600)  
+   ![Клиенты Банка](https://drive.google.com/thumbnail?id=10Few37rJ0FSBM0wr1grc6qEGWFRlxCP2&sz=s800)  
   
 
  `ВАЖНО!`  Обязательным клиентом является Rick Sanchez - на нем счет магазина.  
@@ -65,7 +65,7 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 4. Зайти на склад через порт 8082 или через GateWay на порту 8765/storage  
   
   
-   ![Начальная страница Склада магазина](https://drive.google.com/thumbnail?id=1OC3OhikCCZobXyTjPSoToOyweYK-S0N1&sz=s600)  
+   ![Начальная страница Склада магазина](https://drive.google.com/thumbnail?id=1OC3OhikCCZobXyTjPSoToOyweYK-S0N1&sz=s800)  
   
 
 5. При нажатии на кнопку LOGIN откроется окно авторизации, в котором авторизоваться с логином admin и паролем admin  
@@ -74,11 +74,11 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 6. Закупить товар и выставить его на продажу (клики по карточкам).  
 
 
-   ![Страница закупки товара у поставщика - Склад магазина](https://drive.google.com/thumbnail?id=1plNVf16TRUJb6tSTW3Nfh9fuQVLbrnlf&sz=s600)  
+   ![Страница закупки товара у поставщика - Склад магазина](https://drive.google.com/thumbnail?id=1plNVf16TRUJb6tSTW3Nfh9fuQVLbrnlf&sz=s800)  
 
-   ![Страница товара на складе - Склад магазина](https://drive.google.com/thumbnail?id=1zqFVDsp-xlhYfmn-l7RT6wyebuNScuUx&sz=s600)  
+   ![Страница товара на складе - Склад магазина](https://drive.google.com/thumbnail?id=1zqFVDsp-xlhYfmn-l7RT6wyebuNScuUx&sz=s800)  
 
-   ![Товар в продаже - Склад магазина](https://drive.google.com/thumbnail?id=1c-oev0-_Gu7n-m98DBp5Gvsx3CqAqotU&sz=s600)  
+   ![Товар в продаже - Склад магазина](https://drive.google.com/thumbnail?id=1c-oev0-_Gu7n-m98DBp5Gvsx3CqAqotU&sz=s800)  
 
 
    В данной версии количество и стоимость товара установлены по умолчанию (100 и 19.99 соответственно)  
@@ -86,37 +86,37 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 7. Зайти в магазин через порт 8083 или через GateWay на порту 8765/storefront   
 
 
-   ![Начальная страница Магазина](https://drive.google.com/thumbnail?id=1nfjwkrHTnAVOps2UJYM2W_9mjYlask-M&sz=s600)
+   ![Начальная страница Магазина](https://drive.google.com/thumbnail?id=1nfjwkrHTnAVOps2UJYM2W_9mjYlask-M&sz=s800)
 
 8. В магазине зарегистрировать покупателя (клики на карточки), желательно из списка клиентов банка  
 
 
-   ![Страница регистрации покупателя](https://drive.google.com/thumbnail?id=1zRS6p5fP6IIi_5kK5KAGIAYAmNT8xEHE&sz=s600)  
+   ![Страница регистрации покупателя](https://drive.google.com/thumbnail?id=1zRS6p5fP6IIi_5kK5KAGIAYAmNT8xEHE&sz=s800)  
 
 
    В данной версии покупатели эмулируются, т.е. покупателями являются персонажи Rick&Morty шоу.
    Ограничений по количеству зарегистрированных покупателей нет, но если у покупателя отсутствует счет в банке,
    то при оплате товара будет выведена соответствующая информация.  
 
-![Страница сообщения об отсутствии счета в банке](https://drive.google.com/thumbnail?id=1Tb7yIexL9ENTR3mafHirj7ZxnQoTV8K5&sz=s600)  
+![Страница сообщения об отсутствии счета в банке](https://drive.google.com/thumbnail?id=1Tb7yIexL9ENTR3mafHirj7ZxnQoTV8K5&sz=s800)  
 
 
    После выбора персонажа в качестве покупателя будет выведена информация о логине и пароле, которые можно скопировать или запомнить. 
    Запомнить легко, т.к. логин соответствует полному имени персонажа через нижнее подчеркивание. Пароль совпадает с логином. 
 
-![Страница сообщения об успешной регистрации](https://drive.google.com/thumbnail?id=1OvxcD6B0oMCdmMyEAJNfPlN60fMkI3e1&sz=s600)
+![Страница сообщения об успешной регистрации](https://drive.google.com/thumbnail?id=1OvxcD6B0oMCdmMyEAJNfPlN60fMkI3e1&sz=s800)
 
 9. После регистрации покупателя, следует авторизоваться через кнопку LOGIN 
 
-![Страница авторизации](https://drive.google.com/thumbnail?id=1bfbSIUSIulUdWdc6ZuyTduemqVbgvjQV&sz=s600)
+![Страница авторизации](https://drive.google.com/thumbnail?id=1bfbSIUSIulUdWdc6ZuyTduemqVbgvjQV&sz=s800)
 
 10. Далее закупать товар, складывая его в корзину, и оплачивать стоимость всего товара в корзине, если, конечно, открыт счет в банке.
 
-![Страница товара](https://drive.google.com/thumbnail?id=1FfHdvkzSikYzm8h1FE1vxQln2aI_plaH&sz=s600)  
+![Страница товара](https://drive.google.com/thumbnail?id=1FfHdvkzSikYzm8h1FE1vxQln2aI_plaH&sz=s800)  
 
-![Страница корзинв](https://drive.google.com/thumbnail?id=1Dp1_t53WLPoUOnehBbMruR6806MZN_Zj&sz=s600)
+![Страница корзинв](https://drive.google.com/thumbnail?id=1Dp1_t53WLPoUOnehBbMruR6806MZN_Zj&sz=s800)
 
-![Страница сообщений о результате оплаты товара](https://drive.google.com/thumbnail?id=1xTS1vKImqIzlmvsqy3nHq3r_z2Q0S9SJ&sz=s600)  
+![Страница сообщений о результате оплаты товара](https://drive.google.com/thumbnail?id=1xTS1vKImqIzlmvsqy3nHq3r_z2Q0S9SJ&sz=s800)  
 
    При недостатке средств на счете, или при отсутствии счета в банке, покупатель получит соответствующее сообщение.  
 
@@ -153,7 +153,7 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 После запуска Prometheus и при переходе в интернет-браузере по его настроенному адресу
 будет отображаться информация о доступных ресурсах.   
 
-![Prometheus](https://drive.google.com/thumbnail?id=1NP2z56QQCMHZFcXWTOsEAGFqIWl68BTd&sz=s600)
+![Prometheus](https://drive.google.com/thumbnail?id=1NP2z56QQCMHZFcXWTOsEAGFqIWl68BTd&sz=s800)
 
 
 Для визуализации, мониторинга и анализа данных предложена платформа Grafana. 
@@ -161,7 +161,7 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 каждая из которых отображает определённые показатели в течение установленного периода времени.
 Пример дашборда с пользовательскими метриками, настроенными выше:
 
-![Grafana](https://drive.google.com/thumbnail?id=1ZcZskus0RWP66EELB-YaLIAqUaETBLNP&sz=s600)
+![Grafana](https://drive.google.com/thumbnail?id=1ZcZskus0RWP66EELB-YaLIAqUaETBLNP&sz=s800)
 
 # Тестирование
 
@@ -173,9 +173,9 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 после переноса товара в корзину, а также в модульном тесте проверяется работа исключений при отсутствии товара в продаже.
 Результаты работы тестов:
 
-![Модульный тест](https://drive.google.com/thumbnail?id=1oi35Qxllw4igOUPCy1D2thzc4DoGs_bD&sz=s400)
+![Модульный тест](https://drive.google.com/thumbnail?id=1oi35Qxllw4igOUPCy1D2thzc4DoGs_bD&sz=s600)
 
-![Интеграционный тест](https://drive.google.com/thumbnail?id=122f2Wl147IQ7_34a_x0w21bBBVt0WhPo&sz=s400)
+![Интеграционный тест](https://drive.google.com/thumbnail?id=122f2Wl147IQ7_34a_x0w21bBBVt0WhPo&sz=s600)
 
 В сервис ресурсов банка добавлены модульный и интеграционный тесты перевода денежных средств.
 В данных тестах проверяется корректность списания и начисления денежных средств на счетах клиентов банка,
@@ -188,9 +188,9 @@ https://rickandmortyapi.com/. Данный ресурс является RESTful
 выставленных на продажу. Была представлена нагрузка в 1000 запросов за 60 секунд. Для тестирования сервиса ресурсов банка
 выбрано проведение транзакций. Была представлена нагрузка в 1000 транзакций за 60 секунд. 
 
-![Нагрузочное тестирование магазина](https://drive.google.com/thumbnail?id=15-3T41KI0bw6qb-mK2KNiLXbBle6BURN&sz=s600)  
+![Нагрузочное тестирование магазина](https://drive.google.com/thumbnail?id=15-3T41KI0bw6qb-mK2KNiLXbBle6BURN&sz=s800)  
 
-![Нагрузочное тестирование banka](https://drive.google.com/thumbnail?id=1moVPvZAl5gJ1L8iPE90yk-v3KF_QRs0_&sz=s600)
+![Нагрузочное тестирование banka](https://drive.google.com/thumbnail?id=1moVPvZAl5gJ1L8iPE90yk-v3KF_QRs0_&sz=s800)
 
 Результаты нагрузочного тестирования показали, что сервисы ресурсов магазина и банка 
 соответствует требованиям производительности и способны справиться с пиковыми нагрузками.

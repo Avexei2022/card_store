@@ -18,6 +18,7 @@ import ru.kolodin.model.users.StorageUser;
 import ru.kolodin.service.api.CharacterApiService;
 import ru.kolodin.service.db.ServerDbService;
 import ru.kolodin.service.db.UserDbService;
+import ru.kolodin.service.kafka.KafkaProducerService;
 
 import java.util.NoSuchElementException;
 
@@ -60,6 +61,8 @@ public class StoreServerRestController {
      */
     private final Counter addCardToBasketCounter = Metrics.counter("add_card_to_basket_count");
 
+    private final KafkaProducerService kafkaProducerService;
+
     /**
      * Запрос списка товаров с рессурса поставщика - Rick and Morty.
      * @param page номер страницы в списке товаров.
@@ -68,6 +71,7 @@ public class StoreServerRestController {
     @GetMapping("/characters/page/{page}")
     public ResponseEntity<Characters> getCharactersPage (@PathVariable("page") String page) {
         Characters allCharacters = characterApiService.getPageCharacters(page);
+        kafkaProducerService.sendMessage("Kafka: getCharactersPage = " + page, "foreach");
         return new ResponseEntity<>(allCharacters, HttpStatus.OK);
     }
 
@@ -80,6 +84,7 @@ public class StoreServerRestController {
     public ResponseEntity<Void> addToStorage(@PathVariable("id") Integer id) {
         characterApiService.saveOneCharacterById(id);
         addCardToStorageCounter.increment();
+        kafkaProducerService.sendMessage("Kafka: /characters/add_to_storage/{id} = " + id, "foreach");
         return ResponseEntity.ok().build();
     }
 
@@ -92,6 +97,7 @@ public class StoreServerRestController {
     @GetMapping("/characters/delete_from_storage/{id}")
     public ResponseEntity<Message> deleteFromStorageById(@PathVariable("id") Integer id) {
         Message message = serverDbService.deleteFromStorageById(id);
+        kafkaProducerService.sendMessage("Kafka: /characters/delete_from_storage/{id} = " + id, "foreach");
         return new ResponseEntity<>(message, HttpStatus.OK);
     }
 
@@ -103,6 +109,7 @@ public class StoreServerRestController {
     @GetMapping("/storage/page/{page}")
     public ResponseEntity<Characters> getPageCharactersFromStorage(@PathVariable("page") String page) {
         Characters characters = serverDbService.getPageCharactersFromStorage(Integer.valueOf(page));
+        kafkaProducerService.sendMessage("Kafka: /storage/page/{page} = " + page, "foreach");
         return new ResponseEntity<>(characters, HttpStatus.OK);
     }
 
@@ -114,6 +121,7 @@ public class StoreServerRestController {
     @GetMapping("/storage/add_to_sale/{id}")
     public ResponseEntity<Void> addToSale(@PathVariable("id") Integer id) {
         serverDbService.saveOneCardById(id);
+        kafkaProducerService.sendMessage("Kafka: /storage/add_to_sale/{id} = " + id, "foreach");
         return ResponseEntity.ok().build();
     }
 
@@ -126,6 +134,7 @@ public class StoreServerRestController {
     @GetMapping("/storage/delete_from_sale/{id}")
     public ResponseEntity<Void> deleteFromSale(@PathVariable("id") Long id) {
         serverDbService.deleteCardFromSaleById(id);
+        kafkaProducerService.sendMessage("Kafka: /storage/delete_from_sale/{id} = " + id, "foreach");
         return ResponseEntity.ok().build();
     }
 
@@ -137,6 +146,7 @@ public class StoreServerRestController {
     @GetMapping("/sale/page/{page}")
     public ResponseEntity<Cards> getPageCardsInSale(@PathVariable("page") Integer page) {
         Cards cards = serverDbService.getPageCardsStorageFromSale(page);
+        kafkaProducerService.sendMessage("Kafka: /sale/page/{page} = " + page, "foreach");
         return new ResponseEntity<>(cards, HttpStatus.OK);
 
     }

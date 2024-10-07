@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.client.RestTemplate;
 
 /**
@@ -12,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
  * Принимает значения из файла настройки application.yaml
  */
 @ConfigurationProperties(prefix = "url")
+@Configuration
 @Getter
 @Setter
 public class BasicConfig {
@@ -28,8 +31,22 @@ public class BasicConfig {
 
     /**
      * Синхронный клиент REST.
+     * @return новый экземпляр.
      */
-    private RestTemplate restTemplate;
+    @Bean
+    public RestTemplate template(){
+        return new RestTemplate();
+    }
+
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     * @return новый экземпляр.
+     */
+    @Bean
+    public HttpHeaders headers()
+    {
+        return new HttpHeaders();
+    }
 
     /**
      * Аспект для регистрации действий пользователей и вывода их в консоль.

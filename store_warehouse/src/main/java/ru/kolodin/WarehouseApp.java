@@ -27,22 +27,4 @@ public class WarehouseApp {
         SpringApplication.run(WarehouseApp.class, args);
     }
 
-    /**
-     * Синхронный клиент REST.
-     * @return новый экземпляр.
-     */
-    @Bean
-    public RestTemplate template(){
-        return new RestTemplate();
-    }
-
-    /**
-     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
-     * @return новый экземпляр.
-     */
-    @Bean
-    public HttpHeaders headers()
-    {
-        return new HttpHeaders();
-    }
 }

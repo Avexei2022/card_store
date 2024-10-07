@@ -5,7 +5,9 @@ import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
+import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import ru.kolodin.aspect.UserActionAspect;
@@ -17,6 +19,7 @@ import ru.kolodin.aspect.UserActionAspect;
  */
 @Component
 @ConfigurationProperties(prefix = "url")
+@Configuration
 @ComponentScan
 @EnableAspectJAutoProxy
 @Getter
@@ -25,8 +28,22 @@ public class BasicConfig {
 
     /**
      * Синхронный клиент REST.
+     * @return новый экземпляр.
      */
-    private RestTemplate restTemplate;
+    @Bean
+    public RestTemplate template(){
+        return new RestTemplate();
+    }
+
+    /**
+     * Структура данных, представляющая заголовки HTTP-запросов или ответов.
+     * @return новый экземпляр.
+     */
+    @Bean
+    public HttpHeaders headers()
+    {
+        return new HttpHeaders();
+    }
 
     /**
      * Адрес сервиса ресурсов Rick and Morty.

@@ -21,7 +21,8 @@ spring:
     password: admin
     driver-class-name: org.postgresql.Driver
   kafka:
-    bootstrap-servers: "localhost:9092"
+    bootstrap-servers: localhost:9092
+    bootstrapAddress: localhost:9092
     consumer:
       group-id: "myGroup"
 

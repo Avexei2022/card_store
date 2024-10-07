@@ -48,3 +48,6 @@ build/
 /store_warehouse/target/site/
 /storefront/target/site/
 /bank_resource_server/target/site/
+
+*.txt
+/*.png

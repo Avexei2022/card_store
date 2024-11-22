@@ -77,8 +77,8 @@ public class CharactersApiServiceImpl implements CharactersApiService {
      */
     @Override
     public Message saveOneCharacterById(Integer id) {
-        String url = basicConfig.getBANK_API() + "/visitors/add_to_bank/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getBANK_API() + "/visitors/" + id;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);

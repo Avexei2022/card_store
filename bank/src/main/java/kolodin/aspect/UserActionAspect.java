@@ -27,14 +27,16 @@ public class UserActionAspect {
     public Object userActionLog(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         String methodName = proceedingJoinPoint.getSignature().getName();
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(LocalDateTime.now())
+        stringBuilder
+                .append("\n")
+                .append(LocalDateTime.now())
                 .append(": Пользователь вызвал метод: ")
                 .append(methodName)
                 .append("\nАргументы метода ").append(methodName).append(": ");
-        Arrays.stream(proceedingJoinPoint.getArgs()).forEach(arg -> stringBuilder.append(arg).append("\n"));
+        Arrays.stream(proceedingJoinPoint.getArgs()).forEach(arg -> stringBuilder.append(arg).append(" "));
         long timeStart = System.currentTimeMillis();
         Object method = proceedingJoinPoint.proceed();
-        stringBuilder.append("\nВремя выполнения метода ")
+        stringBuilder.append("Время выполнения метода ")
                 .append(methodName)
                 .append(" (ms): ")
                         .append(System.currentTimeMillis() - timeStart);

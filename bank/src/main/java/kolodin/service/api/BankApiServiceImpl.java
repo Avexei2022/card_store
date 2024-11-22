@@ -1,5 +1,6 @@
 package kolodin.service.api;
 
+import kolodin.aspect.TrackUserAction;
 import kolodin.auth.AuthenticationService;
 import kolodin.configuration.BasicConfig;
 import kolodin.model.clients.Client;
@@ -52,13 +53,14 @@ public class BankApiServiceImpl implements BankApiService {
      * @param id уникальный номер кандидата в клиенты.
      * @return сообщение о результатах удаления кандидата из базы данных.
      */
+    @TrackUserAction
     @Override
     public Message deleteVisitorById(Integer id) {
-        String url = basicConfig.getBANK_API() + "/candidates/delete_from_bank/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getBANK_API() + "/candidates/" + id;
+        HttpMethod method = HttpMethod.DELETE;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
-        log.info("URI - " + url);
+        log.info("BankApiServiceImpl.deleteVisitorById.URI - " + url);
         try {
             ResponseEntity<Message> response = restTemplate
                     .exchange(url, method, requestEntity, responseType);
@@ -99,8 +101,8 @@ public class BankApiServiceImpl implements BankApiService {
      */
     @Override
     public Message saveOneClientById(Integer id) {
-        String url = basicConfig.getBANK_API() + "/candidates/add_to_client/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getBANK_API() + "/candidates/" + id;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
@@ -145,8 +147,8 @@ public class BankApiServiceImpl implements BankApiService {
      */
     @Override
     public Message deleteClientById(Integer id) {
-        String url = basicConfig.getBANK_API() + "/clients/delete_client/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getBANK_API() + "/clients/" + id;
+        HttpMethod method = HttpMethod.DELETE;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
@@ -169,8 +171,8 @@ public class BankApiServiceImpl implements BankApiService {
     @Override
     public Message saveClient(Client client) {
 
-        String url = basicConfig.getBANK_API() + "/clients/update";
-        HttpMethod method = HttpMethod.POST;
+        String url = basicConfig.getBANK_API() + "/clients";
+        HttpMethod method = HttpMethod.PUT;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);

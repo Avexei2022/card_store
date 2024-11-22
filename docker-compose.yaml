@@ -1,54 +1,45 @@
-# docker-compose up --build -d
+#\docker-compose up --build -d
 
-#services:
-#  zookeeper:
-#    image: zookeeper:latest # Официальный образ
-#    environment: # Переменные окружения
-#      ZOOKEEPER_CLIENT_PORT: 2181 # Порт для подключения Zookeeper
-#      ZOOKEEPER_TICK_TIME: 2000 # базовый временной интервал в миллисекундах, используемый для синхронизации.
-#    ports:
-#      - "2181:2181" # Порт для подключений к Zookeeper.
-#
-#  kafka:
-#    image: bitnami/kafka:latest # Официальный образ
-#    depends_on:
-#      - zookeeper #  Указывает на то, что сервис Kafka должен быть запущен после Zookeeper.
-#    environment: # Конфигурационные параметры Kafka
-#      KAFKA_BROKER_ID: 1
-##      KAFKA_ENABLE_KRAFT: yes # разрешить использование протокола KRaft
-#      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-#      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
-#      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
-#      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
-#      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-#      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
-#      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-#    ports:
-#      - "9092:9092" # Порт для внешних подключений к Kafka.
-
-version: "3.9"
 volumes:
   volume1:
 services:
-  kafka1:
+  kafka:
     image: 'bitnami/kafka:latest'
+
+    # container settings
+    container_name: kafka
+    ports:
+       - "9092:9092"
+       - "29092:29092"
+       - "9093:9093" # port for client connection (producer / consumer)
     environment:
       - KAFKA_ENABLE_KRAFT=yes
-      - KAFKA_CFG_PROCESS_ROLES=broker,controller
-      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
-      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CONTROLLER://:9093
-      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT
-      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://kafka1:9092
-      - KAFKA_CFG_BROKER_ID=1
-      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=1@kafka1:9093
+      - KAFKA_CFG_NODE_ID=0
       - ALLOW_PLAINTEXT_LISTENER=yes
+      - KAFKA_CFG_PROCESS_ROLES=controller,broker
+      - KAFKA_CFG_LISTENERS=PLAINTEXT://:9092,CLIENT://:29092,CONTROLLER://:9093
+      - KAFKA_CFG_ADVERTISED_LISTENERS=PLAINTEXT://127.0.0.1:9092,CLIENT://kafka:29092
+      - KAFKA_CFG_LISTENER_SECURITY_PROTOCOL_MAP=CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,CLIENT:PLAINTEXT
+      - KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=0@kafka:9093
+      - KAFKA_CFG_CONTROLLER_LISTENER_NAMES=CONTROLLER
       - KAFKA_KRAFT_CLUSTER_ID=L0ZEQh1yTbGhNNUE7-6wSQ
-    volumes:
-      - volume1:/bitnami/kafka
-  ui:
-    image: provectuslabs/kafka-ui:v0.4.0
+
+  kafka-ui:
+    container_name: kafka-ui
+    image: provectuslabs/kafka-ui:latest
     ports:
-      - "8080:8080"
+      - 8080:8080
+    depends_on:
+      - kafka
+    restart: always
     environment:
-      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka1:9092
-      - KAFKA_CLUSTERS_0_NAME=kraft
+      - KAFKA_CLUSTERS_0_BOOTSTRAP_SERVERS=kafka:29092
+      - KAFKA_CLUSTERS_0_NAME=cards_store
+    links:
+      - kafka
+
+  rabbitmq:
+    image: rabbitmq:3-management
+    ports:
+      - "5672:5672"
+      - "25672:25672"

@@ -14,10 +14,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.java.Log;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -86,7 +83,7 @@ public class BankWebController {
      * @return возврат ссылки на сохраненную страницу
      * или переход к странице сообщений message.html.
      */
-    @GetMapping("/visitors/add_to_bank/{id}/{page}")
+    @PostMapping("/visitors/add_to_bank/{id}/{page}")
     public String addToBank(@PathVariable("id") Integer id, @PathVariable("page") String page, Model model) {
         Message message = charactersApiService.saveOneCharacterById(id);
         if (message.getMessage().equals("OK")) {
@@ -105,7 +102,8 @@ public class BankWebController {
      * @return возврат к странице кандидатов
      * или переход к станице сообщений message.html.
      */
-    @GetMapping("/candidates/delete_from_bank/{id}/{page}")
+    @TrackUserAction
+    @PostMapping("/candidates/delete/{id}/{page}")
     public String deleteCandidateFromBank(@PathVariable("id") Integer id
             , @PathVariable("page") String page
             , Model model) {
@@ -153,7 +151,7 @@ public class BankWebController {
      * или переход к станице сообщений message.html.
      */
     @TrackUserAction
-    @GetMapping("/candidates/add_to_client/{id}/{page}")
+    @PostMapping("/candidates/{id}/{page}")
     public String addCandidateToClient(@PathVariable("id") Integer id
             , @PathVariable("page") String page, Model model) {
         Message message = bankApiService.saveOneClientById(id);
@@ -173,7 +171,7 @@ public class BankWebController {
      * @return возврат к странице клиентов банка
      * или переход к станице сообщений message.html.
      */
-    @GetMapping("/clients/delete_client/{id}/{page}")
+    @PostMapping("/clients/delete_client/{id}/{page}")
     public String deleteClient(@PathVariable("id") Integer id
             , @PathVariable("page") String page
             , Model model) {

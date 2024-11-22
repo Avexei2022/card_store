@@ -49,11 +49,9 @@
       <!-- VISITORS-->
       <section class="main_section_2">
         <div class="main_section_2_div_1" th:each="visitor : ${visitors_list}">
-          <a
+          <div
             class="main_section_2_div_1_card"
-            title="Зачислить в кандидаты"
             style="text-decoration: none"
-            th:href="@{/bank/visitors/add_to_bank/{id}/{page} (id=${visitor.id}, page=${current_page})}"
             th:object="${visitor}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -109,7 +107,23 @@
                 ></span>
               </div>
             </div>
-          </a>
+          </div>
+          <div class="main_section_2_div_1_card_context_section_buttons">
+            <form
+              method="POST"
+              th:action="@{/bank/visitors/add_to_bank/{id}/{page} (id=${visitor.id}, page=${current_page})}"
+            >
+              <button
+                class="main_section_2_div_1_card_context_section_buttons_button"
+                type="submit"
+                name="submit"
+                value="value"
+                title="Зачислить в кандидаты"
+              >
+                В кандидаты
+              </button>
+            </form>
+          </div>
         </div>
         <ul class="footer_ul_1">
           <li class="footer_ul_1_li_1">

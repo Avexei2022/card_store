@@ -8,6 +8,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.kolodin.aspect.TrackUserAction;
 import ru.kolodin.model.basket.Basket;
@@ -243,7 +245,7 @@ public class ServerDbServiceImpl implements ServerDbService {
      */
     //TODO доработать ввод количества товара и проверку на валидность
     @Override
-    @Transactional
+    @Transactional()
     public void moveCardToBasket(Long cardId, String userName)  throws ExcessAmountException, NoSuchElementException {
         CardsStorage cardInSale;
         Buyer buyer;

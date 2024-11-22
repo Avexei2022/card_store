@@ -78,7 +78,7 @@ public class StorageWebController {
      * @param page номер текущей страницы для возврата к ней.
      * @return возврат ссылки на соответствующую страницу.
       */
-    @GetMapping("/characters/add_to_storage/{id}/{page}")
+    @GetMapping("/characters/{id}/{page}")
     public String addToStorage(@PathVariable("id") Integer id, @PathVariable("page") String page) {
         characterApiService.saveOneCharacterById(id);
         return "redirect:/storage/characters/page/" + page;
@@ -141,6 +141,7 @@ public class StorageWebController {
      * @return веб-страница товаров на складе storage.html
      */
     @GetMapping("/storage/page/{page}")
+    @TrackUserAction
     public String getAllCardsInStorage(@PathVariable("page") String page, Model model) {
         //TODO оптимизировать - пока тестовый вариант
         Characters characters = serverApiService.getPageFromStorage(page);

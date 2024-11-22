@@ -78,8 +78,8 @@ public class ContentApiServiceImpl implements ContentApiService {
      */
     @Override
     public Message addToBasketById(Integer id, String userName) {
-        String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id + "/" + userName;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/basket/" + id + "/" + userName;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
@@ -93,8 +93,8 @@ public class ContentApiServiceImpl implements ContentApiService {
      */
     @Override
     public void deleteFromBasketById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/basket/return_to_sale/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/basket/" + id;
+        HttpMethod method = HttpMethod.DELETE;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
@@ -110,7 +110,7 @@ public class ContentApiServiceImpl implements ContentApiService {
     @Override
     public Message basketPay(String userName) {
         String url = basicConfig.getSERVER_API() + "/basket/pay/" + userName;
-        HttpMethod method = HttpMethod.GET;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);

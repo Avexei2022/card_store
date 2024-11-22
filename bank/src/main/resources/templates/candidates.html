@@ -52,11 +52,9 @@
           class="main_section_2_div_1"
           th:each="candidate : ${candidates_list}"
         >
-          <a
-            class="main_section_2_div_1_card"
-            title="Зачислить в клиенты банка"
+          <div
             style="text-decoration: none"
-            th:href="@{/bank/candidates/add_to_client/{id}/{page} (id=${candidate.id}, page=${current_page})}"
+            class="main_section_2_div_1_card"
             th:object="${candidate}"
           >
             <div class="main_section_2_div_1_card_divimg">
@@ -112,12 +110,37 @@
                 ></span>
               </div>
             </div>
-          </a>
-          <a
-            class="main_section_2_div_1_card_context"
-            th:href="@{/bank/candidates/delete_from_bank/{id}/{page} (id=${candidate.id}, page=${current_page})}"
-            >Delete</a
-          >
+          </div>
+          <div class="main_section_2_div_1_card_context_section_buttons">
+            <form
+              method="POST"
+              th:action="@{/bank/candidates/{id}/{page} (id=${candidate.id}, page=${current_page})}"
+            >
+              <button
+                class="main_section_2_div_1_card_context_section_buttons_button"
+                type="submit"
+                name="submit"
+                value="value"
+              title="Зачислить в клиенты банка"
+              >
+                В клиенты
+              </button>
+            </form>
+            <form
+              method="post"
+              th:action="@{/bank/candidates/delete/{id}/{page} (id=${candidate.id}, page=${current_page})}"
+            >
+              <button
+                class="main_section_2_div_1_card_context_section_buttons_button"
+                type="submit"
+                name="submit"
+                value="value"
+                title="Удалить из списка кандидатов в клиенты банка"
+              >
+                Удалить
+              </button>
+            </form>
+          </div>
         </div>
         <ul class="footer_ul_1">
           <li class="footer_ul_1_li_1">

@@ -64,8 +64,8 @@ public class ServerApiServiceImpl implements ServerApiService {
     @Override
     @TrackUserAction
     public Message deleteFromStorageById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/characters/delete_from_storage/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/characters/" + id;
+        HttpMethod method = HttpMethod.DELETE;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);
@@ -83,8 +83,8 @@ public class ServerApiServiceImpl implements ServerApiService {
     @Override
     @TrackUserAction
     public void saveOneCardToSaleById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/storage/add_to_sale/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/storage/" + id;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
@@ -125,8 +125,8 @@ public class ServerApiServiceImpl implements ServerApiService {
     @Override
     @TrackUserAction
     public void deleteCardFromSaleById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/storage/delete_from_sale/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/storage/" + id;
+        HttpMethod method = HttpMethod.DELETE;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         ResponseEntity<HttpStatusCode> response = restTemplate.exchange(url, method, requestEntity, responseType);
@@ -145,8 +145,8 @@ public class ServerApiServiceImpl implements ServerApiService {
     //TODO доработать ввод количества товара и проверку на валидность
     @Override
     public void moveCardToBasket(Long id) {
-        String url = basicConfig.getSERVER_API() + "/basket/add_to_basket/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/basket/" + id;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);
@@ -167,8 +167,8 @@ public class ServerApiServiceImpl implements ServerApiService {
     @Override
     @TrackUserAction
     public void returnCardFromBasketToSale(Long id) {
-        String url = basicConfig.getSERVER_API() + "/basket/return_to_sale/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/basket/" + id;
+        HttpMethod method = HttpMethod.DELETE;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);

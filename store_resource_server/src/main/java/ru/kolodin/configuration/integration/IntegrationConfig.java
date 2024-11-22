@@ -1,4 +1,4 @@
-package ru.kolodin.configuration;
+package ru.kolodin.configuration.integration;
 
 
 import org.springframework.context.annotation.Bean;

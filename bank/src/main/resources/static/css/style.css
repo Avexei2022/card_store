@@ -281,6 +281,10 @@ main {
   max-width: 1920px;
   box-sizing: inherit;
   text-decoration: none;
+  flex-direction: column;
+  background: rgb(60, 62, 68);
+  border-radius: 0.5rem;
+  margin: 0.75rem;
 }
 
 .main_section_2_div_1_card {
@@ -396,6 +400,24 @@ main {
   -webkit-box-pack: center;
   justify-content: left;
   gap: 10px;
+}
+
+.main_section_2_div_1_card_context_section_buttons {
+  flex: 1 1 0%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  -webkit-box-pack: center;
+  justify-content: left;
+  gap: 30px;
+  padding-bottom: 10px;
+}
+
+.main_section_2_div_1_card_context_section_buttons_button {
+  color: rgb(245, 245, 245);
+  text-decoration: none;
+  background-color: transparent;
+  border-radius: 0.5rem;
 }
 
 .main_section_2_div_1_card_context_section_2_span {

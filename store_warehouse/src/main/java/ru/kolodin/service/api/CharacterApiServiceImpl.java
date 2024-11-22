@@ -71,8 +71,8 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     @TrackUserAction
     @Override
     public void saveOneCharacterById(Integer id) {
-        String url = basicConfig.getSERVER_API() + "/characters/add_to_storage/" + id;
-        HttpMethod method = HttpMethod.GET;
+        String url = basicConfig.getSERVER_API() + "/characters/" + id;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = getRequestEntity();
         Class<HttpStatusCode> responseType = HttpStatusCode.class;
         log.info("URI - " + url);

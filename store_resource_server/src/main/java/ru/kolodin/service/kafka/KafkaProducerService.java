@@ -6,7 +6,7 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 /**
- * Сообщения Кафки
+ * Сервис Кафки
  */
 @Service
 @Slf4j

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Log
 public class KafkaConsumerService {
 
-    @KafkaListener(topics = "foreach", groupId = "myGroup")
+    @KafkaListener(topics = "StoreResourceServer.Email", groupId = "cardStoreGroup")
     public void  receiveMessage(String message) {
         log.info("Kafka message: " + message);
     }

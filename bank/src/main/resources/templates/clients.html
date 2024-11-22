@@ -91,11 +91,22 @@
               </div>
             </div>
           </div>
-          <a
-            class="main_section_2_div_1_card_context"
-            th:href="@{/bank/clients/delete_client/{id}/{page} (id=${client.id}, page=${current_page})}"
-            >Delete</a
-          >
+          <div class="main_section_2_div_1_card_context_section_buttons">
+            <form
+              method="post"
+              th:action="@{/bank/clients/delete_client/{id}/{page} (id=${client.id}, page=${current_page})}"
+            >
+              <button
+                class="main_section_2_div_1_card_context_section_buttons_button"
+                type="submit"
+                name="submit"
+                value="value"
+                title="Удалить из списка клиентов банка"
+              >
+                Удалить
+              </button>
+            </form>
+          </div>
         </div>
         <ul class="footer_ul_1">
           <li class="footer_ul_1_li_1">

@@ -8,6 +8,7 @@ import ru.kolodin.model.storage.CardsStorage;
 import ru.kolodin.model.users.Buyer;
 import ru.kolodin.service.db.UserDbService;
 import ru.kolodin.service.integration.FileGateway;
+import ru.kolodin.service.kafka.KafkaProducerService;
 
 import java.util.List;
 
@@ -29,6 +30,11 @@ public class NewProductListener implements ApplicationListener<NewProductEvent> 
     private final FileGateway fileGateway;
 
     /**
+     * Сервис  Кафки
+     */
+    private final KafkaProducerService kafkaProducerService;
+
+    /**
      * Уведомить пользователей подписчиков о поступлении нового товара в продажу.
      * @param event событие - поступление нового товара в продажу.
      */
@@ -40,6 +46,7 @@ public class NewProductListener implements ApplicationListener<NewProductEvent> 
                 .forEach(buyer -> {
                     String fileName = buyer.getUsername().concat(".txt");
                     fileGateway.writeToFile(fileName, cardsStorage);
+                    kafkaProducerService.sendMessage(createMailMessage(cardsStorage, buyer), "StoreResourceServer.Email");
                 });
     }
 
@@ -50,5 +57,18 @@ public class NewProductListener implements ApplicationListener<NewProductEvent> 
     @Override
     public boolean supportsAsyncExecution() {
         return ApplicationListener.super.supportsAsyncExecution();
+    }
+
+    /**
+     * Создать текст сообщения о поступлении нового товара
+     * @param cardsStorage товар
+     * @param buyer покупатель
+     * @return текст сообщения
+     */
+    private String createMailMessage (CardsStorage cardsStorage, Buyer buyer) {
+        return "Email: " + buyer.getEmail()
+                + " User: " +  buyer.getUsername()
+                + " NewCards: Name=" + cardsStorage.getCard().getName()
+                + " Price=" + cardsStorage.getPrice();
     }
 }

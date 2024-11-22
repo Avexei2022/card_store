@@ -80,7 +80,7 @@ public class CharacterApiServiceImpl  implements CharacterApiService{
     @Override
     public Message saveOneCharacterById(Integer id) {
         String url = basicConfig.getSERVER_API() + "/characters/register/" + id;
-        HttpMethod method = HttpMethod.GET;
+        HttpMethod method = HttpMethod.POST;
         HttpEntity<String> requestEntity = authenticationService.getRequestEntity();
         Class<Message> responseType = Message.class;
         log.info("URI - " + url);

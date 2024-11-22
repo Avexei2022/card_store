@@ -59,14 +59,14 @@ public class BasicConfig {
         return new HttpHeaders();
     }
 
-    /**
-     * Аспект для регистрации действий пользователей и вывода их в консоль.
-     * @return новый экземпляр.
-     */
-    @Bean
-    public UserActionAspect loginAspect() {
-        return new UserActionAspect();
-    }
+//    /**
+//     * Аспект для регистрации действий пользователей и вывода их в консоль.
+//     * @return новый экземпляр.
+//     */
+//    @Bean
+//    public UserActionAspect loginAspect() {
+//        return new UserActionAspect();
+//    }
 
 
 }

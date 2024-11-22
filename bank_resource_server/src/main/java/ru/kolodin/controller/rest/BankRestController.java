@@ -70,7 +70,7 @@ public class BankRestController {
      * @param id уникальный номер посетителя банка.
      * @return сообщение о результатах.
      */
-    @GetMapping("/visitors/add_to_bank/{id}")
+    @PostMapping("/visitors/{id}")
     public ResponseEntity<Message> addToBank(@PathVariable("id") Integer id) {
         Message message = bankApiService.saveOneCharacterById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -81,7 +81,7 @@ public class BankRestController {
      * @param id уникальный номер кандидата.
      * @return сообщение о результатах.
      */
-    @GetMapping("/candidates/delete_from_bank/{id}")
+    @DeleteMapping("/candidates/{id}")
     public ResponseEntity<Message> deleteCandidateFromBank(@PathVariable("id") Integer id) {
         Message message = bankDbService.deleteVisitorById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -104,7 +104,7 @@ public class BankRestController {
      * @param id уникальный номер кандидата.
      * @return сообщение о результатах.
      */
-    @GetMapping("/candidates/add_to_client/{id}")
+    @PostMapping("/candidates/{id}")
     public ResponseEntity<Message> addCandidateToClient(@PathVariable("id") Integer id) {
         Message message = bankDbService.saveOneClientById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -116,7 +116,7 @@ public class BankRestController {
      * @return сообщение о результатах.
      */
     @TrackUserAction
-    @GetMapping("/clients/delete_client/{id}")
+    @DeleteMapping("/clients/{id}")
     public ResponseEntity<Message> deleteClient(@PathVariable("id") Long id) {
         Message message = bankDbService.deleteClientById(id);
         return new ResponseEntity<>(message, HttpStatus.OK);
@@ -139,7 +139,7 @@ public class BankRestController {
      * @param client клиент банка.
      * @return сообщение о результатах.
      */
-    @PostMapping("/clients/update")
+    @PutMapping("/clients")
     public ResponseEntity<Message> updateClient(Client client) {
         Message message = bankDbService.saveClient(client);
         return new ResponseEntity<>(message, HttpStatus.OK);
